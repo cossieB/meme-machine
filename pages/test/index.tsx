@@ -40,7 +40,7 @@ export default function Posts({ posts }: PostProps) {
     return (
         <div>
             {showPosts.map(post =>
-                <div className={styles.card}>
+                <div key={post.id} className={styles.card}>
                     <Link href={`/posts/${post.id}`}>{post.title}</Link>
                 </div>)
             }
