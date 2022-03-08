@@ -1,5 +1,5 @@
 import { useState } from "react"
-import styles from '../styles/auth.module.css'
+import styles from '../styles/Auth.module.css'
 import { useRouter } from "next/router"
 
 export default function Login() {
