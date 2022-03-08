@@ -1,0 +1,15 @@
+.profile {
+    display: flex;
+    gap: 2rem;
+}
+
+.avatar {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.info {
+    display: flex;
+    flex-direction: column;
+}

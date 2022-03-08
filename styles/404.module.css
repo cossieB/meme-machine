@@ -1,0 +1,13 @@
+.error {
+    font-family: fantasy;
+    font-size: 40vw;
+    height: calc(100vh - 75px); 
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .error {
+        writing-mode: vertical-rl;
+        text-orientation: upright;
+    }
+}

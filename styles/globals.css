@@ -1,9 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400&family=Stick+No+Bills:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Stick+No+Bills:wght@800&display=swap');
+
+:root {
+  --colorDark: #121212;
+  --colorLight: #ddd;
+
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: 'Nunito', sans-serif;
+  background-color: var(--colorLight);
+}
+
+#__next {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  min-height: 100vh;
 }
 
 a {
@@ -11,6 +27,107 @@ a {
   text-decoration: none;
 }
 
-* {
-  box-sizing: border-box;
+a:hover {
+  text-decoration: underline;
+  color: #0e4cd1;
+}
+
+nav {
+  display: flex;
+  background-color: var(--colorDark);
+  height: 75px;
+  align-items: center;
+  justify-content: space-around;
+  color: var(--colorLight);
+}
+
+nav a {
+  margin-left: 1%;
+  margin-right: 5%;
+  color: var(--colorLight);
+  font-size: xx-large;
+}
+nav a:hover {
+  color: currentColor;
+}
+.logo {
+  color: var(--colorLight);
+  font-family: 'Stick No Bills', sans-serif;;
+}
+
+main {
+  min-height: calc(100vh - 75px);
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+button {
+  background-color: var(--colorDark);
+  color: var(--colorLight);
+  height: 3rem;
+  font-size: large;
+  padding: 0% .75rem;
+  border: none;
+  font-family: 'Nunito';
+}
+button:hover {
+  background-color: #0e4cd1;
+}
+button:disabled {
+  background-color: #555;
+  pointer-events: none;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+.container {
+  width: 90%;
+  height: 100%;
+}
+
+input {
+  margin-bottom: 1rem;
+  height: 2rem;
+}
+
+.flexCenter {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+ul, li {
+  list-style: none;
+}
+img {
+  box-shadow: 0 0 10px;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #2c3e50;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
