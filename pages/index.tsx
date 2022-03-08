@@ -12,7 +12,7 @@ export default function Home() {
         <div >
             {user ?
                 <div className={styles.links}>
-                    <h2><Link href="/posts" >See What's New</Link></h2>
+                    <h2><Link href="/posts" >See What&apos;s New</Link></h2>
                     <h2><Link href="/posts/new" >Post New Meme</Link></h2>
                     <h2><Link href={`users/${user}`}  >Edit Your Profile</Link> </h2>
                 </div>: 
