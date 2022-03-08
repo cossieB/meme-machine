@@ -1,0 +1,13 @@
+.form {
+    width: 60%;
+    transition: all 1000ms ease;
+}
+
+.input {
+    margin-bottom: 1rem;
+    height: 2rem;
+}
+.errorDiv {
+    border: 2px solid red;
+    padding: 1rem;
+}
