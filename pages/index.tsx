@@ -9,7 +9,7 @@ import { ContextInterface, UserContext } from './_app'
 export default function Home() {
     const user = useContext(UserContext)?.user
     return (
-        <div >
+        <div className='container flexColumn' >
             {user ?
                 <div className={styles.links}>
                     <h2><Link href="/posts" >See What&apos;s New</Link></h2>
@@ -21,7 +21,7 @@ export default function Home() {
                     <h2><Link href="/auth" >Sign up or log in to upload a meme</Link></h2>
                 </div>
                 }
-                {user ? <img src='https://i.imgur.com/db93F7b.jpg' alt='Oprah Welcome Back Meme' /> : <img src="https://i.imgur.com/3I2Fw1P.png" alt="Uncle Sam sign up meme" />}
+                {user ? <img className={styles.img} src='https://i.imgur.com/db93F7b.jpg' alt='Oprah Welcome Back Meme' /> : <img className={styles.img} src="https://i.imgur.com/3I2Fw1P.png" alt="Uncle Sam sign up meme" />}
         </div>
     )
 }

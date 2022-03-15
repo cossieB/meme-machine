@@ -34,3 +34,12 @@
 .commentDiv {
     margin-top: 1rem;
 }
+
+@media (max-width: 768px) {
+    .container.postContainer {
+        flex-direction: column;
+    }
+    .panel {
+        width: 100%;
+    }
+}

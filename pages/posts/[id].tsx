@@ -21,7 +21,7 @@ export default function Post(props: P) {
     const { title, image, description, user, date, id } = props
     const [rerenderChildren, setRerenderChildren] = useState(Math.random())
     return (
-        <div className={`${styles.container}`} style={{ width: "90%" }}>
+        <div className={`${styles.container} ${styles.postContainer}`} >
             <div className={`${styles.panel}`}>
                 <h1 style={{ textAlign: "center" }}>{title}</h1>
                 <div className={styles.flexApart}>
