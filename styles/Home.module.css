@@ -1,4 +1,5 @@
 .links {
+  width: 100%;
   display: flex;
   justify-content: space-between;
 }
@@ -114,9 +115,8 @@
   margin-left: 0.5rem;
 }
 
-@media (max-width: 600px) {
-  .grid {
-    width: 100%;
-    flex-direction: column;
+@media (max-width: 768px) {
+  .img {
+    width: 90%;
   }
 }
