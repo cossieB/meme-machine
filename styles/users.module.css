@@ -1,4 +1,5 @@
 .profile {
+    margin-top: 2%;
     display: flex;
     gap: 2rem;
 }
@@ -12,4 +13,10 @@
 .info {
     display: flex;
     flex-direction: column;
+}
+@media (max-width: 768px) {
+    .avatar {
+        width: 100px;
+        height: 100px;
+    }
 }

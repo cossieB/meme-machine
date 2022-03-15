@@ -11,3 +11,8 @@
     border: 2px solid red;
     padding: 1rem;
 }
+@media (max-width: 768px) {
+    .form {
+        width: inherit;
+    }
+}

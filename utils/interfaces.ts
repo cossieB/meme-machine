@@ -17,7 +17,7 @@ interface Post {
     user: User,
     date: Date,
     likes?: User[],
-    _id: mongoose.Types.ObjectId
+    _id: mongoose.Types.ObjectId,
 }
 
 interface Comment {

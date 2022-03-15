@@ -72,6 +72,7 @@ button {
   padding: 0% .75rem;
   border: none;
   font-family: 'Nunito';
+  min-height: 50px;
 }
 button:hover {
   background-color: #0e4cd1;
@@ -113,6 +114,25 @@ ul, li {
 img {
   box-shadow: 0 0 10px;
 }
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #121212;
+  color: #ddd;
+  height: 50px;
+  font-size: x-large;
+}
+
+footer a {
+  text-decoration: underline;
+}
+
+footer a:hover {
+  color: inherit;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 10px;

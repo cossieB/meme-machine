@@ -11,7 +11,7 @@ export default function Layout(props: P) {
         <>
             <Nav />
             <main>{props.children}</main>
-            <footer style={{position: "relative", bottom: 0, textAlign: "center", fontWeight: "bolder"}}>&copy; <a href="https://cossie-91.web.app" target="_blank" rel="noreferrer">Cossie</a></footer>
+            <footer style={{position: "relative", bottom: 0, textAlign: "center", fontWeight: "bolder"}}>&copy; &nbsp; <a href="https://cossie-91.web.app" target="_blank" rel="noreferrer">Cossie</a></footer>
         </>
     )
 }
