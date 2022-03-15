@@ -1,7 +1,8 @@
 .links {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 3rem
 }
 
 
