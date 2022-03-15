@@ -5,10 +5,13 @@ import styles from "../../styles/Posts.module.css"
 import Link from "next/link";
 import { useContext } from "react";
 import { UserContext } from "../_app";
+import { Post, User } from "../../utils/interfaces";
 
+type PostExclUser = Omit<Post, "user">
+type P = Partial<PostExclUser> & {user: Partial<User>} & {dateString: string}
 
-interface P {
-    posts: any[]
+interface Props {
+    posts: P[]
 }
 
 function Tile({ p }: any) {
@@ -24,11 +27,13 @@ function Tile({ p }: any) {
     )
 }
 
-export default function Posts({ posts }: P) {
+
+export default function Posts({ posts }: Props) {
     const user = useContext(UserContext)?.user
     return (
         <>
             <h2> {user ? <Link href={"/posts/new"}>Post A Meme</Link> : <Link href={"/auth"} >Signup or Login to post</Link>} </h2>
+
             <div className={styles.container}>
                 <div className={styles.panel}>
                     {posts.map((p, idx) => {
@@ -49,7 +54,7 @@ export default function Posts({ posts }: P) {
     )
 }
 
-export async function getStaticProps(context: GetStaticPropsContext): Promise<GetStaticPropsResult<P>> {
+export async function getStaticProps(context: GetStaticPropsContext): Promise<GetStaticPropsResult<Props>> {
     await mongoose.connect(process.env.MONGO_URI!).catch(e => console.log(e))
     let data = await PostsModel.find().sort({date: "desc"})
     mongoose.connection.close()
@@ -58,7 +63,7 @@ export async function getStaticProps(context: GetStaticPropsContext): Promise<Ge
             title: p.title,
             image: p.image,
             description: p.description,
-            date: p.date.toISOString(),
+            dateString: p.date.toISOString(),
             likes: p.likes,
             id: p.id,
             user: {

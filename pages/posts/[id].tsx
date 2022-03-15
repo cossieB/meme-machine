@@ -1,6 +1,6 @@
 import { GetStaticPathsContext, GetStaticPathsResult, GetStaticPropsContext, GetStaticPropsResult } from "next";
 import { Posts } from "../../utils/schema";
-import styles from '../../styles/Posts.module.css'
+import styles from '../../styles/Posts[id].module.css'
 import mongoose from "mongoose";
 import Link from "next/link";
 import LikeAndComment from "../../components/LikeAndComment";

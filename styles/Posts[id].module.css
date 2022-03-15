@@ -37,9 +37,12 @@
 
 @media (max-width: 768px) {
     .container {
+        flex-direction: column;
+    }
+    .container {
         width: 90%;
     }
     .panel {
-        width: 47%;
+        width: 100%;
     }
 }
