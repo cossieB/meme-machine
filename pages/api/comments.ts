@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             let response = comments.map(comment => ({
                 content: comment.content,
                 date: comment.date,
-                username: comment.username
+                user: comment.user
             }))
             res.json({response})
         }

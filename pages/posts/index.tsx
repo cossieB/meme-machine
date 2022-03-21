@@ -8,13 +8,13 @@ import { UserContext } from "../_app";
 import { Post, User } from "../../utils/interfaces";
 
 type PostExclUser = Omit<Post, "user">
-type P = Partial<PostExclUser> & {user: Partial<User>} & {dateString: string}
+type P = Partial<PostExclUser> & {user: Partial<User>} & {dateString: string} & {id: string}
 
 interface Props {
     posts: P[]
 }
 
-function Tile({ p }: any) {
+function Tile({ p }: {p: P}) {
     return (
         <Link href={`/posts/${p.id}`}>
             <a>

@@ -15,7 +15,7 @@ export default function Logout(props: P) {
         }
     })
     return (
-        <img src="https://memegenerator.net/img/instances/58606432/i-will-never-forget-you.jpg" alt="" />
+        <img style={{maxWidth: "95%", minWidth: "50%", height: "auto", marginTop: "5%"}} src="https://memegenerator.net/img/instances/58606432/i-will-never-forget-you.jpg" alt="" />
     )
 }
 

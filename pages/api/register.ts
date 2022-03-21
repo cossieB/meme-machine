@@ -25,15 +25,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             user = new Users({username, lowercase, password, joinDate: new Date()})
             await user.save()
             
-            mongoose.connection.close() 
             sendJWT(req, res, username)
             return res.status(201).json({user: username})
         }
     }
     catch(e: any) {
         console.log(e)
-        mongoose.connection.close()
         return res.status(500).json({})
-    }    
+    }  
+    finally {
+        mongoose.connection.close()
+    }  
     
 }

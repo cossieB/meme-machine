@@ -22,7 +22,7 @@ let PostSchema = new Schema<Post>({
 
 let CommentSchema = new Schema<Comment>({
     content: {type: String, required: true},
-    username: String, 
+    user: UserSchema, 
     date: Date,
     post: String
 })

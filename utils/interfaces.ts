@@ -22,7 +22,7 @@ interface Post {
 
 interface Comment {
     content: string,
-    username: string,
+    user: User,
     date: Date,
     post: Post,
     id: mongoose.Types.ObjectId
