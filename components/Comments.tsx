@@ -19,7 +19,6 @@ export default function Comment({ id, rerender }: P) {
                 date: new Date(com.date),
                 user: com.user
             }))
-            console.log(coms)
             setComments(coms)
         })()
     },[rerender])
