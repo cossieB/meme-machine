@@ -18,7 +18,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const { username, password }: User = req.body
             let lowercase = username.toLowerCase()
             let user = await Users.findOne({ lowercase })
-            mongoose.connection.close()
             if (!user || ! await bcrypt.compare(password, user.password)) {
                 return res.status(400).json({ errors: ["Incorrect Credentials"] })
             }
@@ -27,8 +26,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
         catch (e: any) {
             console.log(e)
-            mongoose.connection.close()
             return res.json({errors: [e.message]})
+        }
+        finally {
+            mongoose.connection.close()
         }
     }
     
