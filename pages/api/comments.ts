@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getJwtUserFromDB } from "../../utils/getJwtUserFromDB";
+import { Comment, User } from "../../utils/interfaces";
 import { Comments } from "../../utils/schema";
 
+export type CommentsExclPswd = Partial<Omit<Comment, "user">> & {user: Partial<User>}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     await mongoose.connect(process.env.MONGO_URI!)
@@ -10,11 +12,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         try {
             let {id} = req.query; 
             let comments = await Comments.find({post: id})
-            let response = comments.map(comment => ({
+            
+            let response: CommentsExclPswd[] = comments.map(comment => ({
                 content: comment.content,
                 date: comment.date,
-                user: comment.user
+                user: {
+                    username: comment.user.username,
+                    joinDate: comment.user.joinDate,
+                    avatar: comment.user.avatar,
+                }
             }))
+            
+            // console.log(response)
             res.json({response})
         }
         catch(e: any) {
