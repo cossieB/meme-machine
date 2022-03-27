@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getJwtUserFromDB } from "../../utils/getJwtUserFromDB";
 import { Comments } from "../../utils/schema";
-import ServerError from "../../utils/ServerError";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     await mongoose.connect(process.env.MONGO_URI!)
@@ -22,12 +21,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         try {
             const {comment, id} = req.body
             const user = await getJwtUserFromDB(req)
-            const {username} = user
             let newComment = new Comments({
                 content: comment,
                 date: new Date(),
                 post: id,
-                username
+                user
             })
             await newComment.save()
             res.status(201).json({msg: "ok"})
