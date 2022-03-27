@@ -36,7 +36,7 @@ export default function NewPost() {
         if (validateUrl(url)) {
             let res = await fetch("/api/new-post", {
                 method: "POST",
-                body: JSON.stringify({title, description, url}),
+                body: JSON.stringify({title: title.trim(), description, url}),
                 headers: {
                     "Content-Type": "application/json",
                 }

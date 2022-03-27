@@ -67,6 +67,10 @@ button.danger {
   background-color: rgb(220, 20, 20);
 }
 
+button.submit {
+  background-color: rgb(37, 167, 91);
+}
+
 button {
   background-color: var(--colorDark);
   color: var(--colorLight);
@@ -94,6 +98,11 @@ form {
   height: 100%;
 }
 
+.flexApart {
+  display: flex;
+  justify-content: space-between;
+}
+
 input {
   margin-bottom: 1rem;
   height: 2rem;
@@ -116,6 +125,29 @@ ul, li {
 }
 img {
   box-shadow: 0 0 10px;
+}
+
+.mask {
+  background-color: #121212;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  opacity: 0.8;
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  background-color: #ddd;
+  position: fixed;
+  z-index: 2;
+  top: 25vh;
+  left: 25vw;
+  height: 50vh;
+  width: 50vw;
 }
 
 footer {
