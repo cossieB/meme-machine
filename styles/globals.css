@@ -63,6 +63,9 @@ main {
   align-items: center;
 }
 
+button.danger {
+  background-color: rgb(220, 20, 20);
+}
 
 button {
   background-color: var(--colorDark);

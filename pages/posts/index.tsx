@@ -58,6 +58,7 @@ export async function getStaticProps(context: GetStaticPropsContext): Promise<Ge
     await mongoose.connect(process.env.MONGO_URI!).catch(e => console.log(e))
     let data = await PostsModel.find().sort({date: "desc"})
     mongoose.connection.close()
+
     let posts = data.map(p => {
         return {
             title: p.title,
@@ -68,6 +69,7 @@ export async function getStaticProps(context: GetStaticPropsContext): Promise<Ge
             id: p.id,
             user: {
                 username: p.user.username,
+                avatar: p.user.avatar
             }
         }
     })
