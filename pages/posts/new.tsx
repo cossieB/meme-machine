@@ -73,7 +73,7 @@ export default function NewPost() {
                 <textarea style={{ height: "5rem" }} name="description" placeholder="Description" autoComplete="off" id="Description" value={description} onChange={handleChange} maxLength={200} />
                 <div className={styles.error}></div>
                 {/* <input name="file" type="file" /> */}
-                <button type="submit">Submit</button>
+                <button className="submit" type="submit">Submit</button>
             </form>
         </div>
         </>
