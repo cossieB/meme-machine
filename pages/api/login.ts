@@ -5,6 +5,7 @@ import { User } from "../../utils/interfaces";
 import { Users } from "../../utils/schema";
 import { sendJWT } from "../../utils/sendJWT";
 import { authenticateUser } from "../../utils/authenticate";
+import ServerError from "../../utils/ServerError";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method == "GET") {
@@ -18,15 +19,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const { username, password }: User = req.body
             let lowercase = username.toLowerCase()
             let user = await Users.findOne({ lowercase })
+            
             if (!user || ! await bcrypt.compare(password, user.password)) {
-                return res.status(400).json({ errors: ["Incorrect Credentials"] })
+                throw new ServerError("Incorrect Credentials", 400)
             }
             sendJWT(req, res, user.username)
             return res.json({ username: user.username })
         }
         catch (e: any) {
             console.log(e)
-            return res.json({errors: [e.message]})
+            return res.status(e.status || 500).json({errors: [e.message]})
         }
         finally {
             mongoose.connection.close()

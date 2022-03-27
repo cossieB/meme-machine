@@ -7,7 +7,8 @@ interface User {
     password: string,
     joinDate: Date,
     posts?: Post[],
-    _id: mongoose.Types.ObjectId
+    _id: mongoose.Types.ObjectId,
+    id: string
 }
 
 interface Post {
