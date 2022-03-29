@@ -56,7 +56,7 @@ export default function Posts({ posts }: Props) {
 
 export async function getStaticProps(context: GetStaticPropsContext): Promise<GetStaticPropsResult<Props>> {
     await mongoose.connect(process.env.MONGO_URI!).catch(e => console.log(e))
-    let data = await PostsModel.find().sort({date: "desc"})
+    let data = await PostsModel.find().sort({date: "desc"}).exec()
     mongoose.connection.close()
 
     let posts = data.map(p => {

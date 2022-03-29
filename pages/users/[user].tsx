@@ -1,16 +1,11 @@
 import mongoose from "mongoose";
 import { GetStaticPathsContext, GetStaticPathsResult, GetStaticPropsContext, GetStaticPropsResult } from "next";
 import { Posts, Posts as PostsModel, Users } from '../../utils/schema';
-import {User} from '../../utils/interfaces'
 import styles from "../../styles/Posts.module.css"
-import classes from "../../styles/users.module.css"
 import Link from "next/link";
 import { useContext } from "react";
 import { UserContext } from "../_app";
-
-type Optional<T> = {
-    [k in keyof T]?: T[k]
-}
+import Profile from "../../components/Profile";
 
 interface P {
     posts?: any[],
@@ -30,39 +25,12 @@ function Tile({ p }: any) {
     )
 }
 
-function Settings() {
-    return (
-        <div>
-            <Link href="/logout" >Logout</Link>
-        </div>
-    )
-}
-
-interface P1 {
-    pageUser: any,
-    user: string | undefined
-}
-
-function Profile({pageUser, user}: P1) {
-    return (
-        <div className={classes.profile}>
-            <img className={classes.avatar} src={pageUser.avatar} alt={`${pageUser.username}'s Avatar`} />
-            <div className={classes.info}>
-                <div><h2>{pageUser.username}</h2></div>
-                <div>{new Date(pageUser.joinDate).toDateString()}</div>
-                <div>{pageUser.memes} memes</div>
-            </div>
-            {user == pageUser.username && <Settings  />}
-        </div>
-    )
-}
-
 export default function UserPosts(props: P) {
     const { posts, pageUser } = props
-    const user = useContext(UserContext)?.user
+    const username = useContext(UserContext)?.user?.username
     return (
         <>  
-            <Profile pageUser={pageUser} user={user}/>
+            <Profile pageUser={pageUser} user={username}/>
             
             <h2>{`${pageUser.username}'s Memes`}</h2>
             <div className={styles.container}>
@@ -126,7 +94,7 @@ export async function getStaticProps(context: GetStaticPropsContext): Promise<Ge
 
 export async function getStaticPaths(context: GetStaticPathsContext): Promise<GetStaticPathsResult> {
     await mongoose.connect(process.env.MONGO_URI!).catch(e => console.log(e))
-    let users = await Users.find()
+    let users = await Users.find().exec()
     mongoose.connection.close()
     let paths = users.map(user => ({
         params: { user: user.username }

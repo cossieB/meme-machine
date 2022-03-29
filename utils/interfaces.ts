@@ -29,4 +29,6 @@ interface Comment {
     id: mongoose.Types.ObjectId
 }
 
-export type {Comment, Post, User}
+type UserPick = Pick<User, "username" | "avatar" | "joinDate">
+
+export type {Comment, Post, User, UserPick}

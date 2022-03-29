@@ -3,20 +3,22 @@ import type { AppProps } from 'next/app'
 import Layout from '../components/Layout'
 import React, { createContext, useEffect, useState } from 'react'
 import cookie from 'cookie';
+import { User, UserPick } from '../utils/interfaces';
 
 export type ContextInterface = {
-    user: string,
-    setUser: React.Dispatch<React.SetStateAction<string>>
+    user?: UserPick,
+    setUser: React.Dispatch<React.SetStateAction<UserPick | undefined>>
 }
 
 export const UserContext = createContext<ContextInterface | null>(null)
 
 function MyApp({ Component, pageProps }: AppProps) {
-    const [user, setUser] = useState("")
+    const [user, setUser] = useState<UserPick>()
     useEffect(() => {
         let cookies = document.cookie; 
-        let storedUser = cookie.parse(cookies).user
-        if (storedUser) {
+
+        if (cookie.parse(cookies).user) {
+            let storedUser: UserPick = JSON.parse(cookie.parse(cookies).user)
             setUser(storedUser)
         }
         else {
@@ -24,12 +26,12 @@ function MyApp({ Component, pageProps }: AppProps) {
                 .then(res => res.json())
                 .then(data => {
                     if (data.user) {
-                        setUser(data.user);
-                        document.cookie = `user=${data.user};path=/`
+                        setUser(data.user)
+                        document.cookie = `user=${JSON.stringify(data.user)}`
                     }
                 })
         }
-    }, )
+    }, [])
     return (
         <UserContext.Provider value={{ user, setUser }}>
             <Layout>

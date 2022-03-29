@@ -1,12 +1,14 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import styles from '../styles/Auth.module.css'
 import { useRouter } from "next/router"
+import { ContextInterface, UserContext } from "../pages/_app"
 
 export default function Login() {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [errorMsg, setErrorMsg] = useState<string[]>([])
     const router = useRouter()
+    const {setUser} = useContext(UserContext) as ContextInterface
 
     async function handleSubmit(e: React.ChangeEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -19,10 +21,15 @@ export default function Login() {
                     "Content-Type": "application/json"
                 }
             })
-            let data = await response.json(); console.log(response.status)
+            let data = await response.json();
+
             if (data.errors) return setErrorMsg(data.errors)
-            document.cookie = `user=${data.username}`
-            router.replace(redirect ? "/"+ redirect : "/users/"+data.username)
+            
+            if (data.user) {
+                document.cookie = `user=${JSON.stringify(data.user)}`
+                setUser(data.user)
+                router.replace(redirect ? "/"+ redirect : "/users/"+data.user.username)
+            }
         }
         catch(e) {
             console.log(e)

@@ -1,6 +1,7 @@
 import { JwtPayload } from "jsonwebtoken";
 import { GetServerSidePropsContext } from "next";
 import jwt from 'jsonwebtoken'
+import { UserPick } from "./interfaces";
 
 /**
  * Decodes and verifies the JWT and returns the user if any.
@@ -10,7 +11,7 @@ import jwt from 'jsonwebtoken'
 export function getServerSideUser(context: GetServerSidePropsContext) {
     const {req, res} = context; 
     const {cookies} = req
-    let data: {user: string | null}
+    let data: {user: UserPick | null}
     try {
         let token = jwt.verify(cookies.jwt, process.env.JWT_SECRET!) as JwtPayload
         data = {user: token.user}

@@ -33,12 +33,12 @@ export default function Post(props: P) {
 
                 <div className={styles.flexApart}>
                     <div>{new Date(dateString).toUTCString()}</div>
-                    <Link href={'/users/' + user}><a><strong>{user.username}</strong></a></Link>
+                    <Link href={'/users/' + user.username}><a><strong>{user.username}</strong></a></Link>
                 </div>
 
                 <img src={image} alt={`${title} image`} />
 
-                {thisUser.user == user.username && (
+                {thisUser.user?.username == user.username && (
                     <div className="flexApart">
                         <button onClick={() => setShowEditModal(true)}>Edit</button>
                         <button onClick={() => setShowDeleteModal(true)} className="danger">Delete</button>
@@ -74,7 +74,7 @@ export default function Post(props: P) {
 export async function getStaticProps(context: GetStaticPropsContext): Promise<GetStaticPropsResult<P>> {
     await mongoose.connect(process.env.MONGO_URI!).catch(e => console.log(e))
     let id = context.params!.id as string;
-    let post = await Posts.findById(id).select('-user.password').catch(() => null);
+    let post = await Posts.findById(id).select('-user.password').exec().catch(() => null);
 
     if (!post) {
         return {
