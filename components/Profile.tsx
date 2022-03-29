@@ -1,4 +1,5 @@
 import Link from "next/link";
+import styles from '../styles/users.module.css'
 
 interface P1 {
     pageUser: any,
@@ -8,7 +9,7 @@ interface P1 {
 export default function Profile({pageUser, user}: P1) {
     return (
         <div >
-            <img  src={pageUser.avatar} alt={`${pageUser.username}'s Avatar`} />
+            <img className={styles.avatar}  src={pageUser.avatar} alt={`${pageUser.username}'s Avatar`} />
             <div >
                 <div><h2>{pageUser.username}</h2></div>
                 <div>{new Date(pageUser.joinDate).toDateString()}</div>
