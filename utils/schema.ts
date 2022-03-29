@@ -12,7 +12,10 @@ let UserSchema = new Schema<User>({
 })
 
 let PostSchema = new Schema<Post>({
-    title: {type: String, require: true, maxlength: [30, "Title length has to be less than 30 characters"]},
+    title: {
+        type: String, 
+        require: true, 
+        maxlength: [30, "Title length has to be less than 30 characters"], minlength: [3, "Title length has to be at least 3 characters"]},
     image: {type: String, required: true},
     description: {type: String, maxlength: [200, "Description has to be less than 200 characters"]},
     user: {type: UserSchema, required: true},

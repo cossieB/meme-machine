@@ -7,7 +7,6 @@ import { getServerSideUser } from "../utils/getServerSideUser"
 
 type Action = "login" | "signup"
 interface P {
-    user: string | null,
     action: Action
 }
 
@@ -36,11 +35,11 @@ export function getServerSideProps(context: GetServerSidePropsContext): GetServe
     
     if (user) {
         return {
-            redirect: {destination: "/"+user, permanent: false}
+            redirect: {destination: "/users/"+user.username, permanent: false}
         }
     }
     return {
-        props: {user, action}
+        props: {action}
     }
 }
 

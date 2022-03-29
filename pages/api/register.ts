@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Users } from '../../utils/schema';
-import { User } from '../../utils/interfaces';
+import { User, UserPick } from '../../utils/interfaces';
 import { sendJWT } from '../../utils/sendJWT';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -18,15 +18,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (errors.length > 0) {
                 return res.status(400).json({ errors })
             }
-            let user = await Users.findOne({ lowercase });
+            let user = await Users.findOne({ lowercase }).exec();
             if (user) return res.status(400).json({ errors: ["Username has already been taken"] })
             
             password = await bcrypt.hash(password, 10)
-            user = new Users({username, lowercase, password, joinDate: new Date()})
+
+            let joinDate = new Date()
+            user = new Users({username, lowercase, password, joinDate})
             await user.save()
-            
-            sendJWT(req, res, username)
-            return res.status(201).json({user: username})
+
+            sendJWT(req, res, {username, joinDate, avatar: user.avatar})
+            return res.status(201).json({user: {username, joinDate, avatar: user.avatar}})
         }
     }
     catch(e: any) {

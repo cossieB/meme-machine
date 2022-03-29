@@ -28,9 +28,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         try {
             const user = await getJwtUserFromDB(req)
-            const post = await Posts.findById(id);
+            const post = await Posts.findById(id).exec();
             if (!post) throw new ServerError("Post not found", 400)
-            if (post.user.id != user.id) throw new ServerError("User mismatch", 401)
+            if (post.user.id != user.id) throw new ServerError("User mismatch", 403)
             
             await post.delete()
             res.json({msg: "ok"})
@@ -44,9 +44,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const {id, title, description} = req.body; 
         try {
             let user = await getJwtUserFromDB(req)
-            let post = await Posts.findById(id);
+            let post = await Posts.findById(id).exec();
             if (!post) throw new ServerError("Post not found", 400)
-            if (post.user.id != user.id) throw new ServerError("User mismatch", 401)
+            if (post.user.id != user.id) throw new ServerError("User mismatch", 403)
 
             post.title = title;
             post.description = description 

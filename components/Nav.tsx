@@ -8,7 +8,7 @@ export default function Nav() {
     return (
         <nav>
             <div>
-                {user ? <Link href={`/users/${user}`} ><a>{user}</a></Link> : <Link href={"/auth/"} ><a>Signup</a></Link>}
+                {user?.username ? <Link href={`/users/${user.username}`} ><a>{user.username}</a></Link> : <Link href={"/auth/"} ><a>Signup</a></Link>}
             </div>
             <Link href="/posts" ><a className="logo">Meme Machine</a></Link>
         </nav>
