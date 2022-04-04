@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react"
 import styles from "../styles/Posts.module.css";
-import {Comment as IComment} from "../utils/interfaces"
+import {IComment} from "../utils/interfaces"
 
 interface P {
     id: string,
