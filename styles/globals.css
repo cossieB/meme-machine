@@ -52,7 +52,8 @@ nav a:hover {
 }
 .logo {
   color: var(--colorLight);
-  font-family: 'Stick No Bills', sans-serif;;
+  font-family: 'Stick No Bills', sans-serif;
+  font-size: 48px;
 }
 
 main {
@@ -170,6 +171,13 @@ footer a:hover {
   color: inherit;
 }
 
+
+.navLinks {
+  display: flex; 
+  align-items: center; 
+  height: inherit
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 10px;
@@ -211,5 +219,24 @@ footer a:hover {
   .modal img {
     height: 200px;
     width: 200px;
+  }
+  .navLinks span{
+    display: none;
+  }
+  .logoDesktop {
+    display: none;
+  }
+  .navLinks svg {
+    height: 32px;
+    width: 32px;
+  }
+  .navLinks img {
+    height: 32px;
+  }
+}
+
+@media (min-width: 768px) {
+  .logoMobile {
+    display: none;
   }
 }
