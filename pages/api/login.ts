@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             if (!user || ! await bcrypt.compare(password, user.password)) {
                 throw new ServerError("Incorrect Credentials", 400)
             }
-            const userCookie: UserPick = {username: user.username, avatar: user.avatar, joinDate: user.joinDate}
+            const userCookie: UserPick = {username: user.username, avatar: user.avatar, joinDate: user.joinDate, status: user.status}
 
             sendJWT(req, res, userCookie)
             return res.json({ user: userCookie })
