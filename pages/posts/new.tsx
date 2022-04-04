@@ -62,7 +62,7 @@ export default function NewPost() {
         <div className={`flexCenter ${styles.form}`} style={{height: "100%"}} >
             <form onSubmit={handleSubmit} style={{ width: "50vw" }} method="POST" encType="multipart/formdata">
                 <label htmlFor="Title">Title</label>
-                <input type="text" placeholder="Title" id="Title" value={title} onChange={handleChange} minLength={3} maxLength={25} />
+                <input type="text" placeholder="Title" id="Title" value={title} onChange={handleChange} minLength={3} maxLength={25} required />
                 <div className={styles.error}></div>
                 <label htmlFor="Image-URL">Image URL</label>
                 <input name="url" type="text" placeholder="Image URL" autoComplete="off" id="Image-URL" value={url} onChange={handleChange} />
