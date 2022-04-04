@@ -2,7 +2,7 @@ import React, { ReactNode, SetStateAction, useRef } from "react";
 
 interface P {
     showModal: React.Dispatch<SetStateAction<boolean>>,
-    children: JSX.Element
+    children: ReactNode
 }
 
 export default function (props: P) {

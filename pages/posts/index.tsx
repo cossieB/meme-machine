@@ -5,10 +5,10 @@ import styles from "../../styles/Posts.module.css"
 import Link from "next/link";
 import { useContext } from "react";
 import { UserContext } from "../_app";
-import { Post, User } from "../../utils/interfaces";
+import { IPost, IUser } from "../../utils/interfaces";
 
-type PostExclUser = Omit<Post, "user">
-type P = Partial<PostExclUser> & {user: Partial<User>} & {dateString: string} & {id: string}
+type PostExclUser = Omit<IPost, "user">
+type P = Partial<PostExclUser> & {user: Partial<IUser>} & {dateString: string} & {id: string}
 
 interface Props {
     posts: P[]

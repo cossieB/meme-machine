@@ -1,16 +1,27 @@
 import Link from "next/link";
-import { useContext, useEffect, useState } from "react";
-import cookie from 'cookie'
-import { ContextInterface, UserContext } from "../pages/_app";
+import { useContext, useState } from "react";
+import { UserContext } from "../pages/_app";
+import { IUserContext } from "../utils/interfaces";
+import Mask from "./Mask";
+import Profile from "./Profile";
+import Settings from "./Settings";
 
 export default function Nav() {
-    const { user } = useContext(UserContext) as ContextInterface
+    const { user } = useContext(UserContext) as IUserContext
+    const [showProfile, setShowProfile] = useState(false)
     return (
         <nav>
             <div>
-                {user?.username ? <Link href={`/users/${user.username}`} ><a>{user.username}</a></Link> : <Link href={"/auth/"} ><a>Signup</a></Link>}
+                {user ? <div onClick={() => setShowProfile(true)} > <a>{user.username}</a></div> : <Link href={"/auth/"} ><a>Signup</a></Link>}
             </div>
             <Link href="/posts" ><a className="logo">Meme Machine</a></Link>
+
+            {showProfile && user &&  (
+                <Mask showModal={setShowProfile} >
+                    <Profile showModal={setShowProfile} pageUser={user} />
+                    <Settings  />
+                </Mask>
+            )}
         </nav>
     )
 }

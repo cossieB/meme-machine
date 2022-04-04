@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useContext } from 'react'
 import styles from '../styles/Home.module.css'
-import { ContextInterface, UserContext } from './_app'
+import { UserContext } from './_app'
 
 export default function Home() {
     const user = useContext(UserContext)?.user

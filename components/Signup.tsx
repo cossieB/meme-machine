@@ -2,7 +2,8 @@ import { CSSProperties, useContext, useRef, useState } from "react"
 import {validateInput} from "../utils/validate"
 import styles from '../styles/Auth.module.css'
 import { useRouter } from "next/router"
-import { ContextInterface, UserContext } from "../pages/_app"
+import { UserContext } from "../pages/_app"
+import { IUserContext } from "../utils/interfaces"
 
 interface P {
     redirect: string | string[] | undefined
@@ -15,7 +16,7 @@ export default function Signup() {
     const [errorMsg, setErrorMsg] = useState<string[]>([])
     const ref = useRef<SVGSVGElement>(null)
     const router = useRouter()
-    const {setUser} = useContext(UserContext) as ContextInterface
+    const {setUser} = useContext(UserContext) as IUserContext
     
     function handleSubmit(e: React.ChangeEvent<HTMLFormElement>) {
         e.preventDefault()

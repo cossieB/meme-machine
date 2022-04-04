@@ -1,19 +1,31 @@
 import Link from "next/link";
+import { SetStateAction, useContext } from "react";
+import { UserContext } from "../pages/_app";
+import styles from '../styles/users.module.css'
+import { IUserContext, UserPick } from "../utils/interfaces";
 
 interface P1 {
-    pageUser: any,
-    user: string | undefined
+    pageUser: UserPick & {memes?: number},
+    showModal?: React.Dispatch<SetStateAction<boolean>>
 }
 
-export default function Profile({pageUser, user}: P1) {
+export default function Profile({pageUser, showModal}: P1) {
+    const {user} = useContext(UserContext) as IUserContext
     return (
-        <div >
-            <img  src={pageUser.avatar} alt={`${pageUser.username}'s Avatar`} />
+        <div style={{color: 'var(--colorDark)', marginTop: '1rem'}} >
             <div >
+            <img className={styles.avatar}  src={pageUser.avatar} alt={`${pageUser.username}'s Avatar`} />
                 <div><h2>{pageUser.username}</h2></div>
+                <div><h5>{pageUser.status}</h5></div>
                 <div>{new Date(pageUser.joinDate).toDateString()}</div>
-                <div>{pageUser.memes} memes</div>
+                { pageUser.memes ? <div>{pageUser.memes} memes</div> : <Link href={`../users/${pageUser.username}`}><a style={{color: 'var(--colorDark)', fontSize: '1.5rem'}}>Profile</a></Link> }
             </div>
+
+            <div>
+
+                {pageUser.username == user?.username && <button onClick={() => showModal && showModal(false)} className="danger" type="button"><Link href={'/logout'}><span>Logout</span></Link></button> }
+            </div>
+            
         </div>
     )
 }

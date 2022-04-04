@@ -2,13 +2,25 @@ import mongoose from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getJwtUserFromDB } from "../../utils/getJwtUserFromDB";
 import { Comments } from "../../utils/schema";
+import {IComment} from "../../utils/interfaces"
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+interface GET {
+    response: (mongoose.Document<unknown, any, IComment> & IComment & {_id: mongoose.Types.ObjectId})[]
+}
+
+interface POST {
+    errors?: any,
+    msg?: string
+}
+
+type DATA = GET | POST
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse<DATA>) {
     await mongoose.connect(process.env.MONGO_URI!)
     if (req.method == "GET") {
         try {
             let {id} = req.query; 
-            let comments = await Comments.find({post: id}).select('-user.password').exec()
+            let comments = await Comments.find({post: id}).select('-user.password')
                       
             res.json({response: comments})
         }

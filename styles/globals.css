@@ -4,7 +4,7 @@
 :root {
   --colorDark: #121212;
   --colorLight: #ddd;
-
+  --colorDanger: #dc1414;
 }
 
 html,
@@ -64,7 +64,8 @@ main {
 }
 
 button.danger {
-  background-color: rgb(220, 20, 20);
+  background-color: var(--colorDanger);
+  height: 10;
 }
 
 button.submit {
@@ -128,7 +129,7 @@ img {
 }
 
 .mask {
-  background-color: #121212;
+  background-color: var(--colorDark);
   position: fixed;
   top: 0;
   left: 0;
@@ -140,21 +141,22 @@ img {
 
 .modal {
   display: flex;
-  justify-content: center;
-  background-color: #ddd;
+  justify-content: space-around;
+  background-color: var(--colorLight);
   position: fixed;
   z-index: 2;
   top: 25vh;
   left: 25vw;
   height: 50vh;
   width: 50vw;
+  flex-grow: 1;
 }
 
 footer {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #121212;
+  background-color: var(--colorDark);
   color: #ddd;
   height: 50px;
   font-size: x-large;

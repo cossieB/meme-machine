@@ -1,34 +1,40 @@
 import mongoose from "mongoose";
 
-interface User {
+interface IUser {
     username: string,
     lowercase: string,
     avatar?: string,
     password: string,
     joinDate: Date,
-    posts?: Post[],
+    posts?: IPost[],
+    status?: string,
     _id: mongoose.Types.ObjectId,
     id: string
 }
 
-interface Post {
+interface IPost {
     title: string,
     image: string,
     description?: string,
-    user: User,
+    user: IUser,
     date: Date,
-    likes?: User[],
+    likes?: IUser[],
     _id: mongoose.Types.ObjectId,
 }
 
-interface Comment {
+interface IComment {
     content: string,
-    user: User,
+    user: IUser,
     date: Date,
-    post: Post,
+    post: IPost,
     id: mongoose.Types.ObjectId
 }
 
-type UserPick = Pick<User, "username" | "avatar" | "joinDate">
+type UserPick = Pick<IUser, "username" | "avatar" | "joinDate" | "status">
 
-export type {Comment, Post, User, UserPick}
+interface IUserContext {
+    user?: UserPick,
+    setUser: React.Dispatch<React.SetStateAction<UserPick | undefined>>
+}
+
+export type {IComment, IPost, IUser, UserPick, IUserContext}
