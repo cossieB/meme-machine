@@ -18,7 +18,7 @@ export default function Profile({pageUser, showModal}: P1) {
                 <div><h2>{pageUser.username}</h2></div>
                 <div><h5>{pageUser.status}</h5></div>
                 <div>{new Date(pageUser.joinDate).toDateString()}</div>
-                { pageUser.memes ? <div>{pageUser.memes} memes</div> : <Link href={`../users/${pageUser.username}`}><a style={{color: 'var(--colorDark)', fontSize: '1.5rem'}}>Profile</a></Link> }
+                { pageUser.memes ? <div>{pageUser.memes} memes</div> : <Link href={`../users/${pageUser.username}`}><a onClick={() => showModal && showModal(false)} style={{color: 'var(--colorDark)', fontSize: '1.5rem'}}>Profile</a></Link> }
             </div>
 
             <div>
