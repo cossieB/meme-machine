@@ -20,6 +20,7 @@ interface IPost {
     date: Date,
     likes?: IUser[],
     _id: mongoose.Types.ObjectId,
+    id: string
 }
 
 interface IComment {
