@@ -4,14 +4,17 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Users } from '../../utils/schema';
-import { User, UserPick } from '../../utils/interfaces';
+import { IUser, UserPick } from '../../utils/interfaces';
 import { sendJWT } from '../../utils/sendJWT';
+import { getJwtUserFromDB } from '../../utils/getJwtUserFromDB';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+type DATA = {user: UserPick} | {msg: "ok"} | {errors: any[]} | {error: any}
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse<DATA>) {
     try {
         await mongoose.connect(process.env.MONGO_URI!)
         if (req.method == "POST") {
-            let { username, password }: User = req.body;
+            let { username, password }: IUser = req.body;
             const lowercase = username.toLowerCase()
             
             const errors = validateInput(username, password)
@@ -30,10 +33,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             sendJWT(req, res, {username, joinDate, avatar: user.avatar})
             return res.status(201).json({user: {username, joinDate, avatar: user.avatar}})
         }
+        if (req.method == "PUT") {
+            const {avatar, status} = req.body
+            const user = await getJwtUserFromDB(req)
+            user.avatar = avatar;
+            user.status = status
+
+            await user.save()
+            
+            res.json({user: {joinDate: user.joinDate, username: user.username, avatar, status}})
+        }
     }
     catch(e: any) {
         console.log(e)
-        return res.status(500).json({})
+        return res.status(e.status || 500).json({error: e.message})
     }  
     finally {
         mongoose.connection.close()

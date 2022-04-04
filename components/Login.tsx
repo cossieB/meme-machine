@@ -1,14 +1,15 @@
 import { useContext, useState } from "react"
 import styles from '../styles/Auth.module.css'
 import { useRouter } from "next/router"
-import { ContextInterface, UserContext } from "../pages/_app"
+import { UserContext } from "../pages/_app"
+import { IUserContext } from "../utils/interfaces"
 
 export default function Login() {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [errorMsg, setErrorMsg] = useState<string[]>([])
     const router = useRouter()
-    const {setUser} = useContext(UserContext) as ContextInterface
+    const {setUser} = useContext(UserContext) as IUserContext
 
     async function handleSubmit(e: React.ChangeEvent<HTMLFormElement>) {
         e.preventDefault();

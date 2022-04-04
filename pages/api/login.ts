@@ -1,13 +1,19 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcrypt'
 import { NextApiRequest, NextApiResponse } from "next";
-import { User, UserPick } from "../../utils/interfaces";
+import { IComment, IUser, UserPick } from "../../utils/interfaces";
 import { Users } from "../../utils/schema";
 import { sendJWT } from "../../utils/sendJWT";
 import { authenticateUser } from "../../utils/authenticate";
 import ServerError from "../../utils/ServerError";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+type GET = {response: (mongoose.Document<unknown, any, IComment> & IComment & {_id: mongoose.Types.ObjectId})[]} | {error: any}
+
+type POST = {errors: any[]} | {user: UserPick}
+
+type DATA = GET | POST
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse<DATA>) {
     if (req.method == "GET") {
         try {
             let payload = authenticateUser(req)
@@ -21,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method == "POST") {
         try {
             await mongoose.connect(process.env.MONGO_URI!)
-            const { username, password }: User = req.body
+            const { username, password }: IUser = req.body
             let lowercase = username.toLowerCase()
             let user = await Users.findOne({ lowercase }).exec()
 

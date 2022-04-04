@@ -3,14 +3,9 @@ import type { AppProps } from 'next/app'
 import Layout from '../components/Layout'
 import React, { createContext, useEffect, useState } from 'react'
 import cookie from 'cookie';
-import { User, UserPick } from '../utils/interfaces';
+import {  IUserContext, UserPick } from '../utils/interfaces';
 
-export type ContextInterface = {
-    user?: UserPick,
-    setUser: React.Dispatch<React.SetStateAction<UserPick | undefined>>
-}
-
-export const UserContext = createContext<ContextInterface | null>(null)
+export const UserContext = createContext<IUserContext | null>(null)
 
 function MyApp({ Component, pageProps }: AppProps) {
     const [user, setUser] = useState<UserPick>()

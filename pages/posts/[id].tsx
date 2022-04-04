@@ -6,8 +6,8 @@ import Link from "next/link";
 import LikeAndComment from "../../components/LikeAndComment";
 import Comment from "../../components/Comments";
 import { useContext, useState } from "react";
-import { User, Post as IPost } from "../../utils/interfaces";
-import { ContextInterface, UserContext } from "../_app";
+import { IUser, IPost, IUserContext } from "../../utils/interfaces";
+import { UserContext } from "../_app";
 import { useRouter } from "next/router";
 import DeletePost from "../../components/DeletePost";
 import Mask from "../../components/Mask";
@@ -15,14 +15,14 @@ import EditPost from "../../components/EditPost";
 
 
 type PostExclUser = Omit<IPost, "user">
-type P = Partial<PostExclUser> & { user: Partial<User> } & { dateString: string } & { id: string }
+type P = Partial<PostExclUser> & { user: Partial<IUser> } & { dateString: string } & { id: string }
 
 export default function Post(props: P) {
-    let { title, image, description, user, dateString, id } = props
+    const { title, image, description, user, dateString, id } = props
     const [rerenderChildren, setRerenderChildren] = useState(Math.random())
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [showEditModal, setShowEditModal] = useState(false)
-    const thisUser = useContext(UserContext) as ContextInterface
+    const thisUser = useContext(UserContext) as IUserContext
     const router = useRouter()
 
     return (

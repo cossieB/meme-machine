@@ -15,9 +15,7 @@ export default function NewPost() {
     const [title, setTitle] = useState("")
     const [url, setUrl] = useState("")
     const [description, setDescription] = useState("")
-    const [titleError, setTitleError] = useState("")
     const [urlError, setUrlError] = useState("")
-    const [descriptionError, setDescriptionError] = useState("")
     const router = useRouter()
 
     function validateUrl(val: string) {

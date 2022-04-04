@@ -29,9 +29,9 @@ export default function UserPosts(props: P) {
     const { posts, pageUser } = props
     const username = useContext(UserContext)?.user?.username
     return (
-        <>  
-            <Profile pageUser={pageUser} user={username}/>
-            
+        <>
+            <Profile pageUser={pageUser} />
+
             <h2>{`${pageUser.username}'s Memes`}</h2>
             <div className={styles.container}>
                 <div className={styles.panel}>
@@ -55,22 +55,22 @@ export default function UserPosts(props: P) {
 
 export async function getStaticProps(context: GetStaticPropsContext): Promise<GetStaticPropsResult<P>> {
     let user = context.params?.user as string
-    user = user.toLowerCase(); 
+    user = user.toLowerCase();
     await mongoose.connect(process.env.MONGO_URI!).catch(e => console.log(e))
-    let doc = await Users.findOne({lowercase: user})
-    if (!doc) {
+    let userdoc = await Users.findOne({ lowercase: user })
+
+    if (!userdoc) {
         return {
             notFound: true
         }
     }
-    let data = await PostsModel.find({"user.lowercase": user}).sort({date: "desc"}); 
+    let postsdoc = await PostsModel.find({ "user.lowercase": user }).sort({ date: "desc" });
     mongoose.connection.close()
 
-    const {username, avatar, joinDate} = doc
+    const { username, avatar, joinDate, status = null } = userdoc
+    let pageUser = { username, avatar, status, joinDate: joinDate.toUTCString(), memes: postsdoc.length }
 
-    let pageUser = {username, avatar, joinDate: joinDate.toUTCString(), memes: data.length}
-
-    let posts = data.map(p => {
+    let posts = postsdoc.map(p => {
         return {
             title: p.title,
             image: p.image,

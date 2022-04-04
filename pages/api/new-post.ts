@@ -4,7 +4,9 @@ import { getJwtUserFromDB } from "../../utils/getJwtUserFromDB";
 import { Posts, Users } from "../../utils/schema";
 import ServerError from "../../utils/ServerError";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+type DATA = {id: string} | {msg: "ok"} | {error: any}
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse<DATA>) {
     await mongoose.connect(process.env.MONGO_URI!)
 
     if (req.method == "POST") {
@@ -19,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
         catch(e: any) {
             console.log(e)
-            res.status(e.status || 500).json({errors: e.message})
+            res.status(e.status || 500).json({error: e.message})
         }
     }
     
