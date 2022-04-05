@@ -14,7 +14,7 @@ export default function Home() {
                 <div className={styles.links}>
                     <h2><Link href="/posts" >See What&apos;s New</Link></h2>
                     <h2><Link href="/posts/new" >Post New Meme</Link></h2>
-                    <h2><Link href={`users/${user}`}  >Edit Your Profile</Link> </h2>
+                    <h2><Link href={`users/${user.username}`}  >Edit Your Profile</Link> </h2>
                 </div>: 
                 <div className={styles.links}>
                     <h2><Link href="/posts" >Browse Memes</Link></h2>
