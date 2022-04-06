@@ -26,10 +26,7 @@ let PostSchema = new Schema<IPost>({
         type: String,
         maxlength: [200, "Description has to be less than 200 characters"]
     },
-    user: {
-        type: UserSchema,
-        required: true
-    },
+    user: UserSchema,
     date: Date,
     likes: [UserSchema]
 })
