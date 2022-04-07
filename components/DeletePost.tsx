@@ -1,4 +1,4 @@
-import router from "next/router"
+import {useRouter} from "next/router"
 import { SetStateAction, useRef, useState } from "react"
 
 interface P {
@@ -10,6 +10,7 @@ interface P {
 export default function ({ id, title, showModal }: P) {
     const [input, setInput] = useState("")
     const [error, setError] = useState("")
+    const router = useRouter()
 
     async function deletePost() {
         let response = await fetch('/api/new-post', {

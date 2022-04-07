@@ -7,7 +7,7 @@ export default function Search() {
     const [searchTerm, setSearchTerm] = useState("")
     const [fromDate, setFromDate] = useState('2022-01-01')
     const [toDate, setToDate] = useState(formatDate(new Date()))
-    const [posts, setPosts] = useState<IPost[] | null>(null)
+    const [posts, setPosts] = useState<any[] | null>(null)
 
     function formatDate(date: Date) {
         let year = date.getFullYear();
@@ -65,11 +65,11 @@ export default function Search() {
             {posts && posts.length > 0 && 
                 <div className={styles.result} style={{width: '100%', marginTop: '1rem'}}>
                     {posts.map(post => 
-                        <div key={post._id.toString()} className={styles.searchResults} >
-                            <Link href={`../posts/${post._id.toString()}`}><a><img src={post.image} /></a></Link>
+                        <div key={post.post_id} className={styles.searchResults} >
+                            <Link href={`../posts/${post.post_id}`}><a><img src={post.image} /></a></Link>
                             <div className={styles.links}>
-                                Post Title: <Link href={`../posts/${post._id.toString()}`}><a>{post.title}</a></Link><br />
-                                Posted By: <Link href={`../users/${post.user.username}`}><a>{post.user.username}</a></Link>
+                                Post Title: <Link href={`../posts/${post.post_id}`}><a>{post.title}</a></Link><br />
+                                Posted By: <Link href={`../users/${post.username}`}><a>{post.username}</a></Link>
                             </div>
                         </div>
                         )}

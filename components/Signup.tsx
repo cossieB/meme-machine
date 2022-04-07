@@ -1,7 +1,7 @@
 import { CSSProperties, useContext, useRef, useState } from "react"
 import {validateInput} from "../utils/validate"
 import styles from '../styles/Auth.module.css'
-import { useRouter } from "next/router"
+import { useRouter } from "next/router";
 import { UserContext } from "../pages/_app"
 import { IUserContext } from "../utils/interfaces"
 

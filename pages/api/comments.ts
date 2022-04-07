@@ -1,28 +1,19 @@
-import mongoose from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
+import ConnectToMySQL from "../../utils/ConnectToMySQL";
+import formatDateForSQL from "../../utils/formatDateForSQL";
 import { getJwtUserFromDB } from "../../utils/getJwtUserFromDB";
-import { Comments } from "../../utils/schema";
 import {IComment} from "../../utils/interfaces"
 
-interface GET {
-    response: (mongoose.Document<unknown, any, IComment> & IComment & {_id: mongoose.Types.ObjectId})[]
-}
 
-interface POST {
-    errors?: any,
-    msg?: string
-}
-
-type DATA = GET | POST
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse<DATA>) {
-    await mongoose.connect(process.env.MONGO_URI!)
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method == "GET") {
         try {
             let {id} = req.query; 
-            let comments = await Comments.find({post: id}).select('-user.password')
-                      
-            res.json({response: comments})
+            const connection = await ConnectToMySQL()
+            connection.connect()
+            const [result] = await connection.query(`SELECT * FROM comments`)
+            connection.end()            
+            res.json({response: result})
         }
         catch(e: any) {
             console.log(e)
@@ -33,13 +24,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         try {
             const {comment, id} = req.body
             const user = await getJwtUserFromDB(req)
-            let newComment = new Comments({
-                content: comment,
-                date: new Date(),
-                post: id,
-                user
-            })
-            await newComment.save()
+            const connection = await ConnectToMySQL()
+            connection.connect()
+            const [result] = await connection.query(`INSERT INTO comments(content, post_id, username, date) VALUES('${comment}', '${id}', '${user.username}', '${formatDateForSQL(new Date())}');`)
             res.status(201).json({msg: "ok"})
         }
         catch(e: any) {
@@ -47,5 +34,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             res.status(e.status || 500).json({errors: e.message})
         }
     }
-    mongoose.connection.close()
 }

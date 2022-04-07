@@ -1,11 +1,11 @@
-import mongoose from "mongoose";
 import { GetStaticPathsContext, GetStaticPathsResult, GetStaticPropsContext, GetStaticPropsResult } from "next";
-import { Posts, Posts as PostsModel, Users } from '../../utils/schema';
 import styles from "../../styles/Posts.module.css"
 import Link from "next/link";
 import { useContext } from "react";
 import { UserContext } from "../_app";
 import Profile from "../../components/Profile";
+import ConnectToMySQL from "../../utils/ConnectToMySQL";
+import { IUser } from "../../utils/interfaces";
 
 interface P {
     posts?: any[],
@@ -56,33 +56,35 @@ export default function UserPosts(props: P) {
 export async function getStaticProps(context: GetStaticPropsContext): Promise<GetStaticPropsResult<P>> {
     let user = context.params?.user as string
     user = user.toLowerCase();
-    await mongoose.connect(process.env.MONGO_URI!).catch(e => console.log(e))
-    let userdoc = await Users.findOne({ lowercase: user })
+    const connection = await ConnectToMySQL()
+    await connection.connect()
+
+    const [result] = await connection.query(`SELECT username, joinDate, avatar, status FROM users WHERE lowercase = '${user}';`)
+    let userdoc;
+    if (result instanceof Array) userdoc = result[0] as IUser
 
     if (!userdoc) {
         return {
             notFound: true
         }
     }
-    let postsdoc = await PostsModel.find({ "user.lowercase": user }).sort({ date: "desc" });
-    mongoose.connection.close()
+    let [posts] = await connection.query(`SELECT * FROM posts where username = (
+        SELECT username FROM users WHERE lowercase = '${user}'
+    );`) as [Array<any>, any]
+    connection.end()
+
+    posts = posts.map(p => ({
+        id: p.post_id,
+        username: p.username,
+        date: p.date.toISOString(),
+        title: p.title,
+        image: p.image,
+        description: p.description
+    }))
 
     const { username, avatar, joinDate, status = null } = userdoc
-    let pageUser = { username, avatar, status, joinDate: joinDate.toUTCString(), memes: postsdoc.length }
+    let pageUser = { username, avatar, status, joinDate: joinDate.toUTCString(), memes: posts.length }
 
-    let posts = postsdoc.map(p => {
-        return {
-            title: p.title,
-            image: p.image,
-            description: p.description,
-            date: p.date.toISOString(),
-            likes: p.likes,
-            id: p.id,
-            user: {
-                username: p.user.username,
-            }
-        }
-    })
     return {
         props: {
             posts,
@@ -93,9 +95,11 @@ export async function getStaticProps(context: GetStaticPropsContext): Promise<Ge
 }
 
 export async function getStaticPaths(context: GetStaticPathsContext): Promise<GetStaticPathsResult> {
-    await mongoose.connect(process.env.MONGO_URI!).catch(e => console.log(e))
-    let users = await Users.find().exec()
-    mongoose.connection.close()
+    const connection = await ConnectToMySQL()
+    await connection.connect()
+
+    const [users] = await connection.query(`SELECT username FROM users;`) as [Array<IUser>, any]
+
     let paths = users.map(user => ({
         params: { user: user.username }
     }))

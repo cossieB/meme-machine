@@ -1,17 +1,16 @@
-import mongoose from "mongoose";
 import { GetStaticPropsContext, GetStaticPropsResult } from "next";
-import { Posts as PostsModel } from '../../utils/schema';
 import styles from "../../styles/Posts.module.css"
 import Link from "next/link";
 import { useContext } from "react";
 import { UserContext } from "../_app";
 import { IPost, IUser } from "../../utils/interfaces";
+import ConnectToMySQL from "../../utils/ConnectToMySQL";
 
 type PostExclUser = Omit<IPost, "user">
-type P = Partial<PostExclUser> & {user: Partial<IUser>} & {dateString: string} & {id: string}
+type P = Partial<PostExclUser> & {user: Partial<IUser>}  & {id: string}
 
 interface Props {
-    posts: P[]
+    posts: any[]
 }
 
 function Tile({ p }: {p: P}) {
@@ -55,24 +54,20 @@ export default function Posts({ posts }: Props) {
 }
 
 export async function getStaticProps(context: GetStaticPropsContext): Promise<GetStaticPropsResult<Props>> {
-    await mongoose.connect(process.env.MONGO_URI!).catch(e => console.log(e))
-    let data = await PostsModel.find().sort({date: "desc"}).exec()
-    mongoose.connection.close()
+    const connection = await ConnectToMySQL()
+    await connection.connect()
 
-    let posts = data.map(p => {
-        return {
-            title: p.title,
-            image: p.image,
-            description: p.description,
-            dateString: p.date.toISOString(),
-            likes: p.likes,
-            id: p.id,
-            user: {
-                username: p.user.username,
-                avatar: p.user.avatar
-            }
-        }
-    })
+    const [result] = await connection.query(`SELECT * FROM posts ORDER BY date DESC;`) as [Array<any>, any]
+    connection.end()
+    const posts = result.map(p => ({
+        id: p.post_id,
+        title: p.title,
+        description: p.description,
+        date: p.date.toISOString(),
+        image: p.image,
+        username: p.username
+    }))
+
     return {
         props: {
             posts
