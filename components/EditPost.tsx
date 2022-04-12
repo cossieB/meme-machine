@@ -35,7 +35,7 @@ export default function(props: P) {
             <h3>Edit Post</h3>
             <form style={{width: '80%'}} onSubmit={handleSubmit} >
                 <label htmlFor="newTitle">New Title</label>
-                <input type="text" name="newTitle" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} minLength={3} maxLength={25} />
+                <input type="text" name="newTitle" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} minLength={3} maxLength={25} required />
                 <label htmlFor="newDescription">New Description</label>
                 <textarea style={{height: '5rem', marginBottom: '1rem'}} value={newDescription} onChange={(e) => setNewDescription(e.target.value)} maxLength={200}  />
                 <label htmlFor="ImageURL">Image URL</label>
