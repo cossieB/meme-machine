@@ -1,13 +1,13 @@
 .container {
+    columns: 4 150px;
     width: 80%;
-    display: flex;
-    justify-content: space-between;
 }
 .col {
     flex-direction: column;
 }
 
 .tile {
+    align-items: center;
     display: flex;
     flex-direction: column;
     margin-bottom: 1rem;
@@ -33,6 +33,14 @@
 }
 .commentDiv {
     margin-top: 1rem;
+}
+.meme {
+    display: inline-block;
+    width: 100%
+
+}
+.meme img{
+    aspect-ratio: initial;
 }
 
 @media (max-width: 768px) {
