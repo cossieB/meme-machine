@@ -16,14 +16,16 @@ interface Props {
 
 function Tile({ p }: {p: P}) {
     return (
-        <Link href={`/posts/${p.id}`}>
-            <a>
-                <div className={styles.tile}>
-                    <h3>{p.title}</h3>
-                    <img src={p.image} alt={`${p.title} image`} />
-                </div>
-            </a>
-        </Link>
+        <div className={styles.meme}>
+            <Link href={`/posts/${p.id}`}>
+                <a>
+                    <div className={styles.tile}>
+                        <h3>{p.title}</h3>
+                        <img src={p.image} alt={`${p.title} image`} />
+                    </div>
+                </a>
+            </Link>
+        </div>
     )
 }
 
@@ -33,22 +35,8 @@ export default function Posts({ posts }: Props) {
     return (
         <>
             <h2> {user ? <Link href={"/posts/new"}>Post A Meme</Link> : <Link href={"/auth"} >Signup or Login to post</Link>} </h2>
-
             <div className={styles.container}>
-                <div className={styles.panel}>
-                    {posts.map((p, idx) => {
-                        if (idx % 2 == 0) {
-                            return <Tile key={p.image} p={p} />
-                        }
-                    })}
-                </div>
-                <div className={styles.panel}>
-                    {posts.map((p, idx) => {
-                        if (idx % 2 == 1) {
-                            return <Tile key={p.image} p={p} />
-                        }
-                    })}
-                </div>
+                    {posts.map((p) => <Tile key={p.id} p={p} /> )}
             </div>
         </>
     )
