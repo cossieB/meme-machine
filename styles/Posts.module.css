@@ -1,12 +1,17 @@
 .container {
     columns: 4 150px;
     width: 80%;
+    
 }
 .col {
     flex-direction: column;
 }
 
 .tile {
+    -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    break-inside: avoid;
     align-items: center;
     display: flex;
     flex-direction: column;

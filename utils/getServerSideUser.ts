@@ -5,8 +5,6 @@ import { UserPick } from "./interfaces";
 
 /**
  * Decodes and verifies the JWT and returns the user if any.
- * @param context  
- * @returns 
  */
 export function getServerSideUser(context: GetServerSidePropsContext) {
     const {req, res} = context; 
