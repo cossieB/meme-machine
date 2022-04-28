@@ -43,7 +43,7 @@ export default function Nav() {
 
             {showProfile && user && (
                 <Mask showModal={setShowProfile} >
-                    <Profile showModal={setShowProfile} pageUser={user} />
+                    <Profile showModal={setShowProfile} pageUser={{...user, dateString: user.joinDate.toUTCString()}} />
                     <Settings />
                 </Mask>
             )}
