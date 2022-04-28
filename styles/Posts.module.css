@@ -1,7 +1,7 @@
 .container {
     columns: 4 150px;
     width: 80%;
-    
+    margin-bottom: 1rem;
 }
 .col {
     flex-direction: column;

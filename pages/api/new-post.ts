@@ -20,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             res.json({id: newPost.id})
         }
         catch(e: any) {
-            console.log(e)
+            e !instanceof ServerError && console.log(e)
             res.status(e.status || 500).json({error: e.message})
         }
     }
@@ -38,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             res.json({msg: "ok"})
         }
         catch(e: any) {
-            console.log(e)
+            e !instanceof ServerError && console.log(e)
             res.status(e.status || 500).json({error: e.message})
         }
     }
@@ -57,7 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             res.json({msg: "ok"})
         }
         catch(e: any) {
-            console.log(e)
+            e !instanceof ServerError && console.log(e)
             res.status(e.status || 500).json({error: e.message})
         }
     }

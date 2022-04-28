@@ -8,8 +8,8 @@ export default async function hanlder(req: NextApiRequest, res: NextApiResponse)
         await mongoose.connect(process.env.MONGO_URI!)
         if (req.method == "GET") {
             const postsPerPage = 25
-            const {page, username} = req.query;
-            const postQuery = Posts.find(username ? {"user.username": username} : {}).sort({date: 'desc'}).select('-user.password').limit(postsPerPage).skip(postsPerPage * Number(page))
+            const { page, username } = req.query;
+            const postQuery = Posts.find(username ? { "user.username": username } : {}).sort({ date: 'desc' }).select('-user.password').limit(postsPerPage).skip(postsPerPage * Number(page))
             const countQuery = Posts.count()
             let [data, count] = await Promise.all([postQuery, countQuery])
 
@@ -25,15 +25,18 @@ export default async function hanlder(req: NextApiRequest, res: NextApiResponse)
                         username: p.user.username,
                         avatar: p.user.avatar
                     }
-                }}
-            )
+                }
+            })
 
-            res.json({posts, pageMax: Math.floor(count / postsPerPage)})
+            res.json({
+                posts,
+                pageMax: Math.ceil(count / postsPerPage) - 1
+            })
         }
 
     }
-    catch(e: any) {
+    catch (e: any) {
         e !instanceof ServerError && console.log(e)
     }
-    
+
 }

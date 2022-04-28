@@ -40,7 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             return res.json({ user: userCookie })
         }
         catch (e: any) {
-            console.log(e)
+            e !instanceof ServerError && console.log(e)
             return res.status(e.status || 500).json({ errors: [e.message] })
         }
         finally {
