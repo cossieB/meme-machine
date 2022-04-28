@@ -7,6 +7,7 @@ import { Users } from '../../utils/schema';
 import { IUser, UserPick } from '../../utils/interfaces';
 import { sendJWT } from '../../utils/sendJWT';
 import { getJwtUserFromDB } from '../../utils/getJwtUserFromDB';
+import ServerError from '../../utils/ServerError';
 
 type DATA = {user: UserPick} | {msg: "ok"} | {errors: any[]} | {error: any}
 
@@ -45,7 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         }
     }
     catch(e: any) {
-        console.log(e)
+        e !instanceof ServerError && console.log(e)
         return res.status(e.status || 500).json({error: e.message})
     }  
     finally {

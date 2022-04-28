@@ -7,6 +7,7 @@ import { useContext, useState } from "react";
 import { UserContext } from "../_app";
 import { IPost, IUser } from "../../utils/interfaces";
 import Loader from "../../components/Loader";
+import PostList from "../../components/PostsList";
 
 type PostExclUser = Omit<IPost, "user">
 type P = Partial<PostExclUser> & { user: Partial<IUser> } & { dateString: string } & { id: string }
@@ -17,22 +18,6 @@ interface Props {
 }
 
 const postsPerPage = 25
-
-function Tile({ p }: { p: P }) {
-    return (
-        
-            <Link href={`/posts/${p.id}`}>
-                <a>
-                    <div className={styles.tile}>
-                        <h3>{p.title}</h3>
-                        <img src={p.image} alt={`${p.title} image`} />
-                    </div>
-                </a>
-            </Link>
-        
-    )
-}
-
 
 export default function Posts(props: Props) {
     const {posts} = props
@@ -54,25 +39,9 @@ export default function Posts(props: Props) {
     return (
         <>
             <h2> {user ? <Link href={"/posts/new"}>Post A Meme</Link> : <Link href={"/auth"} >Signup or Login to post</Link>} </h2>
-            {pressed ? <Loader /> :
-                <>
-                    <div className={styles.container}>
-                        {postsState.map((p) => <Tile key={p.id} p={p} />)}
-                    </div>
-                    <div>
-                        <button
-                            disabled={page == 0}
-                            onClick={() => changePage(-1)} >
-                            Previous
-                        </button>
-                        <button
-                            disabled={page + 1 >= pageMax}
-                            onClick={() => changePage(1)}
-                        >
-                            Next
-                        </button>
-                    </div>
-                </>
+            {pressed ?
+                <Loader /> :
+                <PostList posts={postsState} pageMax={pageMax} page={page} changePage={changePage} />
             }
         </>
     )
@@ -105,7 +74,7 @@ export async function getStaticProps(context: GetStaticPropsContext): Promise<Ge
     return {
         props: {
             posts,
-            pageMax: Math.floor(count / postsPerPage)
+            pageMax: Math.ceil(count / postsPerPage) - 1
         },
         revalidate: 60
     }

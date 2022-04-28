@@ -1,13 +1,12 @@
 import mongoose from "mongoose";
 import { GetStaticPathsContext, GetStaticPathsResult, GetStaticPropsContext, GetStaticPropsResult } from "next";
 import { Posts, Posts as PostsModel, Users } from '../../utils/schema';
-import styles from "../../styles/Posts.module.css"
-import Link from "next/link";
 import { useContext, useState } from "react";
 import { UserContext } from "../_app";
 import Profile from "../../components/Profile";
 import Loader from "../../components/Loader";
 import { IPost, IUser, UserPick } from "../../utils/interfaces";
+import PostList from "../../components/PostsList";
 
 type PostExclUser = Omit<IPost, "user">
 type P = Partial<PostExclUser> & { user: Partial<IUser> } & { dateString: string } & { id: string }
@@ -15,23 +14,10 @@ type P = Partial<PostExclUser> & { user: Partial<IUser> } & { dateString: string
 interface Props {
     posts: P[],
     pageMax: number,
-    pageUser: Pick<IUser, "username" | "avatar" | "status"> & {dateString: string}
+    pageUser: Pick<IUser, "username" | "avatar" | "status"> & { dateString: string }
 }
 
-const postsPerPage = 3;
-
-function Tile({ p }: {p: P}) {
-    return (
-        <Link href={`/posts/${p.id}`}>
-            <a>
-                <div className={styles.tile}>
-                    <h3>{p.title}</h3>
-                    <img src={p.image} alt={`${p.title} image`} />
-                </div>
-            </a>
-        </Link>
-    )
-}
+const postsPerPage = 25;
 
 export default function UserPosts(props: Props) {
     const { posts, pageUser } = props;
@@ -55,32 +41,17 @@ export default function UserPosts(props: Props) {
             <Profile pageUser={pageUser} />
 
             <h2>{`${pageUser.username}'s Memes`}</h2>
-            {pressed ? <Loader /> :
-                <>
-                    <div className={styles.container}>
-                        {postsState.map((p) => <Tile key={p.id} p={p} />)}
-                    </div>
-                    <div>
-                        <button
-                            disabled={page == 0}
-                            onClick={() => changePage(-1)} >
-                            Previous
-                        </button>
-                        <button
-                            disabled={page + 1 >= pageMax}
-                            onClick={() => changePage(1)}
-                        >
-                            Next
-                        </button>
-                    </div>
-                </>
+            {pressed ?
+                <Loader /> :
+                <PostList posts={postsState} pageMax={pageMax} page={page} changePage={changePage} />
             }
         </>
     )
 }
 
+
 export async function getStaticProps(context: GetStaticPropsContext): Promise<GetStaticPropsResult<Props>> {
-    
+
     let user = context.params?.user as string
     user = user.toLowerCase();
     await mongoose.connect(process.env.MONGO_URI!).catch(e => console.log(e))
@@ -115,7 +86,7 @@ export async function getStaticProps(context: GetStaticPropsContext): Promise<Ge
         props: {
             posts,
             pageUser,
-            pageMax: Math.floor(count / postsPerPage),
+            pageMax: Math.ceil(count / postsPerPage) - 1,
         },
         revalidate: 60
     }

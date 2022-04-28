@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getJwtUserFromDB } from "../../utils/getJwtUserFromDB";
 import { Comments } from "../../utils/schema";
 import {IComment} from "../../utils/interfaces"
+import ServerError from "../../utils/ServerError";
 
 interface GET {
     response: (mongoose.Document<unknown, any, IComment> & IComment & {_id: mongoose.Types.ObjectId})[]
@@ -43,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             res.status(201).json({msg: "ok"})
         }
         catch(e: any) {
-            console.log(e)
+            e !instanceof ServerError && console.log(e)
             res.status(e.status || 500).json({errors: e.message})
         }
     }
