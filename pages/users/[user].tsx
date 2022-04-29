@@ -14,13 +14,14 @@ type P = Partial<PostExclUser> & { user: Partial<IUser> } & { dateString: string
 interface Props {
     posts: P[],
     pageMax: number,
-    pageUser: Pick<IUser, "username" | "avatar" | "status"> & { dateString: string }
+    pageUser: Pick<IUser, "username" | "avatar" | "status"> & { dateString: string },
+    count: number
 }
 
 const postsPerPage = 25;
 
 export default function UserPosts(props: Props) {
-    const { posts, pageUser } = props;
+    const { posts, pageUser, count } = props;
     const [page, setPage] = useState(0)
     const username = useContext(UserContext)?.user?.username
     const [postsState, setPosts] = useState(posts)
@@ -38,7 +39,7 @@ export default function UserPosts(props: Props) {
     }
     return (
         <>
-            <Profile pageUser={pageUser} />
+            <Profile pageUser={pageUser} count={count} />
 
             <h2>{`${pageUser.username}'s Memes`}</h2>
             {pressed ?
@@ -84,6 +85,7 @@ export async function getStaticProps(context: GetStaticPropsContext): Promise<Ge
     })
     return {
         props: {
+            count,
             posts,
             pageUser,
             pageMax: Math.ceil(count / postsPerPage) - 1,

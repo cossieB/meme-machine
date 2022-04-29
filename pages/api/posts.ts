@@ -10,8 +10,8 @@ export default async function hanlder(req: NextApiRequest, res: NextApiResponse)
             const postsPerPage = 25
             const { page, username } = req.query;
             const postQuery = Posts.find(username ? { "user.username": username } : {}).sort({ date: 'desc' }).select('-user.password').limit(postsPerPage).skip(postsPerPage * Number(page))
-            const countQuery = Posts.count()
-            let [data, count] = await Promise.all([postQuery, countQuery])
+            const countQuery = Posts.count(username ? { "user.username": username } : {})
+            const [data, count] = await Promise.all([postQuery, countQuery])
 
             const posts = data.map(p => {
                 return {
