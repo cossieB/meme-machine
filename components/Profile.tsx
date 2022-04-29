@@ -7,7 +7,7 @@ import { IUser, IUserContext, UserPick } from "../utils/interfaces";
 interface P1 {
     pageUser: Pick<IUser, "username" | "avatar" | "status"> & {dateString: string} & {memes?: number},
     showModal?: React.Dispatch<SetStateAction<boolean>>,
-    count: number
+    count?: number
 }
 
 export default function Profile({pageUser, showModal, count}: P1) {
