@@ -26,7 +26,7 @@ export default function PostList(props: P2) {
                     Previous
                 </button>
                 <button
-                    disabled={page + 1 >= pageMax}
+                    disabled={page  >= pageMax}
                     onClick={() => changePage(1)}
                 >
                     Next

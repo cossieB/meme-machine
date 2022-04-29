@@ -6,10 +6,11 @@ import { IUser, IUserContext, UserPick } from "../utils/interfaces";
 
 interface P1 {
     pageUser: Pick<IUser, "username" | "avatar" | "status"> & {dateString: string} & {memes?: number},
-    showModal?: React.Dispatch<SetStateAction<boolean>>
+    showModal?: React.Dispatch<SetStateAction<boolean>>,
+    count: number
 }
 
-export default function Profile({pageUser, showModal}: P1) {
+export default function Profile({pageUser, showModal, count}: P1) {
     const {user} = useContext(UserContext) as IUserContext
     return (
         <div style={{color: 'var(--colorDark)', marginTop: '1rem'}} >
@@ -18,7 +19,7 @@ export default function Profile({pageUser, showModal}: P1) {
                 <div><h2>{pageUser.username}</h2></div>
                 <div><h5>{pageUser.status}</h5></div>
                 <div>{pageUser.dateString}</div>
-                { pageUser.memes ? <div>{pageUser.memes} memes</div> : <Link href={`../users/${pageUser.username}`}><a onClick={() => showModal && showModal(false)} style={{color: 'var(--colorDark)', fontSize: '1.5rem'}}>Profile</a></Link> }
+                { count ? <div>{count} memes</div> : <Link href={`../users/${pageUser.username}`}><a onClick={() => showModal && showModal(false)} style={{color: 'var(--colorDark)', fontSize: '1.5rem'}}>Profile</a></Link> }
             </div>
 
             <div>
