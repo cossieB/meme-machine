@@ -21,15 +21,19 @@
     box-sizing: border-box;
     justify-content: center;
     &::after{
+        pointer-events: none;
         content: "/>";
         right: 5%;
         @include befaft()
     }
     &::before {
+      pointer-events: none;
         content: $name;
         left: 5%;
         @include befaft()
     }
   }
   $tempcolor1: #b11960;
-  $tempcolor2: scale-color($tempcolor1, $lightness: +25%)
+  $tempcolor2: scale-color($tempcolor1, $lightness: +25%);
+  $tempcolor3: #199ab1;
+  $tempcolor4: scale-color($tempcolor1, $lightness: +25%)

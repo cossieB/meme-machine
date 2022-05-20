@@ -17,7 +17,7 @@ export default function PostList(props: P2) {
     return (
         <>
             <div className={styles.container}>
-                {posts.map((p) => <Tile key={p.id} p={p} />)}
+                {posts.map((p, idx) => <Tile key={p.id} p={{...p, idx: idx % 3}} />)}
             </div>
             <div>
                 <button

@@ -58,7 +58,7 @@ export default function NewPost() {
 
     return (
         <>
-            <h1>New Meme</h1>
+            <h1 style={{width: '50vw', textAlign: 'center'}} className="label-header" >New Meme</h1>
         <div className={`flexCenter ${styles.form}`} style={{height: "100%"}} >
             <form onSubmit={handleSubmit} style={{ width: "50vw" }} method="POST" encType="multipart/formdata">
                 <label htmlFor="Title">Title</label>

@@ -14,6 +14,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
         if (cookie.parse(cookies).user) {
             let storedUser: UserPick = JSON.parse(cookie.parse(cookies).user)
+            storedUser.joinDate = new Date(storedUser.joinDate)
             setUser(storedUser)
         }
         else {
