@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useContext, useState } from "react";
 import { UserContext } from "../pages/_app";
+import formatDate from "../utils/formatDate";
 import { IUserContext } from "../utils/interfaces";
 import Mask from "./Mask";
 import Profile from "./Profile";
@@ -43,7 +44,7 @@ export default function Nav() {
 
             {showProfile && user && (
                 <Mask showModal={setShowProfile} >
-                    <Profile showModal={setShowProfile} pageUser={{...user, dateString: user.joinDate.toUTCString()}} />
+                    <Profile showModal={setShowProfile} pageUser={{...user, dateString: formatDate(user.joinDate)}} />
                     <Settings />
                 </Mask>
             )}

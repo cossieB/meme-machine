@@ -4,9 +4,11 @@ import { Posts, Posts as PostsModel, Users } from '../../utils/schema';
 import { useContext, useState } from "react";
 import { UserContext } from "../_app";
 import Profile from "../../components/Profile";
+import styles from '../../styles/users.module.scss'
 import Loader from "../../components/Loader";
 import { IPost, IUser, UserPick } from "../../utils/interfaces";
 import PostList from "../../components/PostsList";
+import formatDate from "../../utils/formatDate";
 
 type PostExclUser = Omit<IPost, "user">
 type P = Partial<PostExclUser> & { user: Partial<IUser> } & { dateString: string } & { id: string }
@@ -39,9 +41,19 @@ export default function UserPosts(props: Props) {
     }
     return (
         <>
-            <Profile pageUser={pageUser} count={count} />
+            <div className={styles.prof} >
+                <div className={styles.av} >
+                    <img className={styles.av} src={pageUser.avatar} alt="" />
+                </div>
+                <div className={styles.inf} >
+                    <h2>{pageUser.username}</h2>
+                    Joined: { formatDate(pageUser.dateString) } <br />
+                    Status: {pageUser.status}
 
-            <h2>{`${pageUser.username}'s Memes`}</h2>
+                </div>
+            </div>
+
+            <h2 style={{width: '90%', textAlign: 'center'}} className="label-header" >{`${pageUser.username}'s Memes`}</h2>
             {pressed ?
                 <Loader /> :
                 <PostList posts={postsState} pageMax={pageMax} page={page} changePage={changePage} />
