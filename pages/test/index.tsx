@@ -1,7 +1,7 @@
 import { GetStaticPathsContext, GetStaticPathsResult, GetStaticPropsResult } from "next";
 import Link from "next/link";
 import { useState } from "react";
-import styles from '../../styles/Posts.module.css'
+import styles from '../../styles/Posts.module.scss'
 
 export interface Posts {
     userId: number,

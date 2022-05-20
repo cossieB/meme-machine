@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useContext } from 'react'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/Home.module.scss'
 import { UserContext } from './_app'
 
 export default function Home() {
@@ -17,7 +17,7 @@ export default function Home() {
                     <h2><Link href={`users/${user.username}`}  >Edit Your Profile</Link> </h2>
                 </div>: 
                 <div className={styles.links}>
-                    <h2><Link href="/posts" >Browse Memes</Link></h2>
+                    <h2 className='label'><Link href="/posts" >Browse Memes</Link></h2>
                     <h2><Link href="/auth" >Sign up or log in to upload a meme</Link></h2>
                 </div>
                 }

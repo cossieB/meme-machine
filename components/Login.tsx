@@ -1,5 +1,5 @@
 import { useContext, useState } from "react"
-import styles from '../styles/Auth.module.css'
+import styles from '../styles/Auth.module.scss'
 import { useRouter } from "next/router"
 import { UserContext } from "../pages/_app"
 import { IUserContext } from "../utils/interfaces"

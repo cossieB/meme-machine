@@ -3,6 +3,7 @@
     width: 80%;
     margin-bottom: 1rem;
 }
+
 .col {
     flex-direction: column;
 }
@@ -16,42 +17,40 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 1rem;
+
+    img {
+        aspect-ratio: initial;
+        width: 100%;
+    }
 }
-.tile img {
-    aspect-ratio: initial;
-    width: 100%;
-}
+
 .panel {
     width: 45%;
+    img {
+        width: 100%;
+        height: auto;
+    }
 }
+
 .flexApart {
     display: flex;
     justify-content: space-between;
 }
-.panel img {
-    width: 100%;
-    height: auto;
-}
-.partition {
-    border: 1px solid black;
-    padding: 0 0.5rem
-}
-.commentDiv {
-    margin-top: 1rem;
-}
+
 .meme {
     display: inline-block;
-    width: 100%
+    width: 100%;
 
-}
-.meme img{
-    aspect-ratio: initial;
+    img {
+        aspect-ratio: initial;
+    }
 }
 
 @media (max-width: 768px) {
     .container {
         width: 90%;
     }
+
     .panel {
         width: 47%;
     }

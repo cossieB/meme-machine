@@ -1,7 +1,7 @@
 import { JwtPayload } from "jsonwebtoken"
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next"
 import React, { useState } from "react"
-import styles from '../../styles/new.module.css';
+import styles from '../../styles/new.module.scss';
 import jwt from 'jsonwebtoken'
 import { getServerSideUser } from "../../utils/getServerSideUser";
 import { useRouter } from "next/router";

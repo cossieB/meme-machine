@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useState } from "react"
 import { IPost } from "../utils/interfaces"
-import styles from '../styles/search.module.css'
+import styles from '../styles/search.module.scss'
 import Link from "next/link"
 
 export default function Search() {

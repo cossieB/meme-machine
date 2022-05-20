@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { UserContext } from '../pages/_app';
-import styles from '../styles/profile.module.css'
+import styles from '../styles/profile.module.scss'
 import { IUserContext } from '../utils/interfaces';
 
 export default function () {
