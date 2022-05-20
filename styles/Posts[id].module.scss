@@ -6,42 +6,44 @@
 .col {
     flex-direction: column;
 }
-
 .tile {
     display: flex;
     flex-direction: column;
     margin-bottom: 1rem;
-}
-.tile img {
-    aspect-ratio: initial;
-    width: 100%;
+
+    img {
+        aspect-ratio: initial;
+        width: 100%;
+    }
 }
 .panel {
     width: 45%;
+
+    img {
+        width: 100%;
+        height: auto;
+    }
 }
 .flexApart {
     display: flex;
     justify-content: space-between;
 }
-.panel img {
-    width: 100%;
-    height: auto;
-}
 .partition {
     border: 1px solid black;
-    padding: 0 0.5rem
+    padding: 0 0.5rem;
 }
 .commentDiv {
     margin-top: 1rem;
 }
 
+
+
 @media (max-width: 768px) {
     .container {
         flex-direction: column;
-    }
-    .container {
         width: 90%;
     }
+
     .panel {
         width: 100%;
     }

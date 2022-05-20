@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react"
-import styles from "../styles/Posts.module.css";
+import styles from "../styles/Posts.module.scss";
 import {IComment} from "../utils/interfaces"
 
 interface P {
@@ -26,7 +26,7 @@ export default function Comment({ id, rerender }: P) {
     return (
         <div>
             {comments.map(comment =>
-                <div key={comment.date.getTime()} className={styles.commentDiv} >
+                <div key={comment.date.getTime()} className="label-comment" >
                     <div className={`${styles.partition} ${styles.flexApart}`} >
                         <div>{comment.date.toDateString()}</div>
                         <div><Link href={`../users/${comment.user.username}`}>{comment.user.username}</Link></div>

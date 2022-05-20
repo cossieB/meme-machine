@@ -1,0 +1,35 @@
+@use "sass:color";
+
+@mixin befaft {
+    position: absolute;
+    font-size: 50px;
+    opacity: 10%;
+    color: black;
+  }
+
+@mixin label($fromClr, $toClr, $name) {
+    height: 108px;
+    position: relative;
+    background: linear-gradient($fromClr, $toClr);
+    border-radius: 10px;
+    margin: 1rem 0;
+    box-shadow: black 0px 0px 10px;
+    color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    box-sizing: border-box;
+    justify-content: center;
+    &::after{
+        content: "/>";
+        right: 5%;
+        @include befaft()
+    }
+    &::before {
+        content: $name;
+        left: 5%;
+        @include befaft()
+    }
+  }
+  $tempcolor1: #b11960;
+  $tempcolor2: scale-color($tempcolor1, $lightness: +25%)

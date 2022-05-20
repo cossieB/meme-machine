@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { IPost, IUser } from "../utils/interfaces";
-import styles from "../styles/Posts.module.css"
+import styles from "../styles/Posts.module.scss"
 
 type PostExclUser = Omit<IPost, "user">
 type P = Partial<PostExclUser> & { user: Partial<IUser> } & { dateString: string } & { id: string }

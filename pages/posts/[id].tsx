@@ -1,6 +1,6 @@
 import { GetStaticPathsContext, GetStaticPathsResult, GetStaticPropsContext, GetStaticPropsResult } from "next";
 import { Posts } from "../../utils/schema";
-import styles from '../../styles/Posts[id].module.css'
+import styles from '../../styles/Posts[id].module.scss'
 import mongoose from "mongoose";
 import Link from "next/link";
 import LikeAndComment from "../../components/LikeAndComment";
@@ -12,6 +12,8 @@ import { useRouter } from "next/router";
 import DeletePost from "../../components/DeletePost";
 import Mask from "../../components/Mask";
 import EditPost from "../../components/EditPost";
+import formatDate from "../../utils/formatDate";
+
 
 
 type PostExclUser = Omit<IPost, "user">
@@ -29,11 +31,12 @@ export default function Post(props: P) {
         <div className={`${styles.container} ${styles.postContainer}`} >
 
             <div className={`${styles.panel}`}>
-                <h1 style={{ textAlign: "center" }}>{title}</h1>
-
-                <div className={styles.flexApart}>
-                    <div>{new Date(dateString).toUTCString()}</div>
-                    <Link href={'/users/' + user.username}><a><strong>{user.username}</strong></a></Link>
+                <div className='label-title' >
+                    <h1 style={{ textAlign: "center" }}>{title}</h1>
+                    <div className={styles.flexApart}>
+                        <div> {formatDate(dateString)}  </div>
+                        <Link href={'/users/' + user.username}><a><strong>{user.username}</strong></a></Link>
+                    </div>
                 </div>
 
                 <img src={image} alt={`${title} image`} />
@@ -44,11 +47,11 @@ export default function Post(props: P) {
                         <button onClick={() => setShowDeleteModal(true)} className="danger">Delete</button>
                     </div>
                 )}
-                {description && <p>{description}</p>}
+                {description && <p className="label-desc" >{description}</p>}
             </div>
 
             <div className={styles.panel}>
-                <h1 style={{ textAlign: "center" }}>Comments</h1>
+                <h1 className="label-header" style={{ textAlign: "center" }}>Comments</h1>
                 <LikeAndComment setRerenderChildren={setRerenderChildren} id={id} />
                 <Comment id={id} rerender={rerenderChildren} />
             </div>

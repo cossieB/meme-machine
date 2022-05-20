@@ -1,4 +1,4 @@
-import styles from "../styles/Posts.module.css"
+import styles from "../styles/Posts.module.scss"
 import { IPost, IUser } from "../utils/interfaces";
 import Tile from "./Tile";
 

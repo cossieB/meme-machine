@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { SetStateAction, useContext } from "react";
 import { UserContext } from "../pages/_app";
-import styles from '../styles/users.module.css'
+import styles from '../styles/users.module.scss'
 import { IUser, IUserContext, UserPick } from "../utils/interfaces";
 
 interface P1 {
