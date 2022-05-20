@@ -9,7 +9,7 @@ interface P {
     showModal: React.Dispatch<SetStateAction<boolean>>
 }
 
-export default function(props: P) {
+export default function EditPost(props: P) {
     const {id, title, description, image, showModal} = props
     const [newTitle, setNewTitle] = useState(title)
     const [newDescription, setNewDescription] = useState(description)

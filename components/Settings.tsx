@@ -3,7 +3,7 @@ import { UserContext } from '../pages/_app';
 import styles from '../styles/profile.module.scss'
 import { IUserContext } from '../utils/interfaces';
 
-export default function () {
+export default function Settings() {
     const {user, setUser} = useContext(UserContext) as IUserContext
     const [avatar, setAvatar] = useState(user?.avatar || "")
     const [status, setStatus] = useState(user?.status || "")
