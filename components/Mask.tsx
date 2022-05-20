@@ -5,7 +5,7 @@ interface P {
     children: ReactNode
 }
 
-export default function (props: P) {
+export default function Mask(props: P) {
     const ref = useRef<HTMLDivElement>(null)
 
     return (

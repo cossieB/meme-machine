@@ -7,7 +7,7 @@ interface P {
     showModal: React.Dispatch<SetStateAction<boolean>>
 }
 
-export default function ({ id, title, showModal }: P) {
+export default function DeletePost({ id, title, showModal }: P) {
     const [input, setInput] = useState("")
     const [error, setError] = useState("")
 
