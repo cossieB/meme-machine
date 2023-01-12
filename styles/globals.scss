@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400&family=Stick+No+Bills:wght@600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Stick+No+Bills:wght@800&display=swap');
-@import 'variables';
 
 :root {
     --colorDark: #121212;
@@ -9,19 +8,16 @@
     font-size: 16px;
 }
 
+$navHeight: 56px;
+
 html,
 body {
+    $color1: #222222;
+    $color2: #4d52a5de;
     padding: 0;
     margin: 0;
     font-family: 'Nunito', sans-serif;
-    background: linear-gradient(0deg, #2bff00, #e4ff84);
-}
-
-#__next {
-    display: flex;
-    flex-direction: column;
-    width: 100vw;
-    min-height: 100vh;
+    background: linear-gradient(90deg, $color1, $color2, $color1);
 }
 
 a {
@@ -37,7 +33,7 @@ a {
 nav {
     display: flex;
     background-color: var(--colorDark);
-    height: 75px;
+    height: $navHeight;
     align-items: center;
     justify-content: space-around;
     color: var(--colorLight);
@@ -61,7 +57,7 @@ nav {
 }
 
 main {
-    min-height: calc(100vh - 75px);
+    min-height: calc(100vh - $navHeight);
     width: 100vw;
     display: flex;
     flex-direction: column;
@@ -186,39 +182,6 @@ footer {
     }
 }
 
-.label-title {
-    @include label(#800080, #cf2bcf, '<title')
-}
-
-.label-title-0 {
-    @include label(#800080, #cf2bcf, '<title');
-    height: auto
-}
-
-.label-title-1 {
-    @include label(#e45d0f, #a06a4b, '<title');
-    height: auto
-}
-
-.label-title-2 {
-    @include label(#1F51FF, #152f8d, '<title');
-    height: auto
-}
-
-.label-header {
-    @include label(#e45d0f, #a06a4b, '<heading')
-}
-
-.label-desc {
-    @include label(#1F51FF, #152f8d, '<description');
-    min-height: 100px;
-    justify-content: flex-start;
-}
-
-.label-comment {
-    @include label($tempcolor1, $tempcolor2, '<comment');
-    justify-content: space-around;
-}
 
 .navLinks {
     display: flex;
