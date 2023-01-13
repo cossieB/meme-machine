@@ -11,6 +11,9 @@ datasource db {
 }
 
 model User {
-  userId   String @id @db.VarChar(50)
-  username String @unique @db.VarBit(50)
+  userId   String   @id @db.VarChar(50)
+  username String   @unique @db.VarBit(50)
+  avatar   String?
+  status   String?  @default("") @db.VarChar(255)
+  joinDate DateTime @default(now())
 }

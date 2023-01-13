@@ -4,7 +4,7 @@ import { LoginSvg, SearchSvg } from "./svgs";
 
 export default function Nav() {
     return (
-        <nav className="flex-col h-screen bg-teal-800 w-52 fixed">
+        <nav className="flex-col h-screen bg-teal-800 w-52 absolute top-0 left-0">
             <Link href={"/auth/"} >
                 <SideBarIcon Icon={ LoginSvg } text={"Login"} />
             </Link>
