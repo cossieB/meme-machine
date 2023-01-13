@@ -1,16 +1,16 @@
 import Link from "next/link";
-import { useContext, useState } from "react";
-import { UserContext } from "../pages/_app";
-import formatDate from "../utils/formatDate";
-import { IUserContext } from "../utils/interfaces";
-import Mask from "./Mask";
-import Profile from "./Profile";
-import Settings from "./Settings";
+import SideBarIcon from "./SideBarIcon";
+import { LoginSvg, SearchSvg } from "./svgs";
 
 export default function Nav() {
     return (
-        <nav>
-            
+        <nav className="flex-col h-screen bg-teal-800 w-52 fixed">
+            <Link href={"/auth/"} >
+                <SideBarIcon Icon={ LoginSvg } text={"Login"} />
+            </Link>
+            <Link href={"/search/"} >
+                <SideBarIcon Icon={ SearchSvg } text={"Login"} />
+            </Link>
         </nav>
     )
 }
