@@ -1,18 +1,44 @@
+import { getToken } from 'next-auth/jwt';
 import { z } from 'zod';
 import { procedure, router } from '../trpc';
 
+type User = {
+    name: string,
+    age: number
+}
+
+const users: User[] = []
+
 export const appRouter = router({
-  hello: procedure
-    .input(
-      z.object({
-        text: z.string(),
-      }),
-    )
-    .query(({ input }) => {
-      return {
-        greeting: `hello ${input.text}`,
-      };
-    }),
+    hella: procedure
+        .input(
+            z.object({
+                name: z.string(),
+                age: z.number()
+            }),
+        )
+        .query(({ input }) => {
+            return {
+                greeting: `hello ${input.name} who is ${input.age} years old`,
+            };
+        }),
+    create: procedure
+        .input(z.object({
+            name: z.string(), 
+            age: z.number()
+        }))
+        .mutation(req => {
+            users.push(req.input)
+            return users
+        }),
+    test: procedure
+        
+        .query(async (ctx) => {
+            console.log(ctx)
+            // const token = await getToken(ctx);
+            // console.log(token)
+            return true
+        })
 });
 
 // export type definition of API
