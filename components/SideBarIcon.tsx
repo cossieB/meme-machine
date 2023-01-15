@@ -1,17 +1,21 @@
+import Link from "next/link";
 import { ReactNode } from "react";
 import { SvgProps } from "./svgs";
 
 type IconProps = {
-    Icon: any,
+    icon: JSX.Element,
     text: string,
-    size?: number
+    href: string
 }
 
 export default function SideBarIcon(props: IconProps) {
-    const { Icon, text, size } = props;
+    const { icon, text, href } = props;
     return (
-        <div className="navIcon">
-            <Icon size={size} />
-        </div>
+        <Link href={href}>
+            <div className="flex items-center mx-3 text-orange-300 h-20 cursor-pointer">
+                <span className="w-10">{icon}</span>
+                <span> {text} </span>
+            </div>
+        </Link>
     )
 }
