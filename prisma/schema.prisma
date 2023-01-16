@@ -38,17 +38,16 @@ model Session {
 }
 
 model User {
-    id             String    @id @default(cuid())
-    name           String?
-    email          String    @unique
-    emailVerified  DateTime?
-    image          String?
-    accounts       Account[]
-    sessions       Session[]
-    username       String?   @unique @db.VarChar(50)
-    username_lower String?   @unique @db.VarChar(50)
-    status         String    @default("") @db.VarChar(255)
-    joinDate       DateTime  @default(now())
+    id            String    @id @default(cuid())
+    name          String?
+    email         String    @unique
+    emailVerified DateTime?
+    image         String?
+    accounts      Account[]
+    sessions      Session[]
+    username      String    @unique @db.VarChar(255)
+    status        String    @default("") @db.VarChar(255)
+    joinDate      DateTime  @default(now())
 }
 
 model VerificationToken {

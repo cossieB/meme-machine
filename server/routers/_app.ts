@@ -32,12 +32,13 @@ export const appRouter = router({
             return users
         }),
     test: procedure
-        
-        .query(async (ctx) => {
-            console.log(ctx)
-            // const token = await getToken(ctx);
-            // console.log(token)
-            return true
+        .input(z.object({
+            username: z.string(),
+            image: z.string()
+        }))
+        .query(({ctx, input}) => {
+            return input.username == ctx.user?.name && input.image == ctx.user.picture
+            
         })
 });
 

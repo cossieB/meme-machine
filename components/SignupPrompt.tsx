@@ -8,7 +8,7 @@ export default function SignupPrompt() {
     const [name, setName] = useState("")
     const [age, setAge] = useState(0);
     const mutation = trpc.create.useMutation()
-    const query = trpc.test.useQuery()
+    // const query = trpc.test.useQuery()
 
     return (
         <div className="w-screen h-screen absolute top-0 left-0 bg-slate-800 flex">
@@ -21,13 +21,6 @@ export default function SignupPrompt() {
                     className="border-2 text-3xl border-lime-300 p-3 rounded-full w-2/3 hover:bg-lime-300 hover:text-gray-900
                     transition-all duration-300">
                     SIGNUP / LOGIN
-                </button>
-                <button 
-                    onClick={async () => {
-                        console.log(query.data)
-                    }}
-                >
-                    GO
                 </button>
             </div>
         </div>
