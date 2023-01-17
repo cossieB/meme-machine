@@ -1,5 +1,7 @@
+import { TRPCError } from '@trpc/server';
 import { getToken } from 'next-auth/jwt';
 import { z } from 'zod';
+import db from '../../prisma/db';
 import { procedure, router } from '../trpc';
 
 type User = {
@@ -24,21 +26,59 @@ export const appRouter = router({
         }),
     create: procedure
         .input(z.object({
-            name: z.string(), 
+            name: z.string(),
             age: z.number()
         }))
         .mutation(req => {
             users.push(req.input)
             return users
         }),
-    test: procedure
+    getMyInfo: procedure
+        .query(async ({ ctx }) => {
+            if (!ctx.user)
+                throw new TRPCError({ code: 'UNAUTHORIZED' })
+            const result = await db.user.findUnique({
+                where: {
+                    email: ctx.user.email!
+                },
+                select: {
+                    email: true,
+                    name: true,
+                    username: true,
+                    status: true,
+                    image: true
+                }
+            })
+            if (!result)
+                throw new TRPCError({ code: 'NOT_FOUND', message: "User not found" })
+
+            return { ...result, name: result.name ?? "", image: result.image ?? "" }
+        }),
+    updateProfile: procedure
         .input(z.object({
             username: z.string(),
-            image: z.string()
+            image: z.string(),
+            name: z.string(),
+            status: z.string()
         }))
-        .query(({ctx, input}) => {
-            return input.username == ctx.user?.name && input.image == ctx.user.picture
-            
+        .mutation(async req => {
+            if (!req.ctx.user)
+                throw new TRPCError({ code: 'UNAUTHORIZED' })
+            console.log(req.input)
+            // return new TRPCError({ code: 'UNAUTHORIZED' })
+            try {
+                await db.user.update({
+                    where: {
+                        email: req.ctx.user.email!
+                    },
+                    data: { ...req.input }
+                })
+                return true
+            }
+            catch (e: any) {
+                console.error(e);
+                throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' })
+            }
         })
 });
 

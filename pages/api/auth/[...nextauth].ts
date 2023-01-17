@@ -9,19 +9,17 @@ export default NextAuth({
     adapter: PrismaAdapter(db),
     callbacks: {
         async jwt({token, account, profile, user}) {
+            console.log({token, account, profile, user})
             if (user)
                 token.username = user.username
             return token
         },
         async session({session, token, user}) {
+            console.log({session, token, user})
             if (token)
                 session.user.username = token.username
             return session
         },
-        signIn({account, user, credentials, profile}) {
-            console.log({account, user, credentials, profile})
-            return true
-        }
     },
     session: {
         strategy: 'jwt',
