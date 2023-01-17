@@ -1,10 +1,10 @@
 import type { AppProps } from 'next/app'
 import Layout from '../components/Layout'
-import React, { useState } from 'react'
+import React from 'react'
 import { SessionProvider } from "next-auth/react"
 import { trpc } from '../utils/trpc';
 import '../styles/global.css'
-import { ContextUser, UserContext } from '../hooks/userContext';
+import UserProvider from '../components/UserProvider';
 
 function MyApp({ Component, pageProps: session, ...pageProps }: AppProps) {
     
@@ -21,20 +21,3 @@ function MyApp({ Component, pageProps: session, ...pageProps }: AppProps) {
 
 export default trpc.withTRPC(MyApp)
 
-type Props = {
-    children: React.ReactNode
-}
-
-function UserProvider({children}: Props) {
-    const [user, setUser] = useState<ContextUser | null>(null)
-    trpc.getMyInfo.useQuery(undefined, {
-        onSuccess(data) {
-            setUser(data)
-        },
-    })
-    return (
-        <UserContext.Provider value={{user, setUser}} >
-            {children}
-        </UserContext.Provider>
-    )
-}

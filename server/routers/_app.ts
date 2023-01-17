@@ -64,8 +64,10 @@ export const appRouter = router({
         .mutation(async req => {
             if (!req.ctx.user)
                 throw new TRPCError({ code: 'UNAUTHORIZED' })
-            console.log(req.input)
-            // return new TRPCError({ code: 'UNAUTHORIZED' })
+            if (req.input.username.length < 3 || req.input.username.length > 20)
+                throw new TRPCError({ code: 'BAD_REQUEST', message: "Username must be between 3 and 20 characters" })
+            if (req.input.status.length > 255)
+                throw new TRPCError({ code: 'BAD_REQUEST', message: "Maximum length of status is 255 characters" })
             try {
                 await db.user.update({
                     where: {

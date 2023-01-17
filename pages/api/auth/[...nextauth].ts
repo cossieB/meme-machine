@@ -8,14 +8,12 @@ import db from '../../../prisma/db'
 export default NextAuth({
     adapter: PrismaAdapter(db),
     callbacks: {
-        async jwt({token, account, profile, user}) {
-            console.log({token, account, profile, user})
+        async jwt({token, user}) {
             if (user)
                 token.username = user.username
             return token
         },
-        async session({session, token, user}) {
-            console.log({session, token, user})
+        async session({session, token}) {
             if (token)
                 session.user.username = token.username
             return session

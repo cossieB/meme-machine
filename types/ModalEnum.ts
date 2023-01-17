@@ -1,0 +1,1 @@
+export type ModalEnum = "profile" | "search" | "publish" | "" | "prompt signup"

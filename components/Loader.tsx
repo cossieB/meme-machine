@@ -6,7 +6,7 @@ type Var = {
 
 const loaderVariants: Var = {
     animation1: {
-        x: [-100, 100],
+        x: ['-100%', '100%'],
         backgroundColor: ['#fdba74', '#0b981'],
         transition: {
             x: {
@@ -25,7 +25,8 @@ const loaderVariants: Var = {
         }
     },
     animation2: {
-        x: [100, -100],
+        x: ['100%', '-100%'],
+        backgroundColor: ['#0b981', '#fdba74'],
         transition: {
             x: {
                 repeat: Infinity,
@@ -34,6 +35,12 @@ const loaderVariants: Var = {
                 duration: 0.5,
                 ease: 'easeInOut'
             },
+            backgroundColor: {
+                repeat: Infinity,
+                repeatType: 'reverse',
+                duration: 1,
+                ease: 'easeInOut'
+            }
         },
     },
 }

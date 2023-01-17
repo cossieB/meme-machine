@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 
-export function useLocalStorage<T>(key: string, initialValue?: T) {
+type Keys = 'user'
+
+export function useLocalStorage<T>(key: Keys, initialValue?: T) {
     const [storage, setStorage] = useState<T | undefined>(initialValue)
     useEffect(() => {
         const str = localStorage.getItem(key)
@@ -8,7 +10,6 @@ export function useLocalStorage<T>(key: string, initialValue?: T) {
         setStorage(JSON.parse(str))
     }, [])
     function updateLocalStorage(val: T) {
-        console.log("UPDATed")
         setStorage(val)
         localStorage.setItem(key, JSON.stringify(val))
     }
