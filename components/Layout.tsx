@@ -1,12 +1,12 @@
 import { AnimatePresence } from "framer-motion";
 import Head from "next/head";
-import Link from "next/link";
 import { ReactNode, useState } from "react";
 import { ModalEnum } from "../types/ModalEnum";
 import Modal from "./Modal";
-import Nav from "./Nav";
-import Profile from "./Profile";
+import Nav from "./Nav/Nav";
+import Profile from "./Forms/Profile";
 import SignupPrompt from "./SignupPrompt";
+import NewMeme from "./Forms/NewMeme";
 
 interface P {
     children: ReactNode
@@ -28,8 +28,9 @@ export default function Layout(props: P) {
 
                 {modal && (
                     <Modal closeModal={closeModal}>
-                        {modal == 'profile' && <Profile />}
-                        {modal == 'prompt signup' && <SignupPrompt />}
+                        {modal == 'PROFILE' && <Profile />}
+                        {modal == 'PROMPT_SIGNUP' && <SignupPrompt />}
+                        {modal == 'PUBLISH' && <NewMeme />}
                     </Modal>
                 )}
             </AnimatePresence>

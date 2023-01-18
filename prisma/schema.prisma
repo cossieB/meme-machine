@@ -48,6 +48,7 @@ model User {
     username      String    @unique @db.VarChar(255)
     status        String    @default("") @db.VarChar(255)
     joinDate      DateTime  @default(now())
+    posts         Meme[]
 }
 
 model VerificationToken {
@@ -56,4 +57,15 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Meme {
+    postId       String   @id @default(cuid())
+    userId       String
+    user         User     @relation(fields: [userId], references: [id])
+    creationDate DateTime @default(now())
+    editDate     DateTime @default(now())
+    title        String   @db.VarChar(100)
+    image        String
+    description  String   @default("")
 }

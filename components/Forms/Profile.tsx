@@ -1,13 +1,14 @@
 import { User } from "next-auth"
 import { useSession, signOut } from "next-auth/react"
 import React, { useContext, useState } from "react"
-import { useLocalStorage } from "../hooks/useLocalStorage"
-import { UserContext } from "../hooks/userContext"
-import { Optional } from "../lib/utilityTypes"
-import { trpc } from "../utils/trpc"
+import { useLocalStorage } from "../../hooks/useLocalStorage"
+import { UserContext } from "../../hooks/userContext"
+import { Optional } from "../../lib/utilityTypes"
+import { trpc } from "../../utils/trpc"
 import FormInput from "./FormInput"
-import Loader from "./Loader"
-import { exitSvg } from "../utils/svgs"
+import Loader from "../Loader"
+import { exitSvg } from "../../utils/svgs"
+import SubmitButton from "./SubmitButton"
 
 export default function Profile() {
     const { user, setUser } = useContext(UserContext)!
@@ -38,28 +39,28 @@ export default function Profile() {
                     setValue={setUsername}
                     max={20}
                     min={3}
-                    />
+                />
                 <FormInput
                     label="Image"
                     value={image}
-                    setValue={setImage} />
+                    setValue={setImage}
+                />
                 <FormInput
                     label="Name"
                     value={name}
-                    setValue={setName} />
+                    setValue={setName}
+                />
                 <FormInput
                     label="Status"
                     value={status}
                     setValue={setStatus}
                     max={255}
-                    isTextarea />
-                <button
-                    className="bg-green-300 mt-3 rounded-full disabled:bg-slate-500 flex items-center justify-center h-10"
-                    type="submit"
-                    disabled={mutation.status == 'loading' || username.length < 3 || username.length > 20 || status.length > 255}
-                >
-                    {mutation.status == 'loading' ? <Loader /> : "Submit"}
-                </button>
+                    isTextarea
+                />
+                <SubmitButton
+                    disabledWhen={username.length < 3 || username.length > 20 || status.length > 255}
+                    mutation={mutation}
+                />
             </form>
             <button className="bg-red-600" onClick={() => signOut()}>
                 {exitSvg}

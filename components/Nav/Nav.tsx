@@ -1,12 +1,12 @@
-import Link from "next/link";
-import SideBarDiv, { NavItem } from "./SideBarIcon";
-import { addSvg, homeSvg, loginSvg, searchSvg } from "../utils/svgs";
-import { useSession, signIn, signOut } from "next-auth/react"
-import { Dispatch, SetStateAction, useContext, useEffect } from "react";
-import { useLocalStorage } from "../hooks/useLocalStorage";
-import { ContextUser, UserContext } from "../hooks/userContext";
+import { useSession, signIn } from "next-auth/react";
+import { Dispatch, SetStateAction, useContext } from "react";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { UserContext, ContextUser } from "../../hooks/userContext";
+import { ModalEnum } from "../../types/ModalEnum";
+import { homeSvg, addSvg, loginSvg } from "../../utils/svgs";
 import ActionButton from "./ActionButton";
-import { ModalEnum } from "../types/ModalEnum";
+import SideBarDiv, { NavItem } from "./SideBarIcon";
+
 
 type Props = {
     setModal: Dispatch<SetStateAction<ModalEnum>>
@@ -33,7 +33,7 @@ export default function Nav({ setModal }: Props) {
                 </span>
             </div>
             <SideBarDiv icon={homeSvg} text="Home" href="/" />
-            <ActionButton onClick={session ? () => setModal('publish') : () => setModal('prompt signup')}>
+            <ActionButton onClick={session ? () => setModal('PUBLISH') : () => setModal('PROMPT_SIGNUP')}>
                 <NavItem icon={addSvg} text="Publish"
                 />
             </ActionButton>
@@ -45,7 +45,7 @@ export default function Nav({ setModal }: Props) {
                 </div>
                 :
                 <div className="mt-auto mb-3">
-                    <ActionButton onClick={() => setModal('profile')}>
+                    <ActionButton onClick={() => setModal('PROFILE')}>
                         <NavItem
                             icon={user?.image ?? storage?.image ?? "https://media.makeameme.org/created/anonymous-hacker.jpg"}
                             text={user?.username ?? storage?.username ?? ""}

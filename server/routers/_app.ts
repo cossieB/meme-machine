@@ -81,6 +81,31 @@ export const appRouter = router({
                 console.error(e);
                 throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' })
             }
+        }),
+    publishMeme: procedure
+        .input(z.object({
+            title: z.string(),
+            description: z.string(),
+            image: z.string()
+        }))
+        .mutation(async ({ ctx, input }) => {
+            if (!ctx.user)
+                throw new TRPCError({ code: 'UNAUTHORIZED' })
+            if (input.title.length > 100)
+                throw new TRPCError({ code: 'BAD_REQUEST', message: "Maximum length of title is 100 characters" })
+            if (input.title.length == 0)
+                throw new TRPCError({ code: 'BAD_REQUEST', message: "Title is required" })
+            if (input.image.length == 0)
+                throw new TRPCError({ code: 'BAD_REQUEST', message: "Image is required" })
+            try {
+                const result = await db.meme.create({
+                    data: { ...input, userId: ctx.user.sub! }
+                })
+                return {id: result.postId}
+            } catch (error) {
+                console.log(error)
+                throw new TRPCError({code: "INTERNAL_SERVER_ERROR", message: "Something went wrong. Please try again later"})
+            }
         })
 });
 
