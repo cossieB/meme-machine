@@ -45,7 +45,7 @@ const loaderVariants: Var = {
     },
 }
 
-export default function Loader() {
+export function Spinner() {
     return (
         <>
             <motion.div

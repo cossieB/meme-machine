@@ -1,12 +1,9 @@
-import { User } from "next-auth"
-import { useSession, signOut } from "next-auth/react"
+import { signOut } from "next-auth/react"
 import React, { useContext, useState } from "react"
 import { useLocalStorage } from "../../hooks/useLocalStorage"
-import { UserContext } from "../../hooks/userContext"
-import { Optional } from "../../lib/utilityTypes"
+import { ContextUser, UserContext } from "../../hooks/userContext"
 import { trpc } from "../../utils/trpc"
 import FormInput from "./FormInput"
-import Loader from "../Loader"
 import { exitSvg } from "../../utils/svgs"
 import SubmitButton from "./SubmitButton"
 
@@ -16,7 +13,7 @@ export default function Profile() {
     const [image, setImage] = useState(user?.image ?? "")
     const [name, setName] = useState(user?.name ?? "")
     const [status, setStatus] = useState(user?.status ?? "");
-    const { updateLocalStorage } = useLocalStorage<Optional<User, 'id'>>('user')
+    const { updateLocalStorage } = useLocalStorage<ContextUser>('user')
 
     const mutation = trpc.updateProfile.useMutation({ networkMode: process.env.NODE_ENV == 'development' ? 'always' : 'online' })
 
@@ -25,7 +22,7 @@ export default function Profile() {
         await mutation.mutateAsync({ username, image, name, status });
         if (mutation.isSuccess) {
             setUser({ username, image, name, status, email: user!.email })
-            updateLocalStorage({ username, image, name });
+            updateLocalStorage({ username, image, name, status, email: user!.email });
         }
     }
 

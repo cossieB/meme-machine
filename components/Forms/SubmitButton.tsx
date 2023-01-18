@@ -1,5 +1,5 @@
 import { UseTRPCMutationResult } from "@trpc/react-query/dist/shared/hooks/types"
-import Loader from "../Loader"
+import {Spinner} from "../Loading/Spinner"
 
 type Props = {
     mutation: UseTRPCMutationResult<any,any, any, any>
@@ -13,7 +13,7 @@ export default function SubmitButton({mutation, disabledWhen}: Props) {
             type="submit"
             disabled={mutation.status == 'loading' || disabledWhen}
         >
-            {mutation.status == 'loading' ? <Loader /> : "Submit"}
+            {mutation.status == 'loading' ? <Spinner /> : "Submit"}
         </button>
     )
 }

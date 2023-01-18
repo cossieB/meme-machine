@@ -4,35 +4,8 @@ import { z } from 'zod';
 import db from '../../prisma/db';
 import { procedure, router } from '../trpc';
 
-type User = {
-    name: string,
-    age: number
-}
-
-const users: User[] = []
-
 export const appRouter = router({
-    hella: procedure
-        .input(
-            z.object({
-                name: z.string(),
-                age: z.number()
-            }),
-        )
-        .query(({ input }) => {
-            return {
-                greeting: `hello ${input.name} who is ${input.age} years old`,
-            };
-        }),
-    create: procedure
-        .input(z.object({
-            name: z.string(),
-            age: z.number()
-        }))
-        .mutation(req => {
-            users.push(req.input)
-            return users
-        }),
+
     getMyInfo: procedure
         .query(async ({ ctx }) => {
             if (!ctx.user)
