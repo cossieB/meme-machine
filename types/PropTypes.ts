@@ -5,4 +5,4 @@ export type WithChildren = {
     children: React.ReactNode
 }
 
-export type MemePostType = Pick<Meme, 'creationDate' | 'description' | 'image' | 'postId' | 'title'> & {username: string}
+export type MemePostType = Pick<Meme, 'creationDate' | 'description' | 'image' | 'postId' | 'title'> 

@@ -38,9 +38,10 @@ export const memeRouter = router({
     getMemes: procedure
         .input(z.object({
             sort: z.enum(['latest', 'top']).default('latest'),
-            timePeriod: z.enum(['day', 'week', 'month', 'year', 'allTime']).default('allTime')
+            timePeriod: z.enum(['day', 'week', 'month', 'year', 'allTime']).default('allTime'),
+            creator: z.string().nullish()
         }))
-        .query(async ({input}) => {
+        .query(async ({ input }) => {
             type M = {
                 [x in typeof input.timePeriod]: Date
             }
@@ -52,25 +53,30 @@ export const memeRouter = router({
                 year: new Date(now.setFullYear(now.getFullYear() - 1)),
                 allTime: new Date(0)
             }
+            const sort: Prisma.Enumerable<Prisma.MemeOrderByWithRelationInput>  = input.sort == 'latest' ? {creationDate: 'asc'} : {}
+
             const result = await db.meme.findMany({
                 where: {
                     creationDate: {
                         gte: map[input.timePeriod]
-                    }
-                }, 
-                orderBy: {
-                    creationDate: 'desc'
-                }
+                    },
+                    ...(input.creator && {
+                        user: {
+                            username_lower: input.creator.toLowerCase()
+                        }
+                    }),
+                },
+                orderBy: sort,
             })
             return result
         }),
     getMeme: procedure
         .input(z.string())
-        .query(async ({ctx, input}) => {
+        .query(async ({ ctx, input }) => {
             const result = await db.meme.findUnique({
                 where: {
                     postId: input
-                }, 
+                },
                 include: {
                     user: {
                         select: {
@@ -80,7 +86,7 @@ export const memeRouter = router({
                     }
                 }
             })
-            if (!result) throw new TRPCError({code: "NOT_FOUND"})
+            if (!result) throw new TRPCError({ code: "NOT_FOUND" })
             return result
         })
 })

@@ -37,7 +37,7 @@ export default function PostPage() {
                                 text={query.data?.user.username ?? ""}
                                 isImg
                             />
-                            {true && // <----- replace with user.username != query.data!.user.username
+                            {true && // <----- replace with user.username != query.data?.user.username
                                 <ActionButton
                                     onClick={() => console.log("Send follow mutation")}
                                 >
@@ -61,8 +61,8 @@ export default function PostPage() {
                                 icon={commentSvg}
                                 text="1234"
                             />
-                            <span title={formatDate(query.data!.creationDate)} >
-                                {moment(query.data!.creationDate)}
+                            <span title={formatDate(query.data?.creationDate ?? "")} >
+                                {moment(query.data?.creationDate ?? "")}
                             </span>
                         </div>
                         <h2 className="text-center text-xl font-semibold py-5">Comments</h2>

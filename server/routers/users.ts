@@ -10,52 +10,70 @@ const procedure = t.procedure
 
 export const userRouter = router({
     getMyInfo: procedure
-    .query(async ({ ctx }) => {
-        if (!ctx.user)
-            throw new TRPCError({ code: 'UNAUTHORIZED' })
-        const result = await db.user.findUnique({
-            where: {
-                email: ctx.user.email!
-            },
-            select: {
-                email: true,
-                name: true,
-                username: true,
-                status: true,
-                image: true
-            }
-        })
-        if (!result)
-            throw new TRPCError({ code: 'NOT_FOUND', message: "User not found" })
-
-        return { ...result, name: result.name ?? "", image: result.image ?? "" }
-    }),
-updateProfile: procedure
-    .input(z.object({
-        username: z.string(),
-        image: z.string(),
-        name: z.string(),
-        status: z.string()
-    }))
-    .mutation(async req => {
-        if (!req.ctx.user)
-            throw new TRPCError({ code: 'UNAUTHORIZED' })
-        if (req.input.username.length < 3 || req.input.username.length > 20)
-            throw new TRPCError({ code: 'BAD_REQUEST', message: "Username must be between 3 and 20 characters" })
-        if (req.input.status.length > 255)
-            throw new TRPCError({ code: 'BAD_REQUEST', message: "Maximum length of status is 255 characters" })
-        try {
-            await db.user.update({
+        .query(async ({ ctx }) => {
+            if (!ctx.user)
+                throw new TRPCError({ code: 'UNAUTHORIZED' })
+            const result = await db.user.findUnique({
                 where: {
-                    email: req.ctx.user.email!
+                    email: ctx.user.email!
                 },
-                data: { ...req.input }
+                select: {
+                    email: true,
+                    name: true,
+                    username: true,
+                    status: true,
+                    image: true
+                }
             })
-            return true
-        }
-        catch (e: any) {
-            console.error(e);
-            throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' })
-        }
-    }),
+            if (!result)
+                throw new TRPCError({ code: 'NOT_FOUND', message: "User not found" })
+
+            return { ...result, name: result.name ?? "", image: result.image ?? "" }
+        }),
+    updateProfile: procedure
+        .input(z.object({
+            username: z.string(),
+            image: z.string(),
+            name: z.string(),
+            status: z.string()
+        }))
+        .mutation(async req => {
+            if (!req.ctx.user)
+                throw new TRPCError({ code: 'UNAUTHORIZED' })
+            if (req.input.username.length < 3 || req.input.username.length > 20)
+                throw new TRPCError({ code: 'BAD_REQUEST', message: "Username must be between 3 and 20 characters" })
+            if (req.input.status.length > 255)
+                throw new TRPCError({ code: 'BAD_REQUEST', message: "Maximum length of status is 255 characters" })
+            try {
+                await db.user.update({
+                    where: {
+                        email: req.ctx.user.email!
+                    },
+                    data: { ...req.input }
+                })
+                return true
+            }
+            catch (e: any) {
+                console.error(e);
+                throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' })
+            }
+        }),
+    getUser: procedure
+        .input(z.string())
+        .query(async ({input}) => {
+            const result = await db.user.findUnique({
+                where: {
+                    username_lower: input.toLowerCase()
+                },
+                select: {
+                    username: true,
+                    image: true,
+                    joinDate: true,
+                    status: true
+                }
+            })
+            if (!result)
+                throw new TRPCError({code: 'NOT_FOUND', message: "User not found"})
+            return result
+        })
 })

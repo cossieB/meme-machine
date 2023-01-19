@@ -35,6 +35,7 @@ export default NextAuth({
                     email: profile.email,
                     image: profile.picture.data.url,
                     username: `_fb_${profile.name?.split(" ")[0] || 'user'}${Math.floor(Math.random() * 10000)}`,
+                    username_lower: `_fb_${profile.name?.split(" ")[0] || 'user'}${Math.floor(Math.random() * 10000)}`.toLowerCase(),
                 }
             },
         }),
@@ -48,6 +49,7 @@ export default NextAuth({
                     email: profile.email,
                     image: profile.picture,
                     username: `_goog_${profile.given_name || 'user'}${Math.floor(Math.random() * 10000)}`,
+                    username_lower: `_goog_${profile.given_name || 'user'}${Math.floor(Math.random() * 10000)}`.toLowerCase(),
                 }
             },
         }),
@@ -61,6 +63,7 @@ export default NextAuth({
                     email: profile.email,
                     image: profile.avatar_url,
                     username: `_git_${(profile.name ?? profile.login)?.split(" ")[0] || 'user'}${Math.floor(Math.random() * 10000)}`,
+                    username_lower: `_git_${(profile.name ?? profile.login)?.split(" ")[0] || 'user'}${Math.floor(Math.random() * 10000)}`.toLowerCase(),
                 }
             },
         })
