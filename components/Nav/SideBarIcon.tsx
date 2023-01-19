@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ReactNode } from "react";
-import { Optional } from "../lib/utilityTypes";
-import { SvgProps } from "../utils/svgs";
+import { Optional } from "../../lib/utilityTypes";
+
 
 type IconProps = {
     icon: JSX.Element,
@@ -35,7 +35,7 @@ export function NavItem(props: Optional<IconProps, 'href'>) {
                 :
                 <span className="w-10">{icon}</span>
             }
-            <span> {text} </span>
+            <span className="hidden md:block"> {text} </span>
         </div>
     )
 

@@ -23,7 +23,7 @@ export default function Nav({ setModal }: Props) {
         username: ""
     })
     return (
-        <nav className="flex flex-col w-64 content-center bg-teal-800 h-screen">
+        <nav className="flex fixed flex-col w-16 md:w-64 content-center bg-teal-800 h-screen">
             <div className="flex text-3xl h-20 items-center text-orange-300 font-bills mx-3">
                 <span className="hidden md:block text-3xl text-orange-300 font-bills" >
                     Meme Machine

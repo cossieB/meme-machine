@@ -15,7 +15,7 @@ export default function Profile() {
     const [status, setStatus] = useState(user?.status ?? "");
     const { updateLocalStorage } = useLocalStorage<ContextUser>('user')
 
-    const mutation = trpc.updateProfile.useMutation({ networkMode: process.env.NODE_ENV == 'development' ? 'always' : 'online' })
+    const mutation = trpc.user.updateProfile.useMutation({ networkMode: process.env.NODE_ENV == 'development' ? 'always' : 'online' })
 
     async function submit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()

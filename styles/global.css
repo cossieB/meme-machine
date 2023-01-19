@@ -13,3 +13,26 @@
         @apply flex items-center justify-center h-12 w-12 my-2 shadow-lg
     }
 }
+@media (min-width: 768px) {
+    /* width */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+    
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #115e59;
+    }
+    
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #fed7aa;
+        border-radius: 10px;
+    }
+    
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #fdba74;
+    }
+    
+}

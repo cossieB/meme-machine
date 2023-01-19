@@ -10,7 +10,7 @@ type Props = {
 export default function UserProvider({children}: Props) {
     const [user, setUser] = useState<ContextUser | null>(null)
     const {storage, updateLocalStorage} = useLocalStorage<ContextUser>('user')
-    trpc.getMyInfo.useQuery(undefined, {
+    trpc.user.getMyInfo.useQuery(undefined, {
         onSuccess(data) {
             setUser(data)
             updateLocalStorage(data)
@@ -21,6 +21,7 @@ export default function UserProvider({children}: Props) {
         retry(failureCount, error) {
             return error.data?.httpStatus != 401 && failureCount < 3
         },
+        refetchOnWindowFocus: false, 
     })
     return (
         <UserContext.Provider value={{user, setUser}} >

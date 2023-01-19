@@ -7,7 +7,7 @@ export default function NewMeme() {
     const [title, setTitle] = useState("")
     const [image, setImage] = useState("")
     const [description, setDescription] = useState("")
-    const mutation = trpc.publishMeme.useMutation()
+    const mutation = trpc.meme.publishMeme.useMutation()
 
     async function submit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
