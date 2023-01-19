@@ -63,5 +63,24 @@ export const memeRouter = router({
                 }
             })
             return result
+        }),
+    getMeme: procedure
+        .input(z.string())
+        .query(async ({ctx, input}) => {
+            const result = await db.meme.findUnique({
+                where: {
+                    postId: input
+                }, 
+                include: {
+                    user: {
+                        select: {
+                            image: true,
+                            username: true,
+                        }
+                    }
+                }
+            })
+            if (!result) throw new TRPCError({code: "NOT_FOUND"})
+            return result
         })
 })
