@@ -9,14 +9,39 @@ type P = {
 }
 
 export default function Like({postId}: P) {
-    const doILikeQuery = trpc.like.doesUserLike.useQuery(postId)
-    const countQuery = trpc.like.likeCount.useQuery(postId)
+    const utils = trpc.useContext()
+
+    const doILikeQuery = trpc.like.doesUserLike.useQuery(postId, {
+        refetchInterval: false,
+        refetchOnWindowFocus: false,
+        retry(failureCount, error) {
+            return failureCount < 3 && error.data?.code != 'UNAUTHORIZED'
+        },
+        networkMode: process.env.NODE_ENV == 'development' ? 'always' : 'online'
+    })
+    const countQuery = trpc.like.likeCount.useQuery(postId, {
+        refetchInterval: false,
+        refetchOnWindowFocus: false,
+        retry(failureCount, error) {
+            return failureCount < 3
+        },
+        networkMode: process.env.NODE_ENV == 'development' ? 'always' : 'online'
+    })
     const likeMutation = trpc.like.like.useMutation()
     return (
         <ActionButton
             onClick={() => {
                 likeMutation.mutate(postId, {
-                    
+                    onSuccess() {
+                        utils.like.likeCount.setData(postId, data => {
+                            return {
+                                _count: data!._count + (doILikeQuery.data ? -1 : 1)
+                            }
+                        })
+                        utils.like.doesUserLike.setData(postId, data => {
+                            return !data
+                        })
+                    },
                 })
             }}
         >

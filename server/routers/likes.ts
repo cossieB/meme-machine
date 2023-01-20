@@ -28,8 +28,15 @@ export const likesRouter = router({
             }
             catch (e: any) {
                 if (e.code == 'P2002') {
-                    const caller: any = memeRouter.createCaller({ user: ctx.user })
-                    return await caller.unlike(input)
+                    await db.memesLikedByUser.delete({
+                        where: {
+                            postId_userId: {
+                                postId: input,
+                                userId: ctx.user.sub!
+                            }
+                        }
+                    })
+                    return
                 }
                 if (e.code == 'P2003') {
                     throw new TRPCError({ code: 'BAD_REQUEST', message: "Post not found" })

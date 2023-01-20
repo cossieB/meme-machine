@@ -69,7 +69,9 @@ export const userRouter = router({
                     username: true,
                     image: true,
                     joinDate: true,
-                    status: true
+                    status: true,
+                    id: true,
+                    banner: true
                 }
             })
             if (!result)

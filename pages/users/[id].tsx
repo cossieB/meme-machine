@@ -4,6 +4,7 @@ import Loader from "../../components/Loading/Loader"
 import MemeList from "../../components/Memes/MemeList"
 import ActionButton from "../../components/Nav/ActionButton"
 import { NavItem } from "../../components/Nav/SideBarIcon"
+import Follow from "../../components/UserQueries/Follow"
 import { UserContext } from "../../hooks/userContext"
 import { formatDate } from "../../lib/formatDate"
 import { editSvg, followSvg } from "../../utils/svgs"
@@ -18,7 +19,12 @@ export default function UserPage() {
     const memesQuery = trpc.meme.getMemes.useQuery({
         creator: router.query.id as string
     }, {
-        enabled: !!router.query.id
+        enabled: !!router.query.id,
+        refetchInterval: false,
+        refetchOnWindowFocus: false,
+        retry(failureCount, error) {
+            return failureCount < 3
+        },
     })
     return (
         <div>
@@ -28,15 +34,8 @@ export default function UserPage() {
                         <img className="rounded-full h-40 aspect-square absolute translate-y-40 translate-x-5 object-cover" src={query.data?.image ?? ""} alt={query.data?.username} />
                     </div>
                     <div className="right-0 absolute">
-                        {true && // <----- replace with user.username != query.data?.user.username
-                            <ActionButton
-                                onClick={() => console.log("Send follow mutation")}
-                            >
-                                <NavItem
-                                    icon={followSvg}
-                                    text="Follow"
-                                />
-                            </ActionButton>
+                        {user?.username != query.data?.username && 
+                            <Follow userId={query.data?.id ?? ""} />
                         }
                     </div>
                     <div className="mt-20 text-center">

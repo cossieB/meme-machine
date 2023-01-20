@@ -15,7 +15,12 @@ export default function PostPage() {
     const router = useRouter()
     const query = trpc.meme.getMeme.useQuery(router.query.id as string, {
         enabled: !!router.query.id,
+        refetchInterval: false,
         refetchOnWindowFocus: false,
+        retry(failureCount, error) {
+            return failureCount < 3
+        },
+        networkMode: process.env.NODE_ENV == 'development' ? 'always' : 'online',
         onError(err) {
 
         },
@@ -41,7 +46,7 @@ export default function PostPage() {
                                 text={query.data?.user.username ?? ""}
                                 isImg
                             />
-                            {true && // <----- replace with user.username != query.data?.user.username
+                            {user?.username != query.data?.user.username && 
                                 <Follow userId={query.data?.userId ?? ""} />
                             }
                         </div>
