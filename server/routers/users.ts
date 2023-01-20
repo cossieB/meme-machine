@@ -54,6 +54,8 @@ export const userRouter = router({
                 return true
             }
             catch (e: any) {
+                if (e.code == 'P2002')
+                    throw new TRPCError({code: 'BAD_REQUEST', message: 'username already taken'})
                 console.error(e);
                 throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' })
             }

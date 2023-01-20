@@ -42,14 +42,14 @@ model User {
     name             String?
     email            String             @unique
     emailVerified    DateTime?
-    image            String?
+    image            String             @default("")
     accounts         Account[]
     sessions         Session[]
     username         String             @unique @db.VarChar(255)
     username_lower   String             @unique @db.VarChar(255)
     status           String             @default("") @db.VarChar(255)
     joinDate         DateTime           @default(now())
-    banner           String?
+    banner           String             @default("https://i.imgur.com/xUbnRZy.jpg")
     posts            Meme[]
     MemesLikedByUser MemesLikedByUser[]
     Following        FollowerFollowee[] @relation("follower")
@@ -74,6 +74,7 @@ model Meme {
     title            String             @db.VarChar(100)
     image            String
     description      String             @default("")
+    views            Int                @default(0)
     MemesLikedByUser MemesLikedByUser[]
     Comment          Comment[]
 }

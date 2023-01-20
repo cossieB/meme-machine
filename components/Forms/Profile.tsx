@@ -1,5 +1,5 @@
 import { signOut } from "next-auth/react"
-import React, { useContext, useState } from "react"
+import React, { useContext, useRef, useState } from "react"
 import { useLocalStorage } from "../../hooks/useLocalStorage"
 import { ContextUser, UserContext } from "../../hooks/userContext"
 import { trpc } from "../../utils/trpc"
@@ -15,14 +15,22 @@ export default function Profile() {
     const [status, setStatus] = useState(user?.status ?? "");
     const { updateLocalStorage } = useLocalStorage<ContextUser>('user')
 
+    const errorDiv = useRef<HTMLParagraphElement>(null)
+
     const mutation = trpc.user.updateProfile.useMutation({ networkMode: process.env.NODE_ENV == 'development' ? 'always' : 'online' })
 
     async function submit(e: React.FormEvent<HTMLFormElement>) {
+        errorDiv.current!.textContent = ""
         e.preventDefault()
         mutation.mutate({ username, image, name, status }, {
             onSuccess() {
                 setUser({ username, image, name, status, email: user!.email })
                 updateLocalStorage({ username, image, name, status, email: user!.email });
+            },
+            onError(error, variables, context) {
+                if (error.message == 'username already taken') {
+                    errorDiv.current!.textContent = error.message;
+                }
             },
         });
 
@@ -60,6 +68,7 @@ export default function Profile() {
                     disabledWhen={username.length < 3 || username.length > 20 || status.length > 255}
                     mutation={mutation}
                 />
+                <p className="bg-red-300" ref={errorDiv} />
             </form>
             <button className="bg-red-600" onClick={() => signOut()}>
                 {exitSvg}

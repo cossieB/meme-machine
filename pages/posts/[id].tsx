@@ -9,6 +9,7 @@ import { moment } from "../../utils/moment"
 import { formatDate } from "../../lib/formatDate"
 import Follow from "../../components/UserQueries/Follow"
 import Like from "../../components/UserQueries/Like"
+import NotFound from "../404"
 
 export default function PostPage() {
     const { user } = useContext(UserContext)!
@@ -18,7 +19,7 @@ export default function PostPage() {
         refetchInterval: false,
         refetchOnWindowFocus: false,
         retry(failureCount, error) {
-            return failureCount < 3
+            return failureCount < 3 && error.data?.httpStatus != 404
         },
         networkMode: process.env.NODE_ENV == 'development' ? 'always' : 'online',
         onError(err) {
@@ -27,6 +28,8 @@ export default function PostPage() {
     })
 
     return (
+        query.error?.data?.httpStatus == 404 ? <NotFound /> :
+        
         <Loader loading={query.isLoading}  >
             <div className="flex items-center justify-center h-screen">
                 <div className="flex w-11/12 shadow-2xl bg-teal-800 h-5/6 rounded-xl">
