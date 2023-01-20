@@ -83,6 +83,7 @@ export const memeRouter = router({
                         select: {
                             image: true,
                             username: true,
+                            id: true
                         }
                     }
                 }

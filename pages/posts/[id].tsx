@@ -4,11 +4,11 @@ import { trpc } from "../../utils/trpc"
 import SideBarDiv, { NavItem } from "../../components/Nav/SideBarIcon"
 import { useContext } from "react"
 import { UserContext } from "../../hooks/userContext"
-import ActionButton from "../../components/Nav/ActionButton"
-import { commentSvg, followSvg, likeSvg } from "../../utils/svgs"
+import { commentSvg } from "../../utils/svgs"
 import { moment } from "../../utils/moment"
 import { formatDate } from "../../lib/formatDate"
-import { getToken } from "next-auth/jwt"
+import Follow from "../../components/UserQueries/Follow"
+import Like from "../../components/UserQueries/Like"
 
 export default function PostPage() {
     const { user } = useContext(UserContext)!
@@ -20,7 +20,7 @@ export default function PostPage() {
 
         },
     })
-    const likeMutation = trpc.meme.like.useMutation()
+
     return (
         <Loader loading={query.isLoading}  >
             <div className="flex items-center justify-center h-screen">
@@ -31,6 +31,7 @@ export default function PostPage() {
                         <p>{query.data?.description}</p>
                     </div>
                     <div className="w-1/2">
+
                         {/* Creator Div */}
                         <div className="flex w-full justify-around">
 
@@ -41,36 +42,11 @@ export default function PostPage() {
                                 isImg
                             />
                             {true && // <----- replace with user.username != query.data?.user.username
-                                <ActionButton
-                                    onClick={() => {
-                                        likeMutation.mutate(router.query.id as string, {
-                                            
-                                            onError(err) {
-                                    
-                                            },
-                                        })
-                                    }}
-                                >
-                                    <NavItem
-                                        icon={followSvg}
-                                        text="Follow"
-                                    />
-                                </ActionButton>
+                                <Follow userId={query.data?.userId ?? ""} />
                             }
                         </div>
                         <div className="flex items-center justify-around">
-                            <ActionButton
-                                onClick={() => {
-                                    likeMutation.mutate(router.query.id as string, {
-
-                                    })
-                                }}
-                            >
-                                <NavItem
-                                    icon={likeSvg}
-                                    text="123"
-                                />
-                            </ActionButton>
+                            <Like postId={router.query.id as string} />
                             <NavItem
                                 icon={commentSvg}
                                 text="1234"
