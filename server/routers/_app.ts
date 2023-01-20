@@ -1,8 +1,4 @@
-import { TRPCError } from '@trpc/server';
-import { getToken } from 'next-auth/jwt';
-import { z } from 'zod';
-import db from '../../prisma/db';
-import { procedure, router } from '../trpc';
+import { router } from '../trpc';
 import { memeRouter } from './memes';
 import { userRouter } from './users';
 

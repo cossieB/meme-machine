@@ -37,19 +37,19 @@ export const userRouter = router({
             name: z.string(),
             status: z.string()
         }))
-        .mutation(async req => {
-            if (!req.ctx.user)
+        .mutation(async ({ input, ctx }) => {
+            if (!ctx.user)
                 throw new TRPCError({ code: 'UNAUTHORIZED' })
-            if (req.input.username.length < 3 || req.input.username.length > 20)
+            if (input.username.length < 3 || input.username.length > 20)
                 throw new TRPCError({ code: 'BAD_REQUEST', message: "Username must be between 3 and 20 characters" })
-            if (req.input.status.length > 255)
+            if (input.status.length > 255)
                 throw new TRPCError({ code: 'BAD_REQUEST', message: "Maximum length of status is 255 characters" })
             try {
                 await db.user.update({
                     where: {
-                        email: req.ctx.user.email!
+                        email: ctx.user.email!
                     },
-                    data: { ...req.input }
+                    data: { ...input, username_lower: input.username.toLowerCase() }
                 })
                 return true
             }
@@ -60,7 +60,7 @@ export const userRouter = router({
         }),
     getUser: procedure
         .input(z.string())
-        .query(async ({input}) => {
+        .query(async ({ input }) => {
             const result = await db.user.findUnique({
                 where: {
                     username_lower: input.toLowerCase()
@@ -73,7 +73,16 @@ export const userRouter = router({
                 }
             })
             if (!result)
-                throw new TRPCError({code: 'NOT_FOUND', message: "User not found"})
+                throw new TRPCError({ code: 'NOT_FOUND', message: "User not found" })
             return result
+        }),
+    follow: procedure
+        .input(z.string())
+        .mutation(async ({ input, ctx }) => {
+            if (!ctx.user)
+                throw new TRPCError({ code: 'UNAUTHORIZED' })
+            // const result = await db.user.findUnique({})
+            console.log(ctx.user)
+            return true
         })
 })

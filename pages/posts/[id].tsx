@@ -8,16 +8,19 @@ import ActionButton from "../../components/Nav/ActionButton"
 import { commentSvg, followSvg, likeSvg } from "../../utils/svgs"
 import { moment } from "../../utils/moment"
 import { formatDate } from "../../lib/formatDate"
+import { getToken } from "next-auth/jwt"
 
 export default function PostPage() {
     const { user } = useContext(UserContext)!
     const router = useRouter()
     const query = trpc.meme.getMeme.useQuery(router.query.id as string, {
         enabled: !!router.query.id,
+        refetchOnWindowFocus: false,
         onError(err) {
 
         },
     })
+    const likeMutation = trpc.meme.like.useMutation()
     return (
         <Loader loading={query.isLoading}  >
             <div className="flex items-center justify-center h-screen">
@@ -39,7 +42,14 @@ export default function PostPage() {
                             />
                             {true && // <----- replace with user.username != query.data?.user.username
                                 <ActionButton
-                                    onClick={() => console.log("Send follow mutation")}
+                                    onClick={() => {
+                                        likeMutation.mutate(router.query.id as string, {
+                                            
+                                            onError(err) {
+                                    
+                                            },
+                                        })
+                                    }}
                                 >
                                     <NavItem
                                         icon={followSvg}
@@ -50,7 +60,11 @@ export default function PostPage() {
                         </div>
                         <div className="flex items-center justify-around">
                             <ActionButton
-                                onClick={() => console.log("Send like mutation")}
+                                onClick={() => {
+                                    likeMutation.mutate(router.query.id as string, {
+
+                                    })
+                                }}
                             >
                                 <NavItem
                                     icon={likeSvg}

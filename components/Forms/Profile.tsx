@@ -19,11 +19,13 @@ export default function Profile() {
 
     async function submit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
-        await mutation.mutateAsync({ username, image, name, status });
-        if (mutation.isSuccess) {
-            setUser({ username, image, name, status, email: user!.email })
-            updateLocalStorage({ username, image, name, status, email: user!.email });
-        }
+        mutation.mutate({ username, image, name, status }, {
+            onSuccess() {
+                setUser({ username, image, name, status, email: user!.email })
+                updateLocalStorage({ username, image, name, status, email: user!.email });
+            },
+        });
+
     }
 
     return (
