@@ -8,7 +8,7 @@ type P = {
 }
 
 export default function Follow({userId}: P) {
-    const followMutation = trpc.user.follow.useMutation()
+    const followMutation = trpc.follow.follow.useMutation()
     return (
 
         <ActionButton

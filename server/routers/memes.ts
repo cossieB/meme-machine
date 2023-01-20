@@ -91,54 +91,5 @@ export const memeRouter = router({
             if (!result) throw new TRPCError({ code: "NOT_FOUND" })
             return result
         }),
-    like: procedure
-        .input(z.string())
-        .mutation(async ({ ctx, input }) => {
-            if (!ctx.user) {
-                throw new TRPCError({ code: "UNAUTHORIZED" })
-            }
-            try {
-                await db.memesLikedByUser.create({
-                    data: {
-                        postId: input,
-                        userId: ctx.user.sub!
-                    }
-                })
-                return
-            }
-            catch (e: any) {
-                if (e.code == 'P2002') {
-                    const caller: any = memeRouter.createCaller({user: ctx.user})
-                    return await caller.unlike(input)
-                }
-                if (e.code == 'P2003') {
-                    throw new TRPCError({code: 'BAD_REQUEST', message: "Post not found"})
-                }
-                console.log(e)
-                throw new TRPCError({code: 'INTERNAL_SERVER_ERROR', message: "Something went wrong"})
 
-            }
-        }),
-    unlike: procedure
-        .input(z.string())
-        .mutation(async ({ ctx, input }) => {
-            if (!ctx.user) {
-                throw new TRPCError({ code: "UNAUTHORIZED" })
-            }
-            try {
-                await db.memesLikedByUser.delete({
-                    where: {
-                        postId_userId: {
-                            postId: input,
-                            userId: ctx.user.sub!
-                        }
-                    }
-                })
-                return
-            } 
-            catch (error) {
-                console.error(error)
-                throw new TRPCError({code: "INTERNAL_SERVER_ERROR"})
-            }
-        })
 })

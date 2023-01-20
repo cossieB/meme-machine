@@ -76,53 +76,5 @@ export const userRouter = router({
                 throw new TRPCError({ code: 'NOT_FOUND', message: "User not found" })
             return result
         }),
-    follow: procedure
-        .input(z.string())
-        .mutation(async ({ input, ctx }) => {
-            if (!ctx.user)
-                throw new TRPCError({ code: 'UNAUTHORIZED' })
 
-            try {
-                await db.followerFollowee.create({
-                    data: {
-                        followerId: ctx.user.sub!,
-                        followeeId: input
-                    }
-                })
-            }
-            catch (e: any) {
-                if (e.code == 'P2002') {
-                    const caller: any = userRouter.createCaller({user: ctx.user})
-                    return await caller.unfollow(input)
-                }
-                if (e.code == 'P2003') {
-                    throw new TRPCError({code: 'BAD_REQUEST', message: "User not found"})
-                }
-                console.log(e)
-                throw new TRPCError({code: 'INTERNAL_SERVER_ERROR', message: "Something went wrong"})
-            }
-            return true
-        }),
-    unfollow: procedure
-        .input(z.string())
-        .mutation(async ({ctx, input}) => {
-            if (!ctx.user) {
-                throw new TRPCError({ code: "UNAUTHORIZED" })
-            }
-            try {
-                await db.followerFollowee.delete({
-                    where: {
-                        followeeId_followerId: {
-                            followerId: ctx.user.sub!,
-                            followeeId: input
-                        }
-                    }
-                })
-                return
-            } 
-            catch (error) {
-                console.error(error)
-                throw new TRPCError({code: "INTERNAL_SERVER_ERROR"})
-            }
-        })
 })

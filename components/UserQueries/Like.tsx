@@ -9,18 +9,20 @@ type P = {
 }
 
 export default function Like({postId}: P) {
-    const likeMutation = trpc.meme.like.useMutation()
+    const doILikeQuery = trpc.like.doesUserLike.useQuery(postId)
+    const countQuery = trpc.like.likeCount.useQuery(postId)
+    const likeMutation = trpc.like.like.useMutation()
     return (
         <ActionButton
             onClick={() => {
                 likeMutation.mutate(postId, {
-
+                    
                 })
             }}
         >
             <NavItem
                 icon={likeSvg}
-                text="123"
+                text={(countQuery.data?._count ?? 0).toString()}
             />
         </ActionButton>
     )
