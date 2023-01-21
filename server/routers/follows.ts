@@ -2,7 +2,6 @@ import { initTRPC, TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { Context } from "../../pages/api/trpc/[trpc]";
 import db from "../../prisma/db";
-import { userRouter } from "./users";
 
 const t = initTRPC.context<Context>().create();
 

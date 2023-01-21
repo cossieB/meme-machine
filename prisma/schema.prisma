@@ -48,7 +48,7 @@ model User {
     username         String             @unique @db.VarChar(255)
     username_lower   String             @unique @db.VarChar(255)
     status           String             @default("") @db.VarChar(255)
-    joinDate         DateTime           @default(now())
+    joinDate         DateTime           @default(now()) @db.Timestamptz()
     banner           String             @default("https://i.imgur.com/xUbnRZy.jpg")
     posts            Meme[]
     MemesLikedByUser MemesLikedByUser[]
@@ -69,8 +69,8 @@ model Meme {
     postId           String             @id @default(cuid())
     userId           String
     user             User               @relation(fields: [userId], references: [id])
-    creationDate     DateTime           @default(now())
-    editDate         DateTime           @default(now())
+    creationDate     DateTime           @default(now()) @db.Timestamptz()
+    editDate         DateTime           @default(now()) @db.Timestamptz()
     title            String             @db.VarChar(100)
     image            String
     description      String             @default("")
@@ -98,10 +98,12 @@ model FollowerFollowee {
 }
 
 model Comment {
-    commentId String @id @default(cuid())
-    content   String @db.VarChar(255)
-    userId    String
-    postId    String
-    user      User   @relation(fields: [userId], references: [id])
-    meme      Meme   @relation(fields: [postId], references: [postId])
+    commentId    String   @id @default(cuid())
+    content      String   @db.VarChar(255)
+    userId       String
+    postId       String
+    creationDate DateTime @default(now()) @db.Timestamptz()
+    editDate     DateTime @default(now()) @db.Timestamptz()
+    user         User     @relation(fields: [userId], references: [id])
+    meme         Meme     @relation(fields: [postId], references: [postId], onDelete: Cascade)
 }

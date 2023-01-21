@@ -80,5 +80,24 @@ export const userRouter = router({
                 throw new TRPCError({ code: 'NOT_FOUND', message: "User not found" })
             return result
         }),
-
+    byId: procedure
+    .input(z.string())
+    .query(async ({ input }) => {
+        const result = await db.user.findUnique({
+            where: {
+                id: input
+            },
+            select: {
+                username: true,
+                image: true,
+                joinDate: true,
+                status: true,
+                id: true,
+                banner: true
+            }
+        })
+        if (!result)
+            throw new TRPCError({ code: 'NOT_FOUND', message: "User not found" })
+        return result
+    }),
 })

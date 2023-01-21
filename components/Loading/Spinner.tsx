@@ -47,7 +47,7 @@ const loaderVariants: Var = {
 
 export function Spinner() {
     return (
-        <>
+        <div className="w-full h-full flex items-center justify-center">
             <motion.div
                 variants={loaderVariants}
                 animate="animation1"
@@ -58,6 +58,6 @@ export function Spinner() {
                 animate="animation2"
                 className="w-3 h-3 rounded-full bg-orange-300"
             />
-        </>
+        </div>
     )
 }

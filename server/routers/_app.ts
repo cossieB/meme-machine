@@ -1,4 +1,5 @@
 import { router } from '../trpc';
+import { commentRouter } from './comments';
 import { followRouter } from './follows';
 import { likesRouter } from './likes';
 import { memeRouter } from './memes';
@@ -8,7 +9,8 @@ export const appRouter = router({
     user: userRouter,
     meme: memeRouter,
     like: likesRouter,
-    follow: followRouter
+    follow: followRouter,
+    comment: commentRouter,
 });
 
 // export type definition of API

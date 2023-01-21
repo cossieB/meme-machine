@@ -1,4 +1,4 @@
-import { followSvg } from "../../utils/svgs"
+import { followSvg, unfollowSvg } from "../../utils/svgs"
 import { trpc } from "../../utils/trpc"
 import ActionButton from "../Nav/ActionButton"
 import { NavItem } from "../Nav/SideBarIcon"
@@ -35,7 +35,7 @@ export default function Follow({userId}: P) {
             }}
         >
             <NavItem
-                icon={followSvg}
+                icon={doIFollowQuery.data ? unfollowSvg : followSvg}
                 text={doIFollowQuery.data ? "Unfollow" : "Follow"}
             />
         </ActionButton>

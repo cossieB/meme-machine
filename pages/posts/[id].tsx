@@ -10,6 +10,8 @@ import { formatDate } from "../../lib/formatDate"
 import Follow from "../../components/UserQueries/Follow"
 import Like from "../../components/UserQueries/Like"
 import NotFound from "../404"
+import AddComment from "../../components/Comments/AddComment"
+import CommentList from "../../components/Comments/CommentList"
 
 export default function PostPage() {
     const { user } = useContext(UserContext)!
@@ -32,7 +34,7 @@ export default function PostPage() {
         
         <Loader loading={query.isLoading}  >
             <div className="flex items-center justify-center h-screen">
-                <div className="flex w-11/12 shadow-2xl bg-teal-800 h-5/6 rounded-xl">
+                <div className="flex w-11/12 shadow-2xl bg-teal-800 h-[95%] rounded-xl">
                     <div className="w-1/2 flex flex-col items-center justify-around">
                         <h1 className="font-semibold text-3xl" > {query.data?.title} </h1>
                         <img src={query.data?.image ?? ""} alt="" />
@@ -64,6 +66,8 @@ export default function PostPage() {
                             </span>
                         </div>
                         <h2 className="text-center text-xl font-semibold py-5">Comments</h2>
+                        <AddComment postId={query.data?.postId ?? ""} />
+                        <CommentList postId={router.query.id as string} />
                     </div>
                 </div>
             </div>

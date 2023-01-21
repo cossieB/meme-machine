@@ -1,5 +1,5 @@
 import router from "next/router"
-import { unlikeSvg } from "../../utils/svgs"
+import { likeSvg, unlikeSvg } from "../../utils/svgs"
 import { trpc } from "../../utils/trpc"
 import ActionButton from "../Nav/ActionButton"
 import { NavItem } from "../Nav/SideBarIcon"
@@ -46,7 +46,7 @@ export default function Like({postId}: P) {
             }}
         >
             <NavItem
-                icon={unlikeSvg}
+                icon={doILikeQuery.data ? unlikeSvg : likeSvg}
                 text={(countQuery.data?._count ?? 0).toString()}
             />
         </ActionButton>
