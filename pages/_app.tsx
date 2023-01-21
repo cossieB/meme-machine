@@ -5,15 +5,18 @@ import { SessionProvider } from "next-auth/react"
 import { trpc } from '../utils/trpc';
 import '../styles/global.css'
 import UserProvider from '../components/UserProvider';
+import ModalContextProvider from '../components/ModalContextProvider';
 
 function MyApp({ Component, pageProps: session, ...pageProps }: AppProps) {
-    
+
     return (
         <SessionProvider refetchOnWindowFocus={false} >
             <UserProvider>
-                <Layout>
-                    <Component {...pageProps} />
-                </Layout>
+                <ModalContextProvider>
+                    <Layout>
+                        <Component {...pageProps} />
+                    </Layout>
+                </ModalContextProvider>
             </UserProvider>
         </SessionProvider>
     )

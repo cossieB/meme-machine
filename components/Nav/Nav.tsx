@@ -1,5 +1,6 @@
 import { useSession, signIn } from "next-auth/react";
 import { Dispatch, SetStateAction, useContext } from "react";
+import { ModalContext } from "../../hooks/modalContext";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { UserContext, ContextUser } from "../../hooks/userContext";
 import { ModalEnum } from "../../types/ModalEnum";
@@ -7,13 +8,9 @@ import { homeSvg, addSvg, loginSvg } from "../../utils/svgs";
 import ActionButton from "./ActionButton";
 import SideBarDiv, { NavItem } from "./SideBarIcon";
 
-
-type Props = {
-    setModal: Dispatch<SetStateAction<ModalEnum>>
-}
-
-export default function Nav({ setModal }: Props) {
+export default function Nav() {
     const { data: session } = useSession();
+    const {setModal, closeModal} = useContext(ModalContext)!
     const { user } = useContext(UserContext)!
     const { storage } = useLocalStorage<ContextUser>('user', {
         email: "",
