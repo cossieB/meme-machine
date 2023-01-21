@@ -34,13 +34,13 @@ export default function PostPage() {
         
         <Loader loading={query.isLoading}  >
             <div className="flex items-center justify-center h-screen">
-                <div className="flex w-11/12 shadow-2xl bg-teal-800 h-[95%] rounded-xl">
-                    <div className="w-1/2 flex flex-col items-center justify-around">
+                <div className="flex flex-col lg:flex-row gap-5 w-11/12 shadow-2xl bg-teal-800 h-[95%] rounded-xl">
+                    <div className="lg:w-1/2 flex flex-col items-center justify-around">
                         <h1 className="font-semibold text-3xl" > {query.data?.title} </h1>
                         <img src={query.data?.image ?? ""} alt="" />
                         <p>{query.data?.description}</p>
                     </div>
-                    <div className="w-1/2">
+                    <div className="lg:w-1/2">
 
                         {/* Creator Div */}
                         <div className="flex w-full justify-around">
