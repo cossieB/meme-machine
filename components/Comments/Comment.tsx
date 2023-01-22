@@ -1,4 +1,4 @@
-import { Comment } from "@prisma/client";
+import type { Comment } from "@prisma/client";
 import Link from "next/link";
 import { moment } from "../../utils/moment";
 import { trpc } from "../../utils/trpc";

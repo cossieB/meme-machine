@@ -1,4 +1,4 @@
-import { Meme } from "@prisma/client"
+import type { Meme } from "@prisma/client"
 import React from "react"
 
 export type WithChildren = {

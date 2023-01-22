@@ -1,4 +1,5 @@
-import { Meme, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
+import type { Meme } from "@prisma/client";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { Context } from "../../pages/api/trpc/[trpc]";
