@@ -10,6 +10,7 @@ export default function Tabs(props: P) {
         <nav className="flex w-full my-3">
             {props.tabs.map(t =>
                 <Tab 
+                    key={t}
                     {...props}
                     tab={t}
                 />

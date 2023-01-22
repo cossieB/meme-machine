@@ -22,7 +22,8 @@ export const userRouter = router({
                     name: true,
                     username: true,
                     status: true,
-                    image: true
+                    image: true,
+                    banner: true
                 }
             })
             if (!result)
