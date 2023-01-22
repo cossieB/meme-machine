@@ -1,8 +1,6 @@
-import styles from '../styles/404.module.scss'
-
 export default function NotFound() {
     return(
-        <div className={`${styles.error}`}>
+        <div >
             404
         </div>
     )

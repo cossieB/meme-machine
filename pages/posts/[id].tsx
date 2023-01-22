@@ -1,115 +1,81 @@
-import { GetStaticPathsContext, GetStaticPathsResult, GetStaticPropsContext, GetStaticPropsResult } from "next";
-import { Posts } from "../../utils/schema";
-import styles from '../../styles/Posts[id].module.scss'
-import mongoose from "mongoose";
-import Link from "next/link";
-import LikeAndComment from "../../components/LikeAndComment";
-import Comment from "../../components/Comments";
-import { useContext, useState } from "react";
-import { IUser, IPost, IUserContext } from "../../utils/interfaces";
-import { UserContext } from "../_app";
-import { useRouter } from "next/router";
-import DeletePost from "../../components/DeletePost";
-import Mask from "../../components/Mask";
-import EditPost from "../../components/EditPost";
-import formatDate from "../../utils/formatDate";
+import { useRouter } from "next/router"
+import Loader from "../../components/Loading/Loader"
+import { trpc } from "../../utils/trpc"
+import SideBarDiv, { NavItem } from "../../components/Nav/SideBarIcon"
+import { useContext, useEffect } from "react"
+import { UserContext } from "../../hooks/userContext"
+import { commentSvg } from "../../utils/svgs"
+import { moment } from "../../utils/moment"
+import { formatDate } from "../../lib/formatDate"
+import Follow from "../../components/UserQueries/Follow"
+import Like from "../../components/UserQueries/Like"
+import NotFound from "../404"
+import AddComment from "../../components/Comments/AddComment"
+import CommentList from "../../components/Comments/CommentList"
 
-
-
-type PostExclUser = Omit<IPost, "user">
-type P = Partial<PostExclUser> & { user: Partial<IUser> } & { dateString: string } & { id: string }
-
-export default function Post(props: P) {
-    const { title, image, description, user, dateString, id } = props
-    const [rerenderChildren, setRerenderChildren] = useState(Math.random())
-    const [showDeleteModal, setShowDeleteModal] = useState(false)
-    const [showEditModal, setShowEditModal] = useState(false)
-    const thisUser = useContext(UserContext) as IUserContext
+export default function PostPage() {
+    const { user } = useContext(UserContext)!
     const router = useRouter()
+    const viewMut = trpc.meme.viewMeme.useMutation()
+    useEffect(() => {
+        if (!router.query.id) return;
+        viewMut.mutate(router.query.id as string)
+    }, [router.query.id])
+    const query = trpc.meme.getMeme.useQuery(router.query.id as string, {
+        enabled: !!router.query.id,
+        refetchInterval: false,
+        refetchOnWindowFocus: false,
+        retry(failureCount, error) {
+            return failureCount < 3 && error.data?.httpStatus != 404
+        },
+        networkMode: process.env.NODE_ENV == 'development' ? 'always' : 'online',
+        onError(err) {
+
+        },
+    })
 
     return (
-        <div className={`${styles.container} ${styles.postContainer}`} >
+        query.error?.data?.httpStatus == 404 ? <NotFound /> :
+        
+        <Loader loading={query.isLoading}  >
+            <div className="flex items-center justify-center h-screen">
+                <div className="flex flex-col lg:flex-row gap-5 w-11/12 shadow-2xl bg-teal-800 h-[95%] rounded-xl">
+                    <div className="lg:w-1/2 flex flex-col items-center justify-around">
+                        <h1 className="font-semibold text-3xl" > {query.data?.title} </h1>
+                        <img src={query.data?.image ?? ""} alt="" />
+                        <p>{query.data?.description}</p>
+                    </div>
+                    <div className="lg:w-1/2">
 
-            <div className={`${styles.panel}`}>
-                <div className='label-title' >
-                    <h1 style={{ textAlign: "center" }}>{title}</h1>
-                    <div className={styles.flexApart}>
-                        <div> {formatDate(dateString)}  </div>
-                        <Link href={'/users/' + user.username}><a><strong>{user.username}</strong></a></Link>
+                        {/* Creator Div */}
+                        <div className="flex w-full justify-around">
+
+                            <SideBarDiv
+                                href={`/users/${query.data?.user.username}`}
+                                icon={query.data?.user.image || ""}
+                                text={query.data?.user.username ?? ""}
+                                isImg
+                            />
+                            {user?.username != query.data?.user.username && 
+                                <Follow userId={query.data?.userId ?? ""} />
+                            }
+                        </div>
+                        <div className="flex items-center justify-around">
+                            <Like postId={router.query.id as string} />
+                            <NavItem
+                                icon={commentSvg}
+                                text="1234"
+                            />
+                            <span title={formatDate(query.data?.creationDate ?? "")} >
+                                {moment(query.data?.creationDate ?? "")}
+                            </span>
+                        </div>
+                        <h2 className="text-center text-xl font-semibold py-5">Comments</h2>
+                        <AddComment postId={query.data?.postId ?? ""} />
+                        <CommentList postId={router.query.id as string} />
                     </div>
                 </div>
-
-                <img src={image} alt={`${title} image`} />
-
-                {thisUser.user?.username == user.username && (
-                    <div className="flexApart">
-                        <button onClick={() => setShowEditModal(true)}>Edit</button>
-                        <button onClick={() => setShowDeleteModal(true)} className="danger">Delete</button>
-                    </div>
-                )}
-                {description && <p className="label-desc" >{description}</p>}
             </div>
-
-            <div className={styles.panel}>
-                <h1 className="label-header" style={{ textAlign: "center" }}>Comments</h1>
-                <LikeAndComment setRerenderChildren={setRerenderChildren} id={id} />
-                <Comment id={id} rerender={rerenderChildren} />
-            </div>
-
-            {showDeleteModal && (
-                <>
-                    <Mask showModal={setShowDeleteModal}>
-                        <DeletePost id={id} title={title!} showModal={setShowDeleteModal} />
-                    </Mask>
-                </>
-            )}
-            {showEditModal && (
-                <>
-                    <Mask showModal={setShowEditModal}>
-                        <EditPost id={id} description={description} title={title!} image={image!} showModal={setShowEditModal} />
-                    </Mask>
-                </>
-            )}
-        </div>
+        </Loader>
     )
-}
-
-export async function getStaticProps(context: GetStaticPropsContext): Promise<GetStaticPropsResult<P>> {
-    await mongoose.connect(process.env.MONGO_URI!).catch(e => console.log(e))
-    let id = context.params!.id as string;
-    let post = await Posts.findById(id).select('-user.password').exec().catch(() => null);
-
-    if (!post) {
-        return {
-            notFound: true
-        }
-    }
-
-    return {
-        props: {
-            title: post.title,
-            image: post.image,
-            description: post.description,
-            dateString: post.date.toISOString(),
-            likes: post.likes,
-            id: post.id,
-            user: {
-                username: post.user.username,
-                avatar: post.user.avatar
-            }
-        }
-    }
-}
-
-export async function getStaticPaths(context: GetStaticPathsContext): Promise<GetStaticPathsResult> {
-    await mongoose.connect(process.env.MONGO_URI!).catch(e => console.log(e))
-    let posts = await Posts.find()
-    mongoose.connection.close()
-    let paths = posts.map(post => ({
-        params: { id: post.id }
-    }))
-    return {
-        paths,
-        fallback: "blocking"
-    }
 }

@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Stick+No+Bills:wght@800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400&family=Stick+No+Bills:wght@600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .navLinks {
+        @apply relative flex items-center justify-center
+    }
+    .navIcon {
+        @apply flex items-center justify-center h-12 w-12 my-2 shadow-lg
+    }
+}
+@media (min-width: 768px) {
+    /* width */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+    
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #115e59;
+    }
+    
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #fed7aa;
+        border-radius: 10px;
+    }
+    
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #fdba74;
+    }
+    
+}
