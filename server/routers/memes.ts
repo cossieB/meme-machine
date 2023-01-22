@@ -37,7 +37,7 @@ export const memeRouter = router({
         }),
     getMemes: procedure
         .input(z.object({
-            sort: z.enum(['latest', 'top']).default('latest'),
+            sort: z.enum(['new', 'popular']).default('new'),
             timePeriod: z.enum(['day', 'week', 'month', 'year', 'allTime']).default('allTime'),
             creator: z.string().nullish()
         }))
@@ -53,7 +53,7 @@ export const memeRouter = router({
                 year: new Date(now.setFullYear(now.getFullYear() - 1)),
                 allTime: new Date(0)
             }
-            const sort: Prisma.Enumerable<Prisma.MemeOrderByWithRelationInput> = input.sort == 'latest' ? { creationDate: 'desc' } : {}
+            const sort: Prisma.Enumerable<Prisma.MemeOrderByWithRelationInput> = input.sort == 'new' ? { creationDate: 'desc' } : {}
 
             const result = await db.meme.findMany({
                 where: {

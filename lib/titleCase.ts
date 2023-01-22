@@ -1,13 +1,21 @@
-export default function titleCase(value: string) {
-    const arr = value.split(' ')
-    let titleCased = ''
-    const ignoreList = ['of', 'the', 'a', 'an']
+/**
+ * 
+ * @param input String you want to turn to title case. Assumes space-separated words or camel-cased string.
+ * @returns 
+ */
+export default function(input: string) {
+    const arr = input.split(" ");
+    const ignoreList = ["of", "the", "a", "an"]
+    let titleCased = ""
     for (let i = 0; i < arr.length; i++) {
         let word = arr[i]
-        if (ignoreList.includes(word) && i > 0 ) continue
-        word = word.toLowerCase()
-        word = word[0].toUpperCase() + word.slice(1,)
-        titleCased += word + " "
+        word = word.replace(/([a-z])([A-Z])/, '$1 $2')
+        if (i > 0 && ignoreList.includes(word)) {
+            titleCased += word + " ";
+            continue;
+        }
+        const modifiedWord = word.slice(0,1).toUpperCase() + word.slice(1)
+        titleCased += modifiedWord + " "
     }
     return titleCased.trimEnd()
 }

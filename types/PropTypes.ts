@@ -6,3 +6,8 @@ export type WithChildren = {
 }
 
 export type MemePostType = Pick<Meme, 'creationDate' | 'description' | 'image' | 'postId' | 'title'> 
+
+export type UseStateSetterAndValue<T> = {
+    value: T,
+    setValue: React.Dispatch<React.SetStateAction<T>>
+}
