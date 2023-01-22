@@ -1,6 +1,8 @@
 import { Spinner } from "../components/Loading/Spinner";
-import MemeList from "../components/Memes/MemeList";
 import { trpc } from "../utils/trpc";
+import  dynamic from "next/dynamic";
+
+const MemeList = dynamic(() => import('../components/Memes/MemeList'), {ssr: false})
 
 export default function Home() {
     const memes = trpc.meme.getMemes.useQuery({}, {

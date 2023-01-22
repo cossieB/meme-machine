@@ -1,12 +1,14 @@
 import { useRouter } from "next/router"
 import { useContext } from "react"
 import Loader from "../../components/Loading/Loader"
-import MemeList from "../../components/Memes/MemeList"
 import Follow from "../../components/UserQueries/Follow"
 import { UserContext } from "../../hooks/userContext"
 import { formatDate } from "../../lib/formatDate"
 import { trpc } from "../../utils/trpc"
 import NotFound from "../404"
+import  dynamic from "next/dynamic";
+
+const MemeList = dynamic(() => import('../../components/Memes/MemeList'), {ssr: false})
 
 export default function UserPage() {
     const router = useRouter()

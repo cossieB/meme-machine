@@ -6,10 +6,10 @@ import { moment } from "../../utils/moment";
 
 export default function MemePost({ p }: { p: MemePostType }) {
     return (
-        <div className="break-inside-avoid w-full mb-5" >
+        <div className=" mb-5 myGridItem w-64" >
             <Link href={`/posts/${p.postId}`}>
                 <a>
-                    <img className="break-inside-avoid w-full mb-5 rounded-2xl border-2 border-emerald-400" src={p.image} alt={`${p.title} image`} />
+                    <img className="break-inside-avoid w-full rounded-2xl border-2 border-emerald-400" src={p.image} alt={`${p.title} image`} />
                     <div>
 
                     </div>
