@@ -16,6 +16,7 @@ export default function AddComment({postId}: P) {
         e.preventDefault();
         mutation.mutate({postId, content}, {
             onSuccess() {
+                setContent("")
                 utils.comment.all.refetch(postId)
             },
         })

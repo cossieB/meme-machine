@@ -14,16 +14,15 @@ export default function CommentPost({ comment }: { comment: Comment; }) {
     return (
         <div className="grid grid-cols-5 rounded-lg bg-teal-600 mt-5 p-3" >
             <div className="row-span-2">
-                <Link  href={`/users/${query.data?.username}` ?? ""}>
+                <Link href={`/users/${query.data?.username}` ?? ""}>
                     <a>
-                <img className="rounded-full h-10 w-10 mr-3" src={query.data?.image ?? ""} alt={query.data?.username} />
-                {query.data?.username}
-
+                        <img className="rounded-full h-10 w-10 mr-3" src={query.data?.image ?? ""} alt={query.data?.username} />
+                        {query.data?.username}
                     </a>
                 </Link>
             </div>
             <div className="col-start-2 col-span-4 row-span-1" >
-                { moment(comment.creationDate) }
+                {moment(comment.creationDate)}
             </div>
             <div>
                 {comment.content}

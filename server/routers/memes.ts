@@ -1,9 +1,8 @@
 import { Prisma } from "@prisma/client";
 import { initTRPC, TRPCError } from "@trpc/server";
-import { input, string, z } from "zod";
+import { z } from "zod";
 import { Context } from "../../pages/api/trpc/[trpc]";
 import db from "../../prisma/db";
-import { trpc } from "../../utils/trpc";
 
 const t = initTRPC.context<Context>().create();
 
@@ -54,7 +53,7 @@ export const memeRouter = router({
                 year: new Date(now.setFullYear(now.getFullYear() - 1)),
                 allTime: new Date(0)
             }
-            const sort: Prisma.Enumerable<Prisma.MemeOrderByWithRelationInput> = input.sort == 'latest' ? { creationDate: 'asc' } : {}
+            const sort: Prisma.Enumerable<Prisma.MemeOrderByWithRelationInput> = input.sort == 'latest' ? { creationDate: 'desc' } : {}
 
             const result = await db.meme.findMany({
                 where: {

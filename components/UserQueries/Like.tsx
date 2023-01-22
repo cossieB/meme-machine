@@ -1,5 +1,7 @@
-import { useSession } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
 import router from "next/router"
+import { useContext } from "react"
+import { ModalContext } from "../../hooks/modalContext"
 import { likeSvg, unlikeSvg } from "../../utils/svgs"
 import { trpc } from "../../utils/trpc"
 import ActionButton from "../Nav/ActionButton"
@@ -11,6 +13,7 @@ type P = {
 
 export default function Like({postId}: P) {
     const {data: session} = useSession()
+    const {setModal} = useContext(ModalContext)!
     const utils = trpc.useContext()
 
     const doILikeQuery = trpc.like.doesUserLike.useQuery(postId, {
@@ -34,7 +37,7 @@ export default function Like({postId}: P) {
             onSuccess() {
                 utils.like.likeCount.setData(postId, data => {
                     return {
-                        _count: data!._count + (doILikeQuery.data ? -1 : 1)
+                        _count: data!._count + (doILikeQuery.data ? -1 : 1),
                     }
                 })
                 utils.like.doesUserLike.setData(postId, data => {
@@ -45,7 +48,7 @@ export default function Like({postId}: P) {
 
     }
     return (
-        <ActionButton onClick={handleClick} >
+        <ActionButton onClick={session ? handleClick : () => setModal('PROMPT_SIGNUP')} >
             <NavItem
                 icon={doILikeQuery.data ? unlikeSvg : likeSvg}
                 text={(countQuery.data?._count ?? 0).toString()}

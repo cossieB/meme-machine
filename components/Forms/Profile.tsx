@@ -13,6 +13,7 @@ export default function Profile() {
     const [image, setImage] = useState(user?.image ?? "")
     const [name, setName] = useState(user?.name ?? "")
     const [status, setStatus] = useState(user?.status ?? "");
+    const [banner, setBanner] = useState(user?.banner ?? "")
     const { updateLocalStorage } = useLocalStorage<ContextUser>('user')
 
     const errorDiv = useRef<HTMLParagraphElement>(null)
@@ -24,8 +25,8 @@ export default function Profile() {
         e.preventDefault()
         mutation.mutate({ username, image, name, status }, {
             onSuccess() {
-                setUser({ username, image, name, status, email: user!.email })
-                updateLocalStorage({ username, image, name, status, email: user!.email });
+                setUser({ username, image, name, status, banner, email: user!.email })
+                updateLocalStorage({ username, image, name, status, banner, email: user!.email });
             },
             onError(error, variables, context) {
                 if (error.message == 'username already taken') {
