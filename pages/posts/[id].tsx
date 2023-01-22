@@ -2,7 +2,7 @@ import { useRouter } from "next/router"
 import Loader from "../../components/Loading/Loader"
 import { trpc } from "../../utils/trpc"
 import SideBarDiv, { NavItem } from "../../components/Nav/SideBarIcon"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { UserContext } from "../../hooks/userContext"
 import { commentSvg } from "../../utils/svgs"
 import { moment } from "../../utils/moment"
@@ -16,6 +16,11 @@ import CommentList from "../../components/Comments/CommentList"
 export default function PostPage() {
     const { user } = useContext(UserContext)!
     const router = useRouter()
+    const viewMut = trpc.meme.viewMeme.useMutation()
+    useEffect(() => {
+        if (!router.query.id) return;
+        viewMut.mutate(router.query.id as string)
+    }, [router.query.id])
     const query = trpc.meme.getMeme.useQuery(router.query.id as string, {
         enabled: !!router.query.id,
         refetchInterval: false,

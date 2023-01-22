@@ -1,10 +1,9 @@
 import { useSession, signIn } from "next-auth/react";
-import { Dispatch, SetStateAction, useContext } from "react";
+import { useContext } from "react";
 import { ModalContext } from "../../hooks/modalContext";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { UserContext, ContextUser } from "../../hooks/userContext";
-import { ModalEnum } from "../../types/ModalEnum";
-import { homeSvg, addSvg, loginSvg } from "../../utils/svgs";
+import { homeSvg, addSvg, loginSvg, activitySvg } from "../../utils/svgs";
 import ActionButton from "./ActionButton";
 import SideBarDiv, { NavItem } from "./SideBarIcon";
 
@@ -17,7 +16,8 @@ export default function Nav() {
         image: "",
         name: "",
         status: "",
-        username: ""
+        username: "",
+        banner: ""
     })
     return (
         <nav className="flex fixed flex-col w-16 md:w-64 content-center bg-teal-800 h-screen">
@@ -34,6 +34,7 @@ export default function Nav() {
                 <NavItem icon={addSvg} text="Publish"
                 />
             </ActionButton>
+            <SideBarDiv icon={activitySvg} text="Explore" href="/explore" />
             {!session ?
                 <div className="mt-auto mb-3">
                     <ActionButton onClick={() => signIn()}>

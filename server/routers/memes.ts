@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Meme, Prisma } from "@prisma/client";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { Context } from "../../pages/api/trpc/[trpc]";
@@ -38,12 +38,13 @@ export const memeRouter = router({
     getMemes: procedure
         .input(z.object({
             sort: z.enum(['new', 'popular']).default('new'),
-            timePeriod: z.enum(['day', 'week', 'month', 'year', 'allTime']).default('allTime'),
+            filter: z.enum(['day', 'week', 'month', 'year', 'allTime']).default('allTime'),
             creator: z.string().nullish()
         }))
         .query(async ({ input }) => {
+
             type M = {
-                [x in typeof input.timePeriod]: Date
+                [x in typeof input.filter]: Date
             }
             const now = new Date()
             const map: M = {
@@ -53,13 +54,16 @@ export const memeRouter = router({
                 year: new Date(now.setFullYear(now.getFullYear() - 1)),
                 allTime: new Date(0)
             }
-            const sort: Prisma.Enumerable<Prisma.MemeOrderByWithRelationInput> = input.sort == 'new' ? { creationDate: 'desc' } : {}
 
-            const result = await db.meme.findMany({
+            const sort: Prisma.Enumerable<Prisma.MemeOrderByWithRelationInput> = input.sort == 'new' ? { creationDate: 'desc' } : { views: 'desc' }
+
+            return await db.meme.findMany({
                 where: {
-                    creationDate: {
-                        gte: map[input.timePeriod]
-                    },
+                    ...(input.sort == 'popular' && {
+                        creationDate: {
+                            gte: map[input.filter]
+                        }
+                    }),
                     ...(input.creator && {
                         user: {
                             username_lower: input.creator.toLowerCase()
@@ -68,7 +72,6 @@ export const memeRouter = router({
                 },
                 orderBy: sort,
             })
-            return result
         }),
     getMeme: procedure
         .input(z.string())
@@ -89,5 +92,42 @@ export const memeRouter = router({
             if (!result) throw new TRPCError({ code: "NOT_FOUND" })
             return result
         }),
+    viewMeme: procedure
+        .input(z.string())
+        .mutation(async ({ input }) => {
+            await db.meme.update({
+                where: {
+                    postId: input
+                },
+                data: {
+                    views: {
+                        increment: 1
+                    }
+                }
+            })
+            return
+        }),
+    homeFeed: procedure
+        .query(async ({ ctx }) => {
+            if (!ctx.user) return db.meme.findMany({
+                orderBy: {
+                    creationDate: 'desc'
+                }
+            })
+            
+            const result = await db.$queryRaw`
+                SELECT "postId", "userId", "creationDate", "editDate", title, image, description, views
+                FROM "Meme"
+                WHERE "userId" 
+                IN (
+                    SELECT "followeeId" 
+                    FROM "FollowerFollowee"
+                    WHERE "followerId" = ${ctx.user.sub!}
+                )
+                OR "userId" = ${ctx.user.sub}
+                ORDER BY "creationDate" DESC
+            `
+            return result as Meme[]
+        })
 
 })

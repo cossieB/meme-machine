@@ -1,47 +1,27 @@
-import { Spinner } from "../components/Loading/Spinner";
 import { trpc } from "../utils/trpc";
 import dynamic from "next/dynamic";
-import Tabs from "../components/Tabs/Tabs";
-import { useState } from "react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 const MemeList = dynamic(() => import('../components/Memes/MemeList'), { ssr: false })
 
 export default function Home() {
-    const tabs = ["new", "popular"] as const
-    const [tab, setTab] = useState<string>("new")
+    const router = useRouter()
     
-    const sorts = ['day', 'week', 'month', 'year', 'allTime']
-    const [sort, setSort] = useState("allTime")
-
-    const memes = trpc.meme.getMemes.useQuery({}, {
+    const query = trpc.meme.homeFeed.useQuery(undefined, {
         refetchInterval: false,
         refetchOnWindowFocus: false,
         retry(failureCount, error) {
             return failureCount < 3 && error.data?.httpStatus != 404
-        }
+        },
     })
     return (
         <div>
             <Head>
-                <title>Meme Machine | Explore</title>
+                <title>Meme Machine | Home</title>
             </Head>
-            <div>
-                <Tabs
-                    tabs={tabs}
-                    setValue={setTab}
-                    value={tab}
-                />
-                {tab == 'popular' && 
-                    <Tabs
-                        tabs={sorts}
-                        setValue={setSort}
-                        value={sort}
-                    />
-                }
-            </div>
             <MemeList
-                posts={memes.data?.map(item => ({ ...item, creationDate: new Date(item.creationDate) })) ?? []}
+                posts={query.data?.map(item => ({ ...item, creationDate: new Date(item.creationDate) })) ?? []}
             />
 
         </div>

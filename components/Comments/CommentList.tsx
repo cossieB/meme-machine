@@ -16,7 +16,7 @@ export default function CommentList({postId}: P) {
     })
 
     return (
-        <div>
+        <div className="overflow-y-scroll" >
             {(query.data ?? []).map(item => 
             <CommentPost key={item.commentId} comment={{...item, creationDate: new Date(item.creationDate), editDate: new Date(item.editDate)  }} />
                 )  }
