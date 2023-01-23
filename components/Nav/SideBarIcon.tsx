@@ -5,12 +5,12 @@ import { Optional } from "../../lib/utilityTypes";
 
 type IconProps = {
     icon: JSX.Element,
-    text: string,
+    text: string | number,
     href: string,
     isImg?: false | undefined
 } | {
     icon: string,
-    text: string,
+    text: string | number,
     href: string,
     isImg: true
 }

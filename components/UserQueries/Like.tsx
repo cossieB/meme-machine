@@ -51,7 +51,7 @@ export default function Like({postId}: P) {
         <ActionButton onClick={session ? handleClick : () => setModal('PROMPT_SIGNUP')} >
             <NavItem
                 icon={doILikeQuery.data ? unlikeSvg : likeSvg}
-                text={(countQuery.data?._count ?? 0).toString()}
+                text={countQuery.data?._count ?? 0}
             />
         </ActionButton>
     )

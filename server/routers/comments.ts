@@ -18,6 +18,15 @@ export const commentRouter = router({
                 }
             })
         }),
+    count: procedure
+        .input(z.string())
+        .query(async ({ input }) => {
+            return await db.comment.count({
+                where: {
+                    postId: input
+                }
+            })
+        }),
     addComment: procedure
         .input(z.object({
             content: z.string().max(255).min(1),
