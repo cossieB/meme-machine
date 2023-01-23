@@ -37,7 +37,7 @@ export default function UserPage() {
                 <Loader loading={query.isLoading} >
                     <>
                         <div className="w-full h-60 bg-center bg-cover bg-no-repeat" style={{ backgroundImage: `url(${query.data?.banner})` }}>
-                            <img className="rounded-full h-40 aspect-square absolute translate-y-40 translate-x-5 object-cover" src={query.data?.image ?? ""} alt={query.data?.username} />
+                            <img className="rounded-full h-20 md:h-40 aspect-square absolute translate-y-52 md:translate-y-40 translate-x-5 object-cover" src={query.data?.image ?? ""} alt={query.data?.username} />
                         </div>
                         <div className="right-0 absolute">
                             {user?.username != query.data?.username &&

@@ -12,7 +12,7 @@ export default function MemeList(props: P) {
     useLayoutEffect(() => {
         const msnry = new Masonry(ref.current!, {
             itemSelector: '.myGridItem',
-            columnWidth: '.w-64',
+            columnWidth: '.myGridItem',
             gutter: 10,
             horizontalOrder: true,
             fitWidth: true

@@ -17,7 +17,7 @@ export default function Modal({ children, closeModal }: Props) {
             <div className="z-20 w-full h-full flex flex-col justify-center items-center" >
                 {children}
             </div>
-            <span onClick={closeModal} className="absolute top-10 left-10 z-[999] hover:shadow-red-500">
+            <span onClick={closeModal} className="absolute top-3 left-3 z-[999] hover:shadow-red-500">
                 {closeSvg}
             </span>
         </motion.div>

@@ -7,7 +7,7 @@ type P = UseStateSetterAndValue<string> & {
 
 export default function Tabs(props: P) {
     return (
-        <nav className="flex w-full my-3">
+        <nav className="flex w-full my-3 flex-wrap">
             {props.tabs.map(t =>
                 <Tab 
                     key={t}
