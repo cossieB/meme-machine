@@ -27,11 +27,8 @@ export default function Follow({userId}: P) {
     
     function handleClick() {
         followMutation.mutate(userId, {
-            onSuccess() {console.log("Success")
+            onSuccess() {
                 utils.follow.doesUserFollow.setData(userId, data => !data)
-            },
-            onError(err) {
-                console.log(err)
             },
         })
     }

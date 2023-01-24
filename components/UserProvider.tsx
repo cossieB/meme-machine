@@ -15,7 +15,6 @@ export default function UserProvider({children}: Props) {
 
     trpc.user.getMyInfo.useQuery(undefined, {
         onSuccess(data) {
-            console.log(data)
             setUser(data)
             updateLocalStorage(data)
         },
