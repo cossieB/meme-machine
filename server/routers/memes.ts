@@ -30,7 +30,7 @@ export const memeRouter = router({
                 const result = await db.meme.create({
                     data: { ...input, userId: ctx.user.sub! }
                 })
-                return { id: result.postId }
+                return result
             } catch (error) {
                 console.log(error)
                 throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Something went wrong. Please try again later" })

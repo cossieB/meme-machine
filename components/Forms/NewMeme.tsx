@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useContext, useState } from "react";
+import { ModalContext } from "../../hooks/modalContext";
+import { UserContext } from "../../hooks/userContext";
 import { trpc } from "../../utils/trpc";
 import FormInput from "./FormInput";
 import SubmitButton from "./SubmitButton";
@@ -7,14 +10,25 @@ export default function NewMeme() {
     const [title, setTitle] = useState("")
     const [image, setImage] = useState("")
     const [description, setDescription] = useState("")
+    const router = useRouter()
     const mutation = trpc.meme.publishMeme.useMutation()
+    const utils = trpc.useContext()
+    const {user} = useContext(UserContext)!
+    const {closeModal} = useContext(ModalContext)!
 
-    async function submit(e: React.FormEvent<HTMLFormElement>) {
+    function submit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
-        await mutation.mutateAsync({ title: title.trim(), image, description });
-        if (mutation.isSuccess) {
-            
-        }
+        mutation.mutate({ title: title.trim(), image, description }, {
+            onSuccess(data, variables, context) {
+                utils.meme.getMeme.setData(data.postId, {...data, user: {
+                    image: user!.image,
+                    username: user!.username
+                }})
+                closeModal()
+                router.push(`/posts/${data.postId}`)
+            },
+        });
+
     }
     return (
         <>
