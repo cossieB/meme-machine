@@ -2,6 +2,7 @@ import { MemePostType } from "../../types/PropTypes";
 import MemePost from "./Meme";
 import { useLayoutEffect, useRef } from "react";
 import Masonry from "masonry-layout";
+import imagesLoaded from "imagesloaded";
 
 type P = {
     posts: MemePostType[],
@@ -17,6 +18,7 @@ export default function MemeList(props: P) {
             horizontalOrder: true,
             fitWidth: true
         })
+        imagesLoaded(ref.current!).on('progress', () => msnry.layout!())
         
     }, )
     const {posts} = props;

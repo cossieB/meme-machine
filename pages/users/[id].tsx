@@ -1,18 +1,24 @@
 import { useRouter } from "next/router"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import Loader from "../../components/Loading/Loader"
 import Follow from "../../components/UserQueries/Follow"
 import { UserContext } from "../../hooks/userContext"
 import { formatDate } from "../../lib/formatDate"
 import { trpc } from "../../utils/trpc"
 import NotFound from "../404"
-import  dynamic from "next/dynamic";
+import dynamic from "next/dynamic";
+import Tabs from "../../components/Tabs/Tabs"
+import { UserDto } from "../../types/DTOs"
+import UserList from "../../components/Users/UserList"
 
-const MemeList = dynamic(() => import('../../components/Memes/MemeList'), {ssr: false})
+const MemeList = dynamic(() => import('../../components/Memes/MemeList'), { ssr: false })
 
 export default function UserPage() {
     const router = useRouter()
     const { user } = useContext(UserContext)!
+    const tabs = ['memes', 'likes', 'following']
+    const [tab, setTab] = useState('memes')
+
     const query = trpc.user.getUser.useQuery(router.query.id as string, {
         enabled: !!router.query.id,
         refetchInterval: false,
@@ -21,16 +27,32 @@ export default function UserPage() {
             return failureCount < 3 && error.data?.httpStatus != 404
         }
     })
-    const memesQuery = trpc.meme.getMemes.useQuery({
-        creator: router.query.id as string
-    }, {
-        enabled: !!router.query.id,
+    const memesQuery = trpc.meme.getMemes.useQuery({ creator: router.query.id as string }, {
+        enabled: !!router.query.id && tab == 'memes',
         refetchInterval: false,
         refetchOnWindowFocus: false,
         retry(failureCount, error) {
             return failureCount < 3 && error.data?.httpStatus != 404
         }
     })
+    const likesQuery = trpc.like.byUser.useQuery(router.query.id as string, {
+        enabled: !!router.query.id && tab == 'likes',
+        refetchInterval: false,
+        refetchOnWindowFocus: false,
+        retry(failureCount, error) {
+            return failureCount < 3 && error.data?.httpStatus != 404
+        }
+    })
+    const followQuery = trpc.follow.followingWho.useQuery(router.query.id as string, {
+        enabled: !!router.query.id && tab == 'following',
+        refetchInterval: false,
+        refetchOnWindowFocus: false,
+        retry(failureCount, error) {
+            return failureCount < 3 && error.data?.httpStatus != 404
+        }
+    })
+
+
     return (
         query.error?.data?.httpStatus == 404 ? <NotFound /> :
             <div>
@@ -51,10 +73,18 @@ export default function UserPage() {
                         </div>
                     </>
                 </Loader>
+                <Tabs
+                    setValue={setTab}
+                    tabs={tabs}
+                    value={tab}
+                />
                 <Loader loading={memesQuery.isLoading} >
+                    {tab == 'memes' || tab == 'likes' ?
                     <MemeList
-                        posts={memesQuery.data?.map(item => ({ ...item, creationDate: new Date(item.creationDate) })) ?? []}
-                    />
+                        posts={(tab == 'memes' ? memesQuery : likesQuery).data?.map(item => ({ ...item, creationDate: new Date(item.creationDate) })) ?? []}
+                    /> :
+                    <UserList users={followQuery.data?.map(item => ({ ...item, joinDate: new Date(item.joinDate) })) ?? []}  />
+                }
                 </Loader>
             </div>
     )

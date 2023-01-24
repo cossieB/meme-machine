@@ -1,3 +1,4 @@
+import { Meme } from "@prisma/client";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { Context } from "../../pages/api/trpc/[trpc]";
@@ -41,7 +42,6 @@ export const likesRouter = router({
                 if (e.code == 'P2003') {
                     throw new TRPCError({ code: 'BAD_REQUEST', message: "Post not found" })
                 }
-                console.log(e)
                 throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: "Something went wrong" })
 
             }
@@ -95,4 +95,18 @@ export const likesRouter = router({
             })
             return result
         }),
+    byUser: procedure
+        .input(z.string())
+        .query(async ({input}) => {
+            return await db.$queryRaw`
+                SELECT DISTINCT("Meme"."postId"), "Meme"."userId", "Meme"."creationDate", "Meme"."editDate", "Meme".title, "Meme".image, "Meme".description, "Meme".views
+                FROM "Meme"
+                JOIN "MemesLikedByUser"
+                USING ("postId")
+                JOIN "User"
+                ON "Meme"."userId" = id
+                WHERE username_lower = ${input.toLowerCase()}
+            ` as Meme[]
+        })
 })
+

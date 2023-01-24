@@ -11,7 +11,7 @@ export default function NewMeme() {
 
     async function submit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
-        await mutation.mutateAsync({ title, image, description });
+        await mutation.mutateAsync({ title: title.trim(), image, description });
         if (mutation.isSuccess) {
             
         }

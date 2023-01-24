@@ -21,9 +21,9 @@ export default function Profile() {
     const mutation = trpc.user.updateProfile.useMutation({ networkMode: process.env.NODE_ENV == 'development' ? 'always' : 'online' })
 
     async function submit(e: React.FormEvent<HTMLFormElement>) {
-        errorDiv.current!.textContent = ""
+        errorDiv.current!.textContent = "";
         e.preventDefault()
-        mutation.mutate({ username, image, name, status }, {
+        mutation.mutate({ username: username.trimEnd(), image, name, status }, {
             onSuccess() {
                 setUser({ username, image, name, status, banner, email: user!.email })
                 updateLocalStorage({ username, image, name, status, banner, email: user!.email });
@@ -47,6 +47,8 @@ export default function Profile() {
                     setValue={setUsername}
                     max={20}
                     min={3}
+                    pattern="^\w+$"
+                    title="Only letters, numbers, underscores allowed"
                 />
                 <FormInput
                     label="Image"

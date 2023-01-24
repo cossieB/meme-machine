@@ -1,7 +1,9 @@
+import { User } from "@prisma/client";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { Context } from "../../pages/api/trpc/[trpc]";
 import db from "../../prisma/db";
+import { UserDto } from "../../types/DTOs";
 
 const t = initTRPC.context<Context>().create();
 
@@ -85,5 +87,20 @@ export const followRouter = router({
             catch (e: any) {
                 
             }
+        }),
+    followingWho: procedure
+        .input(z.string())
+        .query(async ({input}) => {
+            return await db.$queryRaw`
+                SELECT DISTINCT("User".id), "User".username, "User".image, "User"."joinDate", "User".status,  "User".banner
+                FROM "User"
+                JOIN "FollowerFollowee"
+                ON "followeeId" = id
+                WHERE "followerId" = (
+                    SELECT id 
+                    FROM "User"
+                    WHERE username_lower = ${input.toLowerCase()}
+                )
+            ` as UserDto[]
         })
 })

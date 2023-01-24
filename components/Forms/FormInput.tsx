@@ -5,10 +5,12 @@ type Props = {
     isTextarea?: boolean
     min?: number
     max?: number
+    pattern?: string
+    title?: string
 }
 
 export default function FormInput(props: Props) {
-    const { label, value, setValue, isTextarea, min, max } = props;
+    const { label, value, setValue, isTextarea, min, max, pattern, title } = props;
     return (
         <div className="relative z-0 mt-7">
             {isTextarea ?
@@ -28,6 +30,8 @@ export default function FormInput(props: Props) {
                     required={!!min}
                     onChange={e => setValue(e.target.value)}
                     className="block py-2.5 px-0 w-full text-orange-300 bg-transparent border-0 border-b-2 border-slate-300 appearance-none focus:border-orange-500 focus:outline-none focus:ring-0 peer" placeholder=" "
+                    pattern={pattern}
+                    title={title}
                 />
             }
             <label
