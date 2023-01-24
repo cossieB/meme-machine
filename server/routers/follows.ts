@@ -102,5 +102,20 @@ export const followRouter = router({
                     WHERE username_lower = ${input.toLowerCase()}
                 )
             ` as UserDto[]
+        }),
+    followedBy: procedure
+        .input(z.string())
+        .query(async ({input}) => {
+            return await db.$queryRaw`
+                SELECT DISTINCT("User".id), "User".username, "User".image, "User"."joinDate", "User".status,  "User".banner
+                FROM "User"
+                JOIN "FollowerFollowee"
+                ON "followerId" = id
+                WHERE "followeeId" = (
+                    SELECT id 
+                    FROM "User"
+                    WHERE username_lower = ${input.toLowerCase()}
+                )                
+            ` as UserDto[]
         })
 })

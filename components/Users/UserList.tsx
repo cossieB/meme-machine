@@ -7,7 +7,7 @@ type P = {
 
 export default function UserList({users}: P) {
     return (
-        <div className="grid grid-cols-3" >
+        <div className="grid mx-5 grid-cols-3" >
             {users.map(user => <UserSummary key={user.id} user={user} /> )}
         </div>
     )

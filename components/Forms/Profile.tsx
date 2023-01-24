@@ -6,6 +6,8 @@ import { trpc } from "../../utils/trpc"
 import FormInput from "./FormInput"
 import { exitSvg } from "../../utils/svgs"
 import SubmitButton from "./SubmitButton"
+import ActionButton from "../Nav/ActionButton"
+import { NavItem } from "../Nav/SideBarIcon"
 
 export default function Profile() {
     const { user, setUser } = useContext(UserContext)!
@@ -28,7 +30,7 @@ export default function Profile() {
                 setUser({ username, image, name, status, banner, email: user!.email })
                 updateLocalStorage({ username, image, name, status, banner, email: user!.email });
             },
-            onError(error, variables, context) {
+            onError(error) {
                 if (error.message == 'username already taken') {
                     errorDiv.current!.textContent = error.message;
                 }
@@ -78,10 +80,14 @@ export default function Profile() {
                 />
                 <p className="bg-red-300" ref={errorDiv} />
             </form>
-            <button className="bg-red-600" onClick={() => signOut()}>
-                {exitSvg}
-                Sign Out
-            </button>
+            <ActionButton
+                onClick={() => signOut()}
+            >
+                <NavItem
+                    icon={exitSvg}
+                    text="Sign Out"
+                />
+            </ActionButton>
         </>
     )
 }

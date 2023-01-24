@@ -8,7 +8,6 @@ import { trpc } from "../../utils/trpc"
 import NotFound from "../404"
 import dynamic from "next/dynamic";
 import Tabs from "../../components/Tabs/Tabs"
-import { UserDto } from "../../types/DTOs"
 import UserList from "../../components/Users/UserList"
 
 const MemeList = dynamic(() => import('../../components/Memes/MemeList'), { ssr: false })
@@ -16,7 +15,7 @@ const MemeList = dynamic(() => import('../../components/Memes/MemeList'), { ssr:
 export default function UserPage() {
     const router = useRouter()
     const { user } = useContext(UserContext)!
-    const tabs = ['memes', 'likes', 'following']
+    const tabs = ['memes', 'likes', 'following', 'followers']
     const [tab, setTab] = useState('memes')
 
     const query = trpc.user.getUser.useQuery(router.query.id as string, {
@@ -51,7 +50,14 @@ export default function UserPage() {
             return failureCount < 3 && error.data?.httpStatus != 404
         }
     })
-
+    const followerQuery = trpc.follow.followedBy.useQuery(router.query.id as string, {
+        enabled: !!router.query.id && tab == 'followers',
+        refetchInterval: false,
+        refetchOnWindowFocus: false,
+        retry(failureCount, error) {
+            return failureCount < 3 && error.data?.httpStatus != 404
+        }
+    })
 
     return (
         query.error?.data?.httpStatus == 404 ? <NotFound /> :
@@ -78,13 +84,18 @@ export default function UserPage() {
                     tabs={tabs}
                     value={tab}
                 />
-                <Loader loading={memesQuery.isLoading} >
+                <Loader loading={
+                    (tab == 'memes' && memesQuery.isLoading)
+                    || (tab == 'likes' && likesQuery.isLoading)
+                    || (tab == 'following' && followQuery.isLoading)
+                    || (tab == 'followers' && followerQuery.isLoading)}
+                >
                     {tab == 'memes' || tab == 'likes' ?
-                    <MemeList
-                        posts={(tab == 'memes' ? memesQuery : likesQuery).data?.map(item => ({ ...item, creationDate: new Date(item.creationDate) })) ?? []}
-                    /> :
-                    <UserList users={followQuery.data?.map(item => ({ ...item, joinDate: new Date(item.joinDate) })) ?? []}  />
-                }
+                        <MemeList
+                            posts={(tab == 'memes' ? memesQuery : likesQuery).data?.map(item => ({ ...item, creationDate: new Date(item.creationDate) })) ?? []}
+                        /> :
+                        <UserList users={(tab == 'following' ? followQuery : followerQuery).data?.map(item => ({ ...item, joinDate: new Date(item.joinDate) })) ?? []} />
+                    }
                 </Loader>
             </div>
     )
