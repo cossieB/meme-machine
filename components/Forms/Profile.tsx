@@ -27,8 +27,8 @@ export default function Profile() {
         e.preventDefault()
         mutation.mutate({ username: username.trimEnd(), image, name, status }, {
             onSuccess() {
-                setUser({ username, image, name, status, banner, email: user!.email })
-                updateLocalStorage({ username, image, name, status, banner, email: user!.email });
+                setUser({ username, image, name, status, banner, email: user!.email, id: user!.id })
+                updateLocalStorage({ username, image, name, status, banner, email: user!.email, id: user!.id });
             },
             onError(error) {
                 if (error.message == 'username already taken') {

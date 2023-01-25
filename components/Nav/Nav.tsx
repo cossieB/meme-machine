@@ -17,7 +17,8 @@ export default function Nav() {
         name: "",
         status: "",
         username: "",
-        banner: ""
+        banner: "",
+        id: ""
     })
     return (
         <nav className="flex fixed flex-col w-16 md:w-64 content-center bg-teal-800 h-screen">
