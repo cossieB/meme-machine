@@ -7,6 +7,7 @@ export type ContextUser = {
     name: string
     image: string
     banner: string
+    id: string
 }
 
 type UserContext = {

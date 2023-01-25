@@ -7,12 +7,14 @@ type IconProps = {
     icon: JSX.Element,
     text: string | number,
     href: string,
-    isImg?: false | undefined
+    isImg?: false | undefined,
+    hideTextOnMobile?: boolean
 } | {
     icon: string,
     text: string | number,
     href: string,
-    isImg: true
+    isImg: true,
+    hideTextOnMobile?: boolean
 }
 
 export default function SideBarDiv(props: IconProps) {
@@ -28,6 +30,7 @@ export default function SideBarDiv(props: IconProps) {
 
 export function NavItem(props: Optional<IconProps, 'href'>) {
     const { icon, text, href, isImg } = props;
+    const hideTextOnMobile = props.hideTextOnMobile ?? true
     return (
         <div className="flex items-center p-3 text-orange-300  cursor-pointer hover:rounded-full hover:bg-teal-900">
             {isImg ?
@@ -35,7 +38,7 @@ export function NavItem(props: Optional<IconProps, 'href'>) {
                 :
                 <span className="w-10">{icon}</span>
             }
-            <span className="hidden md:block"> {text} </span>
+            <span className={`${hideTextOnMobile && 'hidden'} md:block`}> {text} </span>
         </div>
     )
 

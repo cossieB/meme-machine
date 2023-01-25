@@ -30,13 +30,14 @@ export default NextAuth({
             clientSecret: process.env.FACEBOOK_SECRET!,
             profile(profile: FacebookProfile) {
                 const rand = Math.random() * 10000
+                const username = `_fb_${profile.name?.split(" ")[0] || 'user'}${rand}`
                 return {
                     id: profile.id,
                     name: profile.name,
                     email: profile.email,
                     image: profile.picture.data.url,
-                    username: `_fb_${profile.name?.split(" ")[0] || 'user'}${rand}`,
-                    username_lower: `_fb_${profile.name?.split(" ")[0] || 'user'}${rand}`.toLowerCase(),
+                    username,
+                    username_lower: username.toLowerCase(),
                 }
             },
         }),
@@ -45,13 +46,14 @@ export default NextAuth({
             clientSecret: process.env.GOOGLE_SECRET!,
             profile(profile: GoogleProfile) {
                 const rand = Math.random() * 10000
+                const username = `_goog_${profile.given_name || 'user'}${rand}`
                 return {
                     id: profile.sub,
                     name: profile.name,
                     email: profile.email,
                     image: profile.picture,
-                    username: `_goog_${profile.given_name || 'user'}${rand}`,
-                    username_lower: `_goog_${profile.given_name || 'user'}${rand}`.toLowerCase(),
+                    username,
+                    username_lower: username.toLowerCase(),
                 }
             },
         }),
@@ -59,14 +61,15 @@ export default NextAuth({
             clientId: process.env.GITHUB_ID!,
             clientSecret: process.env.GITHUB_SECRET!,
             profile(profile: GithubProfile) {
-                const rand = Math.random() * 10000
+                const rand = Math.random() * 10000;
+                const username = `_git_${(profile.name ?? profile.login)?.split(" ")[0] || 'user'}${rand}`
                 return {
                     id: profile.id.toString(),
                     name: profile.name ?? profile.login,
                     email: profile.email,
                     image: profile.avatar_url,
-                    username: `_git_${(profile.name ?? profile.login)?.split(" ")[0] || 'user'}${rand}`,
-                    username_lower: `_git_${(profile.name ?? profile.login)?.split(" ")[0] || 'user'}${rand}`.toLowerCase(),
+                    username,
+                    username_lower: username.toLowerCase(),
                 }
             },
         })

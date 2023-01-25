@@ -4,17 +4,21 @@ import {checkSvg} from "../../utils/svgs"
 
 type Props = {
     mutation: UseTRPCMutationResult<any,any, any, any>
-    disabledWhen: boolean
+    disabledWhen: boolean,
+    text?: string
+    bg?: string
 }
 
-export default function SubmitButton({mutation, disabledWhen}: Props) {
+export default function SubmitButton(props: Props) {
+    const {mutation, disabledWhen, text} = props;
+    const bg = props.bg ?? "bg-green-300"
     return (
         <button
-            className="bg-green-300 mt-3 rounded-full disabled:bg-slate-500 flex items-center justify-center h-10"
+            className={`${bg} mt-3 rounded-full disabled:bg-slate-500 flex items-center justify-center h-10`}
             type="submit"
             disabled={mutation.status == 'loading' || disabledWhen}
         >
-            {mutation.status == 'loading' ? <Spinner /> : mutation.status == 'success' ? checkSvg : "Submit"}
+            {mutation.status == 'loading' ? <Spinner /> : mutation.status == 'success' ? checkSvg : text ?? "Submit"}
         </button>
     )
 }

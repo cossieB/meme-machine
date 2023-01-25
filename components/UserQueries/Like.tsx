@@ -52,6 +52,7 @@ export default function Like({postId}: P) {
             <NavItem
                 icon={doILikeQuery.data ? unlikeSvg : likeSvg}
                 text={countQuery.data?._count ?? 0}
+                hideTextOnMobile={false}
             />
         </ActionButton>
     )

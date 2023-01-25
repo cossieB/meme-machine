@@ -129,6 +129,29 @@ export const memeRouter = router({
                 ORDER BY "creationDate" DESC
             `
             return result as Meme[]
+        }),
+    delete: procedure
+        .input(z.string())
+        .mutation(async ({ctx, input}) => {
+            if (!ctx.user)
+                throw new TRPCError({code: "UNAUTHORIZED"})
+            const meme = await db.meme.findUnique({
+                where: {
+                    postId: input,
+                }
+            })
+            if (!meme) 
+                throw new TRPCError({code: "NOT_FOUND"})
+            
+            if (meme.userId != ctx.user.sub)
+                throw new TRPCError({code: "FORBIDDEN", message: "user mismatch"})
+
+            await db.meme.delete({
+                where: {
+                    postId: input,
+                }
+            })
+            return
         })
 
 })

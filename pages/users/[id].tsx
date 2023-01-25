@@ -31,7 +31,7 @@ export default function UserPage() {
         refetchInterval: false,
         refetchOnWindowFocus: false,
         retry(failureCount, error) {
-            return failureCount < 3 && error.data?.httpStatus != 404
+            return failureCount < 3
         }
     })
     const likesQuery = trpc.like.byUser.useQuery(router.query.id as string, {
@@ -39,7 +39,7 @@ export default function UserPage() {
         refetchInterval: false,
         refetchOnWindowFocus: false,
         retry(failureCount, error) {
-            return failureCount < 3 && error.data?.httpStatus != 404
+            return failureCount < 3
         }
     })
     const followQuery = trpc.follow.followingWho.useQuery(router.query.id as string, {
@@ -47,7 +47,7 @@ export default function UserPage() {
         refetchInterval: false,
         refetchOnWindowFocus: false,
         retry(failureCount, error) {
-            return failureCount < 3 && error.data?.httpStatus != 404
+            return failureCount < 3
         }
     })
     const followerQuery = trpc.follow.followedBy.useQuery(router.query.id as string, {
@@ -55,7 +55,7 @@ export default function UserPage() {
         refetchInterval: false,
         refetchOnWindowFocus: false,
         retry(failureCount, error) {
-            return failureCount < 3 && error.data?.httpStatus != 404
+            return failureCount < 3
         }
     })
 
