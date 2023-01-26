@@ -9,7 +9,7 @@ export default function(input: string) {
     let titleCased = ""
     for (let i = 0; i < arr.length; i++) {
         let word = arr[i]
-        word = word.replace(/([a-z])([A-Z])/, '$1 $2')
+        word = word.replace(/([a-z])([A-Z])/g, '$1 $2')
         if (i > 0 && ignoreList.includes(word)) {
             titleCased += word + " ";
             continue;

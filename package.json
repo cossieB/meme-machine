@@ -19,6 +19,7 @@
     "bcrypt": "^5.1.0",
     "busboy": "^1.6.0",
     "cors": "^2.8.5",
+    "firebase": "^9.16.0",
     "framer-motion": "^8.4.2",
     "imagesloaded": "^5.0.0",
     "jsonwebtoken": "^9.0.0",
