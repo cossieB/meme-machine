@@ -37,9 +37,10 @@ export default function Profile() {
         let profilePic = image;
         let bannerPic = banner;
         try {
-            if (avatarIsUpload && uploadedAvatar) {
+            if (avatarIsUpload) {
+                if (!uploadedAvatar) return;
                 try {
-                    profilePic = await uploadToFirebase(uploadedAvatar, `avatars/${user!.username}`)
+                    profilePic = await uploadToFirebase(uploadedAvatar, `/users/avatars/${user!.username}`)
                 }
                 catch (e: any) {
                     errorDiv.current!.textContent = e.message;
@@ -49,9 +50,10 @@ export default function Profile() {
                     return
                 }
             }
-            if (bannerIsUpload && uploadedBanner) {
+            if (bannerIsUpload) {
+                if (!uploadedBanner) return
                 try {
-                    bannerPic = await uploadToFirebase(uploadedBanner, `banners/${user!.username}`)
+                    bannerPic = await uploadToFirebase(uploadedBanner, `/users/banners/${user!.username}`)
                 }
                 catch (e: any) {
                     errorDiv.current!.textContent = e.message;

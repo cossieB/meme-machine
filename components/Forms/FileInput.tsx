@@ -9,7 +9,8 @@ export default function FileInput({setFile, label}: P) {
                 onChange={e => {
                     setFile(e.target.files![0]);
                 }}
-                className="hidden"
+                className="opacity-0 absolute"
+                name={label}
                 type="file"
                 required
             />
