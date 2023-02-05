@@ -37,7 +37,8 @@ export const userRouter = router({
             username: z.string(),
             image: z.string(),
             name: z.string(),
-            status: z.string()
+            status: z.string(),
+            banner: z.string()
         }))
         .mutation(async ({ input, ctx }) => {
             if (!ctx.user)

@@ -63,7 +63,7 @@ export default function Profile() {
                     return
                 }
             }
-            mutation.mutate({ username: username.trim(), image, name, status }, {
+            mutation.mutate({ username: username.trim(), image, name, status, banner }, {
                 onSuccess() {
                     setUser({ username, image: profilePic, name, status, banner, email: user!.email, id: user!.id })
                     updateLocalStorage({ username, image, name, status, banner, email: user!.email, id: user!.id });

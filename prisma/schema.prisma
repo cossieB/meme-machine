@@ -49,7 +49,7 @@ model User {
     username_lower   String             @unique @db.VarChar(255)
     status           String             @default("") @db.VarChar(255)
     joinDate         DateTime           @default(now()) @db.Timestamptz()
-    banner           String             @default("https://i.imgur.com/xUbnRZy.jpg")
+    banner           String             @default("/logo_long.png")
     posts            Meme[]
     MemesLikedByUser MemesLikedByUser[]
     Following        FollowerFollowee[] @relation("follower")

@@ -12,6 +12,7 @@ export default function FileInput({setFile, label}: P) {
                 className="opacity-0 absolute"
                 name={label}
                 type="file"
+                accept="image/*"
                 required
             />
             <span> {label} </span>
