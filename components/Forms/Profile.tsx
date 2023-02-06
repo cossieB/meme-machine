@@ -19,9 +19,9 @@ export default function Profile() {
     const [name, setName] = useState(user?.name ?? "")
     const [status, setStatus] = useState(user?.status ?? "");
     const [banner, setBanner] = useState(user?.banner ?? "")
-    const [avatarIsUpload, setAvatarIsUpload] = useState(true)
+    const [avatarIsUpload, setAvatarIsUpload] = useState(false)
     const [uploadedAvatar, setUploadedAvatar] = useState<File>()
-    const [bannerIsUpload, setBannerisUpload] = useState(true)
+    const [bannerIsUpload, setBannerisUpload] = useState(false)
     const [uploadedBanner, setUploadedBanner] = useState<File>()
     const { updateLocalStorage } = useLocalStorage<ContextUser>('user')
     const [submitted, setSubmitted] = useState(false)
