@@ -3,13 +3,12 @@ import dynamic from "next/dynamic";
 import Tabs from "../components/Tabs/Tabs";
 import { useState } from "react";
 import Head from "next/head";
-
-const MemeList = dynamic(() => import('../components/Memes/MemeList'), { ssr: false })
+import MemeListWithLoader from "../components/Memes/MemesListWithLoader";
 
 export default function Explore() {
     const tabs = ["new", "popular"] as const
     const [tab, setTab] = useState<string>("new")
-    
+
     const filters = ['day', 'week', 'month', 'year', 'allTime'] as const
     const [filter, setFilter] = useState("allTime")
 
@@ -34,7 +33,7 @@ export default function Explore() {
                     setValue={setTab}
                     value={tab}
                 />
-                {tab == 'popular' && 
+                {tab == 'popular' &&
                     <Tabs
                         tabs={filters}
                         setValue={setFilter}
@@ -42,10 +41,10 @@ export default function Explore() {
                     />
                 }
             </div>
-            <MemeList
+            <MemeListWithLoader
                 posts={memes.data?.map(item => ({ ...item, creationDate: new Date(item.creationDate) })) ?? []}
+                loading={memes.isLoading}
             />
-
         </div>
     )
 }

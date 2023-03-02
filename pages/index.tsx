@@ -1,14 +1,9 @@
 import { trpc } from "../utils/trpc";
-import dynamic from "next/dynamic";
 import Head from "next/head";
-import { useRouter } from "next/router";
-
-const MemeList = dynamic(() => import('../components/Memes/MemeList'), { ssr: false })
+import MemeListWithLoader from "../components/Memes/MemesListWithLoader";
 
 export default function Home() {
-    const router = useRouter()
-    
-    const query = trpc.meme.homeFeed.useQuery(undefined, {
+        const query = trpc.meme.homeFeed.useQuery(undefined, {
         refetchInterval: false,
         refetchOnWindowFocus: false,
         retry(failureCount, error) {
@@ -20,10 +15,15 @@ export default function Home() {
             <Head>
                 <title>Meme Machine | Home</title>
             </Head>
-            <MemeList
+            <MemeListWithLoader
+                loading={query.isLoading}
                 posts={query.data?.map(item => ({ ...item, creationDate: new Date(item.creationDate) })) ?? []}
             />
-
+            { query.data && query.data.length === 0 && 
+            <p>
+                Follow people to view their memes. Or visit the <a href="/explore">explore page</a> to view popular memes.
+            </p> 
+            }
         </div>
     )
 }
