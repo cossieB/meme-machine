@@ -1,6 +1,7 @@
 import { trpc } from "../utils/trpc";
 import Head from "next/head";
 import MemeListWithLoader from "../components/Memes/MemesListWithLoader";
+import Link from "next/link";
 
 export default function Home() {
         const query = trpc.meme.homeFeed.useQuery(undefined, {
@@ -21,7 +22,7 @@ export default function Home() {
             />
             { query.data && query.data.length === 0 && 
             <p>
-                Follow people to view their memes. Or visit the <a href="/explore">explore page</a> to view popular memes.
+                Follow people to view their memes. Or visit the <Link href="/explore">explore page</Link> to view popular memes.
             </p> 
             }
         </div>
