@@ -61,8 +61,8 @@ export default function PostPage() {
                                     {moment(query.data?.creationDate ?? "")}
                                 </span>
                             </div>
-                            <div>
-                                <img src={query.data?.image ?? ""} alt="" />
+                            <div className="w-full">
+                                <img className="mx-auto w-5/6" src={query.data?.image ?? ""} alt="" />
                                 <div className="flex justify-around w-full">
                                     <div className="flex fill-orange-300 items-center">
                                         <a id="tweet-quote" title="Tweet this quote" className="shareQuote bg-[#1DA1F2]" href={`https://twitter.com/intent/tweet?text="${query.data?.title}" - https://mememachine.vercel.app/posts/${router.query.id}`} target="_blank" rel="noreferrer">

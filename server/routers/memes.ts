@@ -96,17 +96,23 @@ export const memeRouter = router({
     viewMeme: procedure
         .input(z.string())
         .mutation(async ({ input }) => {
-            await db.meme.update({
-                where: {
-                    postId: input
-                },
-                data: {
-                    views: {
-                        increment: 1
+            try {
+                await db.meme.update({
+                    where: {
+                        postId: input
+                    },
+                    data: {
+                        views: {
+                            increment: 1
+                        }
                     }
-                }
-            })
-            return
+                })
+                return
+            } 
+            catch (error: any) {
+                // error P2025 is a known error. It means no item to item was found
+                if (error.code != 'P2025') throw new TRPCError({code: 'INTERNAL_SERVER_ERROR'})
+            }
         }),
     homeFeed: procedure
         .query(async ({ ctx }) => {
