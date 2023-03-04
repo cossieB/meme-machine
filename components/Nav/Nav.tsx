@@ -9,7 +9,7 @@ import SideBarDiv, { NavItem } from "./SideBarIcon";
 
 export default function Nav() {
     const { data: session } = useSession();
-    const {setModal, closeModal} = useContext(ModalContext)!
+    const {setModal} = useContext(ModalContext)!
     const { user } = useContext(UserContext)!
     const { storage } = useLocalStorage<ContextUser>('user', {
         email: "",

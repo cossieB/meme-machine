@@ -1,13 +1,10 @@
 import { MemePostType } from "../../types/PropTypes";
 import MemePost from "./Meme";
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import Masonry from "masonry-layout";
 import imagesLoaded from "imagesloaded";
-import Loader from "../Loading/Loader";
-import MemesPlaceholder from "../Loading/MemesPlaceholder";
-import dynamic from "next/dynamic";
-
-
+import { memesPerPage } from "../../utils/globalVariables";
+import PageButton from "./PageButton";
 
 type P = {
     posts: MemePostType[],
@@ -16,6 +13,7 @@ type P = {
 export default function MemeList(props: P) {
     let ref = useRef<HTMLDivElement>(null);
     const { posts } = props;
+   
     useLayoutEffect(() => {
         const msnry = new Masonry(ref.current!, {
             itemSelector: '.myGridItem',
@@ -26,23 +24,12 @@ export default function MemeList(props: P) {
         })
         imagesLoaded(ref.current!).on('progress', () => msnry.layout!())
     },)
+
+
     return (
         <>
             <div ref={ref} className="mx-auto myGrid">
                 {posts.map(p => <MemePost key={p.postId} p={p} />)}
-            </div>
-            <div>
-                {/* <button
-                    disabled={page == 0}
-                    onClick={() => changePage(-1)} >
-                    Previous
-                </button>
-                <button
-                    disabled={page  >= pageMax}
-                    onClick={() => changePage(1)}
-                >
-                    Next
-                </button> */}
             </div>
         </>
     )

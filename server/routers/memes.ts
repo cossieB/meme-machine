@@ -4,6 +4,7 @@ import { initTRPC, TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { Context } from "../../pages/api/trpc/[trpc]";
 import db from "../../prisma/db";
+import { memesPerPage } from "../../utils/globalVariables";
 
 const t = initTRPC.context<Context>().create();
 
@@ -108,21 +109,35 @@ export const memeRouter = router({
                     }
                 })
                 return
-            } 
+            }
             catch (error: any) {
-                // error P2025 is a known error. It means no item to item was found
-                if (error.code != 'P2025') throw new TRPCError({code: 'INTERNAL_SERVER_ERROR'})
+                // error P2025 is a known error. It means no item to update was found
+                if (error.code != 'P2025') throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' })
             }
         }),
     homeFeed: procedure
-        .query(async ({ ctx }) => {
-            if (!ctx.user) return db.meme.findMany({
-                orderBy: {
-                    creationDate: 'desc'
+        .input(z.object({
+            page: z.number().default(0)
+        }))
+        .query(async ({ ctx, input }) => {
+            type ApiResponse = {
+                memes: Meme[],
+                isLastPage: boolean
+            };
+            if (!ctx.user) {
+                const memes = await db.meme.findMany({
+                    take: memesPerPage + 1,
+                    skip: input.page * memesPerPage,
+                    orderBy: {
+                        creationDate: 'desc'
+                    },
+                })
+                return {
+                    memes: memes.slice(0, memesPerPage),
+                    isLastPage: memes.length <= memesPerPage
                 }
-            })
-            
-            const result = await db.$queryRaw`
+            }
+            const memes: Meme[] = await db.$queryRaw`
                 SELECT "postId", "userId", "creationDate", "editDate", title, image, description, views
                 FROM "Meme"
                 WHERE "userId" 
@@ -133,24 +148,29 @@ export const memeRouter = router({
                 )
                 OR "userId" = ${ctx.user.sub}
                 ORDER BY "creationDate" DESC
+                LIMIT ${memesPerPage + 1}
+                OFFSET ${input.page * memesPerPage}
             `
-            return result as Meme[]
+            return {
+                memes: memes.slice(0, memesPerPage),
+                isLastPage: memes.length <= memesPerPage
+            }
         }),
     delete: procedure
         .input(z.string())
-        .mutation(async ({ctx, input}) => {
+        .mutation(async ({ ctx, input }) => {
             if (!ctx.user)
-                throw new TRPCError({code: "UNAUTHORIZED"})
+                throw new TRPCError({ code: "UNAUTHORIZED" })
             const meme = await db.meme.findUnique({
                 where: {
                     postId: input,
                 }
             })
-            if (!meme) 
-                throw new TRPCError({code: "NOT_FOUND"})
-            
+            if (!meme)
+                throw new TRPCError({ code: "NOT_FOUND" })
+
             if (meme.userId != ctx.user.sub)
-                throw new TRPCError({code: "FORBIDDEN", message: "user mismatch"})
+                throw new TRPCError({ code: "FORBIDDEN", message: "user mismatch" })
 
             await db.meme.delete({
                 where: {
@@ -159,5 +179,4 @@ export const memeRouter = router({
             })
             return
         })
-
 })
