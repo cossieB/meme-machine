@@ -1,9 +1,9 @@
-import { trpc } from "../utils/trpc";
+import { trpc } from "../../utils/trpc";
 import dynamic from "next/dynamic";
-import Tabs from "../components/Tabs/Tabs";
+import Tabs from "../../components/Tabs/Tabs";
 import { useState } from "react";
 import Head from "next/head";
-import MemeListWithLoader from "../components/Memes/MemesListWithLoader";
+import MemeListWithLoader from "../../components/Memes/MemesListWithLoader";
 
 export default function Explore() {
     const tabs = ["new", "popular"] as const
