@@ -1,1 +1,1 @@
-export const memesPerPage = 6
+export const memesPerPage = 60
