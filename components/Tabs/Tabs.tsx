@@ -1,8 +1,10 @@
+import { SetStateAction } from "react";
 import { UseStateSetterAndValue } from "../../types/PropTypes";
 import Tab  from "./Tab";
 
 type P = UseStateSetterAndValue<string> & {
     tabs: readonly string[]
+    setPage?: React.Dispatch<SetStateAction<number>>
 }
 
 export default function Tabs(props: P) {

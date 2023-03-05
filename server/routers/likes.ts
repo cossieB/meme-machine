@@ -3,6 +3,7 @@ import { initTRPC, TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { Context } from "../../pages/api/trpc/[trpc]";
 import db from "../../prisma/db";
+import { memesPerPage } from "../../utils/globalVariables";
 import { memeRouter } from "./memes";
 
 
@@ -96,17 +97,26 @@ export const likesRouter = router({
             return result
         }),
     byUser: procedure
-        .input(z.string())
-        .query(async ({input}) => {
-            return await db.$queryRaw`
+        .input(z.object({
+            username: z.string(),
+            page: z.number().default(0)
+        }))
+        .query(async ({ input }) => {
+            const memes: Meme[] = await db.$queryRaw`
                 SELECT DISTINCT("Meme"."postId"), "Meme"."userId", "Meme"."creationDate", "Meme"."editDate", "Meme".title, "Meme".image, "Meme".description, "Meme".views
                 FROM "Meme"
                 JOIN "MemesLikedByUser"
                 USING ("postId")
                 JOIN "User"
                 ON "Meme"."userId" = id
-                WHERE username_lower = ${input.toLowerCase()}
-            ` as Meme[]
+                WHERE username_lower = ${input.username.toLowerCase()}
+                LIMIT ${memesPerPage + 1}
+                OFFSET ${input.page * memesPerPage}
+            `
+            return {
+                memes: memes.slice(0, memesPerPage),
+                isLastPage: memes.length <= memesPerPage
+            }
         })
 })
 

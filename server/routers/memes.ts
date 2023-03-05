@@ -41,15 +41,15 @@ export const memeRouter = router({
         .input(z.object({
             sort: z.enum(['new', 'popular']).default('new'),
             filter: z.enum(['day', 'week', 'month', 'year', 'allTime']).default('allTime'),
-            creator: z.string().nullish()
+            creator: z.string().nullish(),
+            page: z.number().default(0)
         }))
         .query(async ({ input }) => {
-
-            type M = {
+            type Mapper = {
                 [x in typeof input.filter]: Date
             }
             const now = new Date()
-            const map: M = {
+            const map: Mapper = {
                 day: new Date(now.setDate(now.getDate() - 1)),
                 week: new Date(now.setDate(now.getDate() - 7)),
                 month: new Date(now.setMonth(now.getMonth() - 1)),
@@ -59,7 +59,7 @@ export const memeRouter = router({
 
             const sort: Prisma.Enumerable<Prisma.MemeOrderByWithRelationInput> = input.sort == 'new' ? { creationDate: 'desc' } : { views: 'desc' }
 
-            return await db.meme.findMany({
+            const memes = await db.meme.findMany({
                 where: {
                     ...(input.sort == 'popular' && {
                         creationDate: {
@@ -72,8 +72,14 @@ export const memeRouter = router({
                         }
                     }),
                 },
+                take: memesPerPage + 1,
+                skip: input.page * memesPerPage,
                 orderBy: sort,
             })
+            return {
+                memes: memes.slice(0, memesPerPage),
+                isLastPage: memes.length <= memesPerPage
+            }
         }),
     getMeme: procedure
         .input(z.string())

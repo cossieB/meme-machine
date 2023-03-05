@@ -1,10 +1,8 @@
 import { MemePostType } from "../../types/PropTypes";
 import MemePost from "./Meme";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef } from "react";
 import Masonry from "masonry-layout";
 import imagesLoaded from "imagesloaded";
-import { memesPerPage } from "../../utils/globalVariables";
-import PageButton from "./PageButton";
 
 type P = {
     posts: MemePostType[],

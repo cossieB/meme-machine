@@ -1,9 +1,7 @@
 import { trpc } from "../utils/trpc";
 import Head from "next/head";
-import MemeListWithLoader from "../components/Memes/MemesListWithLoader";
 import Link from "next/link";
 import { useState } from "react";
-import PageButton from "../components/Memes/PageButton";
 import MemesWithPaginator from "../components/Memes/MemesWithPaginator";
 
 export default function Home() {
