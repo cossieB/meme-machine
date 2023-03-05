@@ -11,23 +11,27 @@ type P = {
 export default function MemeList(props: P) {
     let ref = useRef<HTMLDivElement>(null);
     const { posts } = props;
-   
+
     useLayoutEffect(() => {
         const msnry = new Masonry(ref.current!, {
             itemSelector: '.myGridItem',
             columnWidth: '.myGridItem',
-            gutter: 10,
+            gutter: 5,
             horizontalOrder: true,
-            fitWidth: true
+            fitWidth: true,
         })
         imagesLoaded(ref.current!).on('progress', () => msnry.layout!())
     },)
 
-
     return (
         <>
             <div ref={ref} className="mx-auto myGrid">
-                {posts.map(p => <MemePost key={p.postId} p={p} />)}
+                {posts.map(p =>
+                    <MemePost
+                        key={p.postId}
+                        p={p}
+                    />
+                )}
             </div>
         </>
     )

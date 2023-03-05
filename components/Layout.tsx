@@ -19,13 +19,12 @@ export default function Layout(props: P) {
         <div className="flex w-screen min-h-screen">
             <Head><title>Meme Machine</title> </Head>
             <Nav  />
-            <main className="text-orange-200 ml-16 md:ml-64 w-screen overflow-x-hidden">
+            <main className="text-orange-200 mb-16 md:mb-0 md:ml-64 w-screen overflow-x-hidden">
                 {props.children}
                 {/* <footer style={{position: "relative", bottom: 0, textAlign: "center", fontWeight: "bolder"}}>&copy; &nbsp; <a href="https://cossie-91.web.app" target="_blank" rel="noreferrer">Cossie</a></footer> */}
             </main>
             <div className="sideBar" />
             <AnimatePresence>
-
                 {modal && (
                     <Modal closeModal={closeModal}>
                         {modal == 'PROFILE' && <Profile />}

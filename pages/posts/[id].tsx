@@ -92,7 +92,6 @@ export default function PostPage() {
 
                             {/* Creator Div */}
                             <div className="flex w-full justify-around">
-
                                 <SideBarDiv
                                     href={`/users/${query.data?.user.username}`}
                                     icon={query.data?.user.image || ""}
@@ -103,6 +102,7 @@ export default function PostPage() {
                                     <Follow userId={query.data?.userId ?? ""} />
                                 }
                             </div>
+                            {/* Buttons */}
                             <div className="flex items-center justify-around">
                                 <Like postId={router.query.id as string} />
                                 <NavItem
