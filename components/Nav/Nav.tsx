@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { ModalContext } from "../../hooks/modalContext";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { UserContext, ContextUser } from "../../hooks/userContext";
-import { homeSvg, addSvg, loginSvg, activitySvg } from "../../utils/svgs";
+import { homeSvg, addSvg, loginSvg, activitySvg, searchSvg } from "../../utils/svgs";
 import ActionButton from "./ActionButton";
 import SideBarDiv, { NavItem } from "./SideBarIcon";
 
@@ -40,6 +40,9 @@ export default function Nav() {
             </div>
             <div className="md:w-full">
                 <SideBarDiv icon={activitySvg} text="Explore" href="/explore" />
+            </div>
+            <div className="md:w-full">
+                <SideBarDiv icon={searchSvg} text="Search" href="/search" />
             </div>
             <div className="ml-auto md:ml-0 md:mt-auto md:mb-3 md:w-full">
                 {!session ?

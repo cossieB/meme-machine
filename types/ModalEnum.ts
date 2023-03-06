@@ -1,6 +1,5 @@
 export type ModalEnum =
-    | ""
+    | "NONE"
     | "PROFILE"
-    | "SEARCH"
     | "PUBLISH"
     | "PROMPT_SIGNUP"

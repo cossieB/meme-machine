@@ -82,7 +82,7 @@ export default function Profile() {
 
     return (
         <>
-            <form onSubmit={submit} className="flex flex-col w-11/12 md:w-1/2 h-5/6 bg-teal-800 p-3 rounded-xl shadow-lg">
+            <form onSubmit={submit} className="flex flex-col w-11/12 md:w-1/2 h-5/6 bg-slate-800 p-3 rounded-xl shadow-lg">
 
                 <FormInput
                     label="Username"

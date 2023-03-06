@@ -1,7 +1,6 @@
 import { AnimatePresence } from "framer-motion";
 import Head from "next/head";
-import { ReactNode, useContext, useState } from "react";
-import { ModalEnum } from "../types/ModalEnum";
+import { ReactNode, useContext } from "react";
 import Modal from "./Modal";
 import Nav from "./Nav/Nav";
 import Profile from "./Forms/Profile";
@@ -15,6 +14,12 @@ interface P {
 
 export default function Layout(props: P) {
     const {modal, setModal, closeModal} = useContext(ModalContext)!
+    const mapper = {
+        "NONE": null,
+        "PROFILE": <Profile />,
+        "PROMPT_SIGNUP": <SignupPrompt />,
+        "PUBLISH": <NewMeme />,
+    }
     return (
         <div className="flex w-screen min-h-screen">
             <Head><title>Meme Machine</title> </Head>
@@ -25,14 +30,13 @@ export default function Layout(props: P) {
             </main>
             <div className="sideBar" />
             <AnimatePresence>
-                {modal && (
+                {modal != "NONE" && (
                     <Modal closeModal={closeModal}>
-                        {modal == 'PROFILE' && <Profile />}
-                        {modal == 'PROMPT_SIGNUP' && <SignupPrompt />}
-                        {modal == 'PUBLISH' && <NewMeme />}
+                        {mapper[modal]}
                     </Modal>
                 )}
             </AnimatePresence>
         </div>
     )
 }
+

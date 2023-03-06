@@ -4,8 +4,8 @@ import { ModalEnum } from "../types/ModalEnum";
 import { WithChildren } from "../types/PropTypes";
 
 export default function ModalContextProvider({children}: WithChildren) {
-    const [modal, setModal] = useState<ModalEnum>("");
-    const closeModal = () => setModal("")
+    const [modal, setModal] = useState<ModalEnum>("NONE");
+    const closeModal = () => setModal("NONE")
     return (
         <ModalContext.Provider value={{modal, setModal, closeModal}}>
             {children}

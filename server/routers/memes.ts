@@ -184,5 +184,26 @@ export const memeRouter = router({
                 }
             })
             return
+        }),
+    search: procedure
+        .input(z.object({
+            term: z.string(),
+            page: z.number().default(0)
+        }))
+        .mutation(async({input}) => {
+            const memes = await db.meme.findMany({
+                where: {
+                    title: {
+                        contains: input.term,
+                        mode: 'insensitive'
+                    }
+                },
+                take: memesPerPage + 1,
+                skip: input.page * memesPerPage,
+            })
+            return {
+                memes: memes.slice(0, memesPerPage),
+                isLastPage: memes.length <= memesPerPage
+            }
         })
 })

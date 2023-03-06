@@ -20,7 +20,7 @@ export default function MemesWithPaginator(props: P) {
                 posts={memes?.map(item => ({ ...item, creationDate: new Date(item.creationDate) })) ?? []}
             />
             {
-                memes &&
+                memes && memes.length > 0 &&
                 <div className="flex h-10 w-full justify-around" >
                     <PageButton
                         disabled={page == 0}

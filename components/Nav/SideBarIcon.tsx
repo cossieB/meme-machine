@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ReactNode } from "react";
 import { Optional } from "../../lib/utilityTypes";
 
 
@@ -21,7 +20,7 @@ export default function SideBarDiv(props: IconProps) {
     const { icon, text, href } = props;
     return (
         <Link href={href}>
-            <a>
+            <a className="md:h-full md:w-full">
                 <NavItem {...props} />
             </a>
         </Link>
@@ -31,9 +30,9 @@ export default function SideBarDiv(props: IconProps) {
 export function NavItem(props: Optional<IconProps, 'href'>) {
     const { icon, text, href, isImg, hideTextOnMobile = true } = props;
     return (
-        <div className="flex h-16 w-16 items-center justify-center md:justify-start md:p-3 text-orange-300  cursor-pointer hover:rounded-full hover:bg-teal-900">
+        <div className="flex h-16 w-16 md:h-auto md:w-auto items-center justify-center md:justify-start md:p-3 text-orange-300  cursor-pointer hover:rounded-full hover:bg-teal-900">
             {isImg ?
-                <img src={icon as string} className="rounded-full h-16 md:w-16 md:h-auto object-cover mr-3" alt="" />
+                <img src={icon as string} className="rounded-full h-16 md:w-16 md:h-16 object-cover mr-3" alt="" />
                 :
                 <span className="mr-3">{icon}</span>
             }

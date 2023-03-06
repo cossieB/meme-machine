@@ -1,3 +1,5 @@
+import { HTMLInputTypeAttribute } from "react"
+
 type Props = {
     label: string,
     value: string,
@@ -7,10 +9,11 @@ type Props = {
     max?: number
     pattern?: string
     title?: string
+    type?: HTMLInputTypeAttribute
 }
 
 export default function FormInput(props: Props) {
-    const { label, value, setValue, isTextarea, min, max, pattern, title } = props;
+    const { label, value, setValue, isTextarea, min, max, pattern, title, type = 'text' } = props;
     return (
         <div className="relative z-0 mt-7">
             {isTextarea ?
@@ -22,7 +25,7 @@ export default function FormInput(props: Props) {
                     className="block py-2.5 px-0 w-full text-orange-300 bg-transparent border-0 border-b-2 border-slate-300 appearance-none focus:border-orange-500 focus:outline-none focus:ring-0 peer" placeholder=" "
                 /> :
                 <input
-                    type="text"
+                    type={type}
                     id={label}
                     value={value}
                     minLength={min}
