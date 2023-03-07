@@ -11,6 +11,7 @@ import { NavItem } from "../Nav/SideBarIcon"
 import uploadToFirebase from "../../utils/uploadToFirebase"
 import FileInput from "./FileInput"
 import ToggleLinkOrUpload from "./ToggleIsLinkOrUpload"
+import writeErrorInDiv from "../../utils/writeErrorsInDiv"
 
 export default function Profile() {
     const { user, setUser } = useContext(UserContext)!;
@@ -43,10 +44,7 @@ export default function Profile() {
                     profilePic = await uploadToFirebase(uploadedAvatar, `/users/avatars/${user!.username}`)
                 }
                 catch (e: any) {
-                    errorDiv.current!.textContent = e.message;
-                    setTimeout(() => {
-                        errorDiv.current!.textContent = ""
-                    }, 2500)
+                    writeErrorInDiv(e.message, errorDiv)
                     return
                 }
             }
@@ -56,10 +54,7 @@ export default function Profile() {
                     bannerPic = await uploadToFirebase(uploadedBanner, `/users/banners/${user!.username}`)
                 }
                 catch (e: any) {
-                    errorDiv.current!.textContent = e.message;
-                    setTimeout(() => {
-                        errorDiv.current!.textContent = ""
-                    }, 2500)
+                    writeErrorInDiv(e.message, errorDiv)
                     return
                 }
             }
@@ -70,7 +65,7 @@ export default function Profile() {
                 },
                 onError(error) {
                     if (error.message == 'username already taken') {
-                        errorDiv.current!.textContent = error.message;
+                        writeErrorInDiv(error.message, errorDiv)
                     }
                 },
             });
@@ -101,7 +96,11 @@ export default function Profile() {
                 />
                 {avatarIsUpload
                     ?
-                    <FileInput setFile={setUploadedAvatar} label="Profile Picture" />
+                    <FileInput
+                        setFile={setUploadedAvatar}
+                        label="Profile Picture"
+                        handleError={(str: string) => writeErrorInDiv(str, errorDiv)}
+                    />
                     :
                     <FormInput
                         label="Profile Picture"
@@ -122,7 +121,11 @@ export default function Profile() {
                 />
                 {bannerIsUpload
                     ?
-                    <FileInput setFile={setUploadedBanner} label="Banner Image" />
+                    <FileInput
+                        setFile={setUploadedBanner}
+                        label="Banner Image"
+                        handleError={(str: string) => writeErrorInDiv(str, errorDiv)}
+                    />
                     :
                     <FormInput
                         label="Banner Image"

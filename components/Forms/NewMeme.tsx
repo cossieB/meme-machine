@@ -1,9 +1,10 @@
 import { useRouter } from "next/router";
-import { useContext, useRef, useState } from "react";
+import { RefObject, useContext, useRef, useState } from "react";
 import { ModalContext } from "../../hooks/modalContext";
 import { UserContext } from "../../hooks/userContext";
 import { trpc } from "../../utils/trpc";
 import uploadToFirebase from "../../utils/uploadToFirebase";
+import writeErrorInDiv from "../../utils/writeErrorsInDiv";
 import FileInput from "./FileInput";
 import FormInput from "./FormInput";
 import SubmitButton from "./SubmitButton";
@@ -27,7 +28,7 @@ export default function NewMeme() {
         if (imageIsUpload) {
             if (!file) return;
             if (file.size > 1024 * 1024)
-                return writeErrorInDiv("Maximum file size is 1MB")
+                return writeErrorInDiv("Maximum file size is 1MB", errorDiv)
 
             let base64Img = await getBase64(file)
             if (typeof base64Img != 'string') return;
@@ -42,7 +43,7 @@ export default function NewMeme() {
                 }
             }, {
                 onError(error) {
-                    writeErrorInDiv(error.message)
+                    writeErrorInDiv(error.message, errorDiv)
                 },
                 onSuccess(data) {
                     utils.meme.getMeme.setData(data.postId, {
@@ -67,7 +68,7 @@ export default function NewMeme() {
                 },
             }, {
                 onError(error) {
-                    writeErrorInDiv(error.message)
+                    writeErrorInDiv(error.message, errorDiv)
                 },
                 onSuccess(data) {
                     utils.meme.getMeme.setData(data.postId, {
@@ -91,12 +92,7 @@ export default function NewMeme() {
             reader.onerror = error => reject(error)
         })
     }
-    function writeErrorInDiv(errorMsg: string) {
-        errorDiv.current!.textContent = errorMsg
-        setTimeout(() => {
-            errorDiv.current!.textContent = ""
-        }, 5000)
-    }
+
     return (
         <>
             <form onSubmit={submit} className="flex flex-col w-11/12 lg:w-1/2 h-5/6 bg-slate-800 p-3 rounded-xl shadow-lg">
@@ -118,7 +114,7 @@ export default function NewMeme() {
                     <FileInput
                         label={file ? file.name : "Select Image"}
                         setFile={setFile}
-                        handleError={(str: string) => writeErrorInDiv(str)}
+                        handleError={(str: string) => writeErrorInDiv(str, errorDiv)}
                     />
                     :
                     <FormInput
