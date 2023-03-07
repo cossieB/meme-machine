@@ -5,6 +5,7 @@ import { z } from "zod";
 import { Context } from "../../pages/api/trpc/[trpc]";
 import db from "../../prisma/db";
 import { memesPerPage } from "../../utils/globalVariables";
+import uploadToImgur from "../../utils/uploadToImgur";
 
 const t = initTRPC.context<Context>().create();
 
@@ -16,7 +17,10 @@ export const memeRouter = router({
         .input(z.object({
             title: z.string(),
             description: z.string(),
-            image: z.string()
+            image: z.object({
+                type: z.enum(['url', 'base64']),
+                data: z.string()
+            })
         }))
         .mutation(async ({ ctx, input }) => {
             if (!ctx.user)
@@ -25,13 +29,32 @@ export const memeRouter = router({
                 throw new TRPCError({ code: 'BAD_REQUEST', message: "Maximum length of title is 100 characters" })
             if (input.title.length == 0)
                 throw new TRPCError({ code: 'BAD_REQUEST', message: "Title is required" })
-            if (input.image.length == 0)
+            if (input.image.data.length == 0)
                 throw new TRPCError({ code: 'BAD_REQUEST', message: "Image is required" })
+
+            if (input.image.type == 'url')
+                try {
+                    const result = await db.meme.create({
+                        data: { ...input, image: input.image.data, userId: ctx.user.sub! }
+                    })
+                    return result
+                } catch (error) {
+                    console.log(error)
+                    throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Something went wrong. Please try again later" })
+                }
+
             try {
-                const result = await db.meme.create({
-                    data: { ...input, userId: ctx.user.sub! }
-                })
-                return result
+                const response = await uploadToImgur(input.image.data);
+
+                if (response.success) {
+                    const result = await db.meme.create({
+                        data: {
+                            ...input, image: response.data.link, userId: ctx.user.sub!
+                        }
+                    })
+                    return result
+                }
+                throw new TRPCError({ code: 'BAD_REQUEST', message: response.data?.error?.message ?? "Something went wrong. Please try again later" })
             } catch (error) {
                 console.log(error)
                 throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Something went wrong. Please try again later" })
@@ -190,7 +213,7 @@ export const memeRouter = router({
             term: z.string(),
             page: z.number().default(0)
         }))
-        .mutation(async({input}) => {
+        .mutation(async ({ input }) => {
             const memes = await db.meme.findMany({
                 where: {
                     title: {

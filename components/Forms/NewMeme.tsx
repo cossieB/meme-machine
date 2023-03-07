@@ -29,7 +29,6 @@ export default function NewMeme() {
             if (!file) return;
             try {
                 meme = await uploadToFirebase(file, `memes/${user!.username}${new Date().getTime()}`);
-                console.log(meme)
             }
             catch (e: any) {
                 errorDiv.current!.textContent = e.message;
@@ -39,7 +38,7 @@ export default function NewMeme() {
                 return
             }
         }; 
-        mutation.mutate({ title: title.trim(), image: meme, description }, {
+        mutation.mutate({ title: title.trim(), image: {meme}, description }, {
             onSuccess(data) {
                 utils.meme.getMeme.setData(data.postId, {
                     ...data,

@@ -18,7 +18,7 @@ export default function Search() {
     }, [page])
 
     function search() {
-        if (!ref.current!.value) {
+        if (!ref.current?.value) {
             setPage(0)
             setIsLastPage(true)
             return setMemes([])
@@ -62,10 +62,13 @@ export default function Search() {
                 memes={memes}
                 setPage={setPage}
             />
-            { !mutation.isIdle && ref.current?.value && memes.length == 0 && 
-            <p>
-                Nothing To See Here
-            </p>
+            {!mutation.isIdle && ref.current?.value && memes.length == 0 &&
+                <>
+                    <img className="mx-auto" src="https://media.makeameme.org/created/i-cant-find-eze3rf.jpg" alt="Nothing found" />
+                    <p className="text-center">
+                        Nothing To See Here
+                    </p>
+                </>
             }
         </div>
     )
