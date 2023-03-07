@@ -4,7 +4,7 @@ import { initTRPC, TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { Context } from "../../pages/api/trpc/[trpc]";
 import db from "../../prisma/db";
-import { memesPerPage } from "../../utils/globalVariables";
+import { genericApiError as genericErrorMsg, memesPerPage } from "../../utils/globalVariables";
 import uploadToImgur from "../../utils/uploadToImgur";
 
 const t = initTRPC.context<Context>().create();
@@ -32,33 +32,31 @@ export const memeRouter = router({
             if (input.image.data.length == 0)
                 throw new TRPCError({ code: 'BAD_REQUEST', message: "Image is required" })
 
-            if (input.image.type == 'url')
-                try {
-                    const result = await db.meme.create({
-                        data: { ...input, image: input.image.data, userId: ctx.user.sub! }
+            if (input.image.type == 'url') {
+                // check if the image url is valid and it's an image
+                const response = await fetch(input.image.data)
+                    .catch(() => {
+                        throw new TRPCError({ code: 'BAD_REQUEST', message: 'Invalid URL' })
                     })
-                    return result
-                } catch (error) {
-                    console.log(error)
-                    throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Something went wrong. Please try again later" })
-                }
+                const blob = await response.blob();
+                if (!blob.type.startsWith('image/')) throw new TRPCError({ code: 'BAD_REQUEST', message: 'Invalid file type' })
 
-            try {
-                const response = await uploadToImgur(input.image.data);
-
-                if (response.success) {
-                    const result = await db.meme.create({
-                        data: {
-                            ...input, image: response.data.link, userId: ctx.user.sub!
-                        }
-                    })
-                    return result
-                }
-                throw new TRPCError({ code: 'BAD_REQUEST', message: response.data?.error?.message ?? "Something went wrong. Please try again later" })
-            } catch (error) {
-                console.log(error)
-                throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Something went wrong. Please try again later" })
+                const result = await db.meme.create({
+                    data: { ...input, image: input.image.data, userId: ctx.user.sub! }
+                })
+                return result
             }
+
+            const response = await uploadToImgur(input.image.data);
+            if (!response.success)
+                throw new TRPCError({ code: 'BAD_REQUEST', message: response.data?.error?.message ?? genericErrorMsg })
+
+            const result = await db.meme.create({
+                data: {
+                    ...input, image: response.data.link, userId: ctx.user.sub!
+                }
+            })
+            return result
         }),
     getMemes: procedure
         .input(z.object({

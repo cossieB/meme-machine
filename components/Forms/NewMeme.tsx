@@ -11,7 +11,7 @@ import ToggleLinkOrUpload from "./ToggleIsLinkOrUpload";
 
 export default function NewMeme() {
     const [title, setTitle] = useState("")
-    const [image, setImage] = useState("")
+    const [imageUrl, setImageUrl] = useState("")
     const [description, setDescription] = useState("")
     const router = useRouter()
     const mutation = trpc.meme.publishMeme.useMutation()
@@ -24,34 +24,78 @@ export default function NewMeme() {
 
     async function submit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        let meme = image;
         if (imageIsUpload) {
             if (!file) return;
-            try {
-                meme = await uploadToFirebase(file, `memes/${user!.username}${new Date().getTime()}`);
-            }
-            catch (e: any) {
-                errorDiv.current!.textContent = e.message;
-                setTimeout(() => {
-                    errorDiv.current!.textContent = ""
-                }, 2500)
-                return
-            }
-        }; 
-        mutation.mutate({ title: title.trim(), image: {meme}, description }, {
-            onSuccess(data) {
-                utils.meme.getMeme.setData(data.postId, {
-                    ...data,
-                    user: {
-                        image: user!.image,
-                        username: user!.username
-                    }
-                })
-                closeModal()
-                router.push(`/posts/${data.postId}`)
-            },
-        });
+            if (file.size > 1024 * 1024)
+                return writeErrorInDiv("Maximum file size is 1MB")
 
+            let base64Img = await getBase64(file)
+            if (typeof base64Img != 'string') return;
+            base64Img = base64Img.replace(/^data:.+base64,/, '')
+
+            mutation.mutate({
+                title: title.trim(),
+                description,
+                image: {
+                    type: 'base64',
+                    data: base64Img
+                }
+            }, {
+                onError(error) {
+                    writeErrorInDiv(error.message)
+                },
+                onSuccess(data) {
+                    utils.meme.getMeme.setData(data.postId, {
+                        ...data,
+                        user: {
+                            image: user!.image,
+                            username: user!.username
+                        }
+                    })
+                    closeModal()
+                    router.push(`/posts/${data.postId}`)
+                },
+            })
+        }
+        else {
+            mutation.mutate({
+                description,
+                title: title.trim(),
+                image: {
+                    type: 'url',
+                    data: imageUrl
+                },
+            }, {
+                onError(error) {
+                    writeErrorInDiv(error.message)
+                },
+                onSuccess(data) {
+                    utils.meme.getMeme.setData(data.postId, {
+                        ...data,
+                        user: {
+                            image: user!.image,
+                            username: user!.username
+                        }
+                    })
+                    closeModal()
+                    router.push(`/posts/${data.postId}`)
+                },
+            });
+        }
+    }
+    function getBase64(file: File): Promise<string | ArrayBuffer | null> {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.readAsDataURL(file)
+            reader.onload = () => resolve(reader.result)
+            reader.onerror = error => reject(error)
+        })
+    }
+    function writeErrorInDiv(errorMsg: string) {
+        errorDiv.current!.textContent = errorMsg
+        setTimeout(() => {
+            errorDiv.current!.textContent = ""
+        }, 5000)
     }
     return (
         <>
@@ -72,14 +116,15 @@ export default function NewMeme() {
                 {imageIsUpload
                     ?
                     <FileInput
-                        label="Image"
+                        label={file ? file.name : "Select Image"}
                         setFile={setFile}
+                        handleError={(str: string) => writeErrorInDiv(str)}
                     />
                     :
                     <FormInput
                         label="Image"
-                        value={image}
-                        setValue={setImage}
+                        value={imageUrl}
+                        setValue={setImageUrl}
                         min={1}
                     />
                 }
@@ -92,7 +137,7 @@ export default function NewMeme() {
                 />
                 <SubmitButton
                     mutation={mutation}
-                    disabledWhen={title.length == 0 || title.length > 100 || (!imageIsUpload && !image) || (imageIsUpload && !file) || description.length > 255}
+                    disabledWhen={title.length == 0 || title.length > 100 || (!imageIsUpload && !imageUrl) || (imageIsUpload && !file) || description.length > 255}
                 />
                 <p ref={errorDiv} className="bg-red-300" />
             </form>
