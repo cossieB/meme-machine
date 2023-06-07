@@ -38,8 +38,8 @@ export const memeRouter = router({
                     .catch(() => {
                         throw new TRPCError({ code: 'BAD_REQUEST', message: 'Invalid URL' })
                     })
-                console.log(response)
-                const blob = await response.blob(); console.log(blob)
+                
+                const blob = await response.blob(); 
                 if (blob.type.startsWith('text/html')) throw new TRPCError({code: 'BAD_REQUEST', message: 'Invalid URL'})
                 if (!blob.type.startsWith('image/')) throw new TRPCError({ code: 'BAD_REQUEST', message: 'Invalid file type' })
 
